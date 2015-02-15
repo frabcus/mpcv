@@ -40,3 +40,9 @@ def lookup_candidates(constituency_id):
     return sorted(current_candidate_list, key=surname)
 
 
+def lookup_candidate(candidate_id):
+    str_id = str(int(candidate_id))
+
+    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/posts/%s?embed=membership.person" % str_id).json()
+
+

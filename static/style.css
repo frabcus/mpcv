@@ -11,7 +11,7 @@
 
 /* /applicants */
 
-#applicants h2 {
+#applicants > div {
     margin-top: 48px;
 }
 
