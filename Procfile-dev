@@ -1,0 +1,1 @@
+web: gunicorn main:app --reload --log-file=-
