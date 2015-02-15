@@ -24,7 +24,7 @@ def constituency():
     constituency = lookup_postcode(postcode)
 
     if 'error' in constituency:
-        flask.flash("bad postcode haha")
+        flask.flash(constituency['error'], 'danger')
         return flask.redirect(flask.url_for('index'))
 
     return """
