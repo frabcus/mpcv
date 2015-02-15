@@ -75,10 +75,9 @@ def applicants():
 #####################################################################
 # Uploading CVs
 
-@app.route('/upload_cv/<int:person_id>')
-def upload_cv():
-    if 'postcode' not in flask.session:
-        pass
+@app.route('/upload_cv/constituency/<int:constituency_id>/applicant/<int:person_id>')
+def upload_cv(person_id):
+    callapis.lookup_candidates
     return ""
 
 

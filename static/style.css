@@ -4,6 +4,11 @@
     margin-top: 48px;
 }
 
+.alert-warning a {
+    color: white;
+    text-decoration: underline;
+}
+
 /* /applicants */
 
 #applicants h2 {
