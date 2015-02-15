@@ -1,4 +1,5 @@
 import requests
+import json
 
 import constants
 
@@ -11,27 +12,23 @@ def lookup_postcode(postcode):
 def lookup_candidates(constituency_id):
     str_id = str(int(constituency_id))
 
-    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/posts/%s?embed=membership.person" % str_id).json()
+    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=standing_in.%s.post_id:%s" %
+            (constants.year, str_id)).json()
+    print(json.dumps(data))
     if "errors" in data:
         return data
 
     current_candidate_list = []
-    got_urls = set()
-    for member in data['result']['memberships']:
-        standing_in = member['person_id']['standing_in']
+    for member in data['result']:
+        standing_in = member['standing_in']
         if constants.year in standing_in and standing_in[constants.year] != None:
             if standing_in[constants.year]['post_id'] == str_id:
-                # TODO: remove this got_urls hack which is just there to
-                # remove a duplicate Louise Ellman - have asked on Democracy Club list
-                m = member['person_id']
-                if m['url'] not in got_urls:
-                    current_candidate_list.append({
-                        'id': m['id'],
-                        'name': m['name'],
-                        'email': m['email'],
-                        'party': m['party_memberships'][constants.year]['name']
-                    })
-                    got_urls.add(m['url'])
+                current_candidate_list.append({
+                    'id': member['id'],
+                    'name': member['name'],
+                    'email': member['email'],
+                    'party': member['party_memberships'][constants.year]['name']
+                })
 
     # Sort by surname (as best we can -- "Duncan Smith" won't work)
     # so it is same as on ballot paper. So can get used to it.
