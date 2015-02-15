@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h1>If you were hiring somebody at work, you'd look at their CVs, right?</h1>
+    <h2>So why don't we look at our MP's CV?</h2>
+
+    <p class="lead">Enter your postcode, to start sifting through
+    the CVs of people applying for the job of being your MP.</p>
+
+    <form action="/constituency" method="GET">
+        <div class="form-group">
+          <input id="postcode" name="postcode" placeholder="Postcode" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">View candidates</button>
+        </div>
+    </form>
+{% endblock %}
+
