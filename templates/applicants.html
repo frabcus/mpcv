@@ -5,11 +5,26 @@
         <h1>Applicants for job of MP for <br>{{ constituency.name }}</h1>
         <p><a href="/clear_postcode">I live somewhere else</a></p>
 
+        <div class="no_cv">
+
+            <h2>Ask these applicants to send in their CV</h2>
+
+
+            <div class="applicant_list">
+                {% for applicant in applicants %}
+                <div class="applicant">
+                    <a href="/email" class="btn btn-default emailthem" target="_blank">Email them</a>
+                    <span class="name">{{ applicant.name }}</span> &mdash; <span class="party">{{ applicant.party}}</span>
+                    <br><a href="/upload_cv/{{ applicant.id }}">This is me, add my CV</a>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
         <div class="no_email">
 
             <h2>Help find the emails of these applicants</h2>
-
-            <p>So you can later email them to ask them to send in their CV.</p>
 
             <div class="applicant_list">
                 {% for applicant in applicants_no_email %}
@@ -20,26 +35,10 @@
                 {% endfor %}
             </div>
 
-            <p>(those "add" buttons will take you over to the right place on <a href="https://yournextmp.com/">YourNextMP</a>, 
-            where you need to register, then you can add their emails! Your help is <i>much</i> appreciated)
+            <p>
+                The "add" buttons take you to <a href="https://yournextmp.com/">YourNextMP</a>, log in and edit the email.
+            </p>
 
-        </div>
-
-        <div class="no_cv">
-
-            <h2>Ask these applicants to send in their CV</h2>
-
-
-            <div class="applicant_list">
-                {% for applicant in applicants %}
-                <div class="applicant">
-                    <a href="/email" class="btn btn-default" target="_blank">Email them</a>
-                    <span class="name">{{ applicant.name }}</span> &mdash; <span class="party">{{ applicant.party}}</span>
-                </div>
-                {% endfor %}
-            </div>
-
- 
         </div>
 
     </div>
