@@ -39,7 +39,11 @@ def lookup_candidates(constituency_id):
                     })
                     got_urls.add(m['url'])
 
-    return current_candidate_list
+    # Sort by surname (as best we can -- "Duncan Smith" won't work)
+    # so it is same as on ballot paper. So can get used to it.
+    def surname(candidate):
+        return candidate['name'].split(" ")[-1]
+    return sorted(current_candidate_list, key=surname)
 
 @app.route('/error')
 def error():
