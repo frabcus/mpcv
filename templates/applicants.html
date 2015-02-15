@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h1>{{ name }}</h1>
+    <p><a href="/clear_postcode">I live somewhere else</a></p>
+
+    <p class="lead">These people have applied for the job of being 
+    Member of Parliament in your constituency.
+    </p>
+
+    {% for applicant in applicants %}
+      <p>{{ applicant.name }}</p>
+    {% endfor %}
+
+{% endblock %}
+

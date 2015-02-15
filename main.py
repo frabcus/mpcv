@@ -5,6 +5,8 @@ import flask
 import requests
 import json
 
+year = '2015'
+
 app = flask.Flask(__name__)
 app.secret_key = os.getenv('MPCV_SESSION_SECRET')
 
@@ -13,6 +15,32 @@ def lookup_postcode(postcode):
     if "error" in data:
         return data
     return data["areas"][str(data["shortcuts"]["WMC"])]
+
+def lookup_candidates(constituency_id):
+    str_id = str(int(constituency_id))
+
+    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/posts/%s?embed=membership.person" % str_id).json()
+    if "errors" in data:
+        return data
+
+    current_candidate_list = []
+    got_urls = set()
+    for member in data['result']['memberships']:
+        standing_in = member['person_id']['standing_in']
+        if year in standing_in and standing_in[year] != None:
+            if standing_in[year]['post_id'] == str_id:
+                # TODO: remove this got_urls hack which is just there to
+                # remove a duplicate Louise Ellman - have asked on Democracy Club list
+                if member['person_id']['url'] not in got_urls:
+                    current_candidate_list.append(member['person_id'])
+                    got_urls.add(member['person_id']['url'])
+
+    return current_candidate_list
+
+@app.route('/error')
+def error():
+    return flask.render_template('error.html')
+
 
 @app.route('/')
 def index():
@@ -51,7 +79,12 @@ def applicants():
     postcode = flask.session['postcode']
     constituency = flask.session['constituency']
 
-    return flask.render_template("applicants.html", name=constituency['name'])
+    applicants = lookup_candidates(constituency['id'])
+    if 'errors' in applicants:
+        flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
+        return flask.redirect(flask.url_for('error'))
+
+    return flask.render_template("applicants.html", name=constituency['name'], applicants=applicants)
 
 
 if __name__ == '__main__':
