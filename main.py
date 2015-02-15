@@ -3,7 +3,7 @@
 import os
 import flask
 
-import callapis
+import lookups
 
 app = flask.Flask(__name__)
 app.secret_key = os.getenv('MPCV_SESSION_SECRET')
@@ -30,7 +30,7 @@ def index():
 @app.route('/set_postcode')
 def set_postcode():
     postcode = flask.request.args.get('postcode')
-    constituency = callapis.lookup_postcode(postcode)
+    constituency = lookups.lookup_postcode(postcode)
 
     if 'error' in constituency:
         flask.flash(constituency['error'], 'danger')
@@ -60,7 +60,7 @@ def applicants():
     postcode = flask.session['postcode']
     constituency = flask.session['constituency']
 
-    applicants = callapis.lookup_candidates(constituency['id'])
+    applicants = lookups.lookup_candidates(constituency['id'])
     if 'errors' in applicants:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return flask.redirect(flask.url_for('error'))
@@ -77,7 +77,7 @@ def applicants():
 
 @app.route('/upload_cv/constituency/<int:constituency_id>/applicant/<int:person_id>')
 def upload_cv(person_id):
-    callapis.lookup_candidates
+    lookups.lookup_candidates
     return ""
 
 
