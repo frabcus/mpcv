@@ -1,7 +1,7 @@
 To test in development do:
 
-foreman start -f Procfile-dev 
+./main.py
 
-(that version of the Heroku Procfile reloads on changes)
+Will show stack traces and stuff.
 
-
+In production, Heroku uses the config in Procfile.
