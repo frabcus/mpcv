@@ -31,9 +31,13 @@ def lookup_candidates(constituency_id):
             if standing_in[year]['post_id'] == str_id:
                 # TODO: remove this got_urls hack which is just there to
                 # remove a duplicate Louise Ellman - have asked on Democracy Club list
-                if member['person_id']['url'] not in got_urls:
-                    current_candidate_list.append(member['person_id'])
-                    got_urls.add(member['person_id']['url'])
+                m = member['person_id']
+                if m['url'] not in got_urls:
+                    current_candidate_list.append({
+                        'name': m['name'],
+                        'party': m['party_memberships'][year]['name']
+                    })
+                    got_urls.add(m['url'])
 
     return current_candidate_list
 
