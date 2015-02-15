@@ -2,20 +2,23 @@
 
 import os
 import flask
-import requests
-import json
 
-import remoteapis
-
-year = '2015'
+import callapis
 
 app = flask.Flask(__name__)
 app.secret_key = os.getenv('MPCV_SESSION_SECRET')
+
+
+#####################################################################
+# General utility routes
 
 @app.route('/error')
 def error():
     return flask.render_template('error.html')
 
+
+#####################################################################
+# Postcode entry
 
 @app.route('/')
 def index():
@@ -27,7 +30,7 @@ def index():
 @app.route('/set_postcode')
 def set_postcode():
     postcode = flask.request.args.get('postcode')
-    constituency = remoteapis.lookup_postcode(postcode)
+    constituency = callapis.lookup_postcode(postcode)
 
     if 'error' in constituency:
         flask.flash(constituency['error'], 'danger')
@@ -46,6 +49,9 @@ def clear_postcode():
     return flask.redirect("/")
 
 
+#####################################################################
+# List of applicants
+
 @app.route('/applicants')
 def applicants():
     if 'postcode' not in flask.session:
@@ -54,7 +60,7 @@ def applicants():
     postcode = flask.session['postcode']
     constituency = flask.session['constituency']
 
-    applicants = remoteapis.lookup_candidates(constituency['id'])
+    applicants = callapis.lookup_candidates(constituency['id'])
     if 'errors' in applicants:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return flask.redirect(flask.url_for('error'))
@@ -65,6 +71,19 @@ def applicants():
     return flask.render_template("applicants.html", constituency=constituency,
             applicants=applicants, applicants_no_email=applicants_no_email)
 
+
+#####################################################################
+# Uploading CVs
+
+@app.route('/upload_cv/<int:person_id>')
+def upload_cv():
+    if 'postcode' not in flask.session:
+        pass
+    return ""
+
+
+#####################################################################
+# Debugging entry point
 
 if __name__ == '__main__':
     app.config['DEBUG'] = True

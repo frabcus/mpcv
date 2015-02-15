@@ -1,3 +1,7 @@
+import requests
+
+import constants
+
 def lookup_postcode(postcode):
     data = requests.get("http://mapit.mysociety.org/postcode/" + postcode).json()
     if "error" in data:
@@ -15,8 +19,8 @@ def lookup_candidates(constituency_id):
     got_urls = set()
     for member in data['result']['memberships']:
         standing_in = member['person_id']['standing_in']
-        if year in standing_in and standing_in[year] != None:
-            if standing_in[year]['post_id'] == str_id:
+        if constants.year in standing_in and standing_in[constants.year] != None:
+            if standing_in[constants.year]['post_id'] == str_id:
                 # TODO: remove this got_urls hack which is just there to
                 # remove a duplicate Louise Ellman - have asked on Democracy Club list
                 m = member['person_id']
@@ -25,7 +29,7 @@ def lookup_candidates(constituency_id):
                         'id': m['id'],
                         'name': m['name'],
                         'email': m['email'],
-                        'party': m['party_memberships'][year]['name']
+                        'party': m['party_memberships'][constants.year]['name']
                     })
                     got_urls.add(m['url'])
 
