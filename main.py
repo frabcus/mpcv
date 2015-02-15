@@ -2,6 +2,7 @@
 
 import os
 import flask
+import json
 
 import lookups
 
@@ -75,11 +76,15 @@ def applicants():
 #####################################################################
 # Uploading CVs
 
-@app.route('/upload_cv/constituency/<int:constituency_id>/applicant/<int:person_id>')
+@app.route('/upload_cv/<int:person_id>')
 def upload_cv(person_id):
-    lookups.lookup_candidates
-    return ""
+    data = lookups.lookup_candidate(person_id)
 
+    if 'error' in data:
+        flask.flash(data['error'], 'danger')
+        return flask.redirect(flask.url_for('error'))
+
+    return flask.render_template("upload_cv.html", applicant=data)
 
 #####################################################################
 # Debugging entry point

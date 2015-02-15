@@ -28,14 +28,15 @@
 
             <div class="text-center alert alert-danger">Stuff below here doesn't work yet!</div>
 
-            <h2>Ask these applicants to send in their CV</h2>
+            <!-- <h2>Ask these applicants to send in their CV</h2> -->
+            <h2>Add your CV, if you're an applicant</h2>
 
             <div class="applicant_list">
                 {% for applicant in applicants %}
                 <div class="applicant">
-                    <a href="/email" class="btn btn-default emailthem" target="_blank">Email them</a>
+                    <!-- <a href="/email" class="btn btn-default emailthem" target="_blank">Email them</a> -->
                     <span class="name">{{ applicant.name }}</span> &mdash; <span class="party">{{ applicant.party}}</span>
-                    <br><a href="/upload_cv/constituency/{{ constituency.id }}/applicant/{{ applicant.id }}">This is me, add my CV</a>
+                    <br><a href="/upload_cv/{{ applicant.id }}">This is me, add my CV</a>
                 </div>
                 {% endfor %}
             </div>

@@ -36,10 +36,14 @@ def lookup_candidates(constituency_id):
         return candidate['name'].split(" ")[-1]
     return sorted(current_candidate_list, key=surname)
 
-
 def lookup_candidate(candidate_id):
     str_id = str(int(candidate_id))
+    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=id:%s" % str_id).json()
 
-    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/posts/%s?embed=membership.person" % str_id).json()
+    if data["total"] < 1:
+        return { "error": "Applicant %s not found" % str_id }
+    if data["total"] > 1:
+        return { "error": "Applicant %s unexpectedly appears multiple times" % str_id }
 
+    return data['result'][0]
 
