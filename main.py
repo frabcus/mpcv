@@ -16,10 +16,13 @@ def lookup_postcode(postcode):
 
 @app.route('/')
 def index():
+    if 'postcode' in flask.session:
+        return flask.redirect("/applicants")
+
     return flask.render_template('index.html')
 
-@app.route('/constituency')
-def constituency():
+@app.route('/set_postcode')
+def set_postcode():
     postcode = flask.request.args.get('postcode')
     constituency = lookup_postcode(postcode)
 
@@ -27,9 +30,28 @@ def constituency():
         flask.flash(constituency['error'], 'danger')
         return flask.redirect(flask.url_for('index'))
 
-    return """
-            Hi: %s
-    """ % json.dumps(constituency)
+    flask.session['postcode'] = postcode
+    flask.session['constituency'] = constituency
+
+    return flask.redirect("/applicants")
+
+@app.route('/clear_postcode')
+def clear_postcode():
+    del flask.session['postcode']
+    del flask.session['constituency']
+
+    return flask.redirect("/")
+
+
+@app.route('/applicants')
+def applicants():
+    if 'postcode' not in flask.session:
+        return flask.redirect("/")
+
+    postcode = flask.session['postcode']
+    constituency = flask.session['constituency']
+
+    return flask.render_template("applicants.html", name=constituency['name'])
 
 
 if __name__ == '__main__':
