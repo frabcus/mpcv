@@ -1,19 +1,23 @@
 {% extends "layout.html" %}
 {% block body %}
-    <h1>If you were hiring somebody at work, you'd look at their CVs, right?</h1>
-    <h2>So why don't we look at our MP's CV?</h2>
+    <div id="front">
 
-    <p class="lead">Enter your postcode, to start sifting through
-    the CVs of people applying for the job of being your MP.</p>
+        <h1>If you were hiring somebody at work, you'd look at their CVs, right?</h1>
+        <h2>So why don't we look at our MP's CV?</h2>
 
-    <form action="/set_postcode" method="GET">
-        <div class="form-group">
-          <input id="postcode" name="postcode" placeholder="Postcode" class="form-control">
-        </div>
+        <p class="lead">Enter your postcode, to start sifting through
+        the CVs of people applying for the job of being your MP.</p>
 
-        <div class="form-group">
-          <button type="submit" class="btn btn-default">View candidates</button>
-        </div>
-    </form>
+        <form action="/set_postcode" method="GET">
+            <div class="form-group">
+              <input id="postcode" name="postcode" placeholder="Postcode" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <button type="submit" class="btn btn-default">View candidates</button>
+            </div>
+        </form>
+
+    </div>
 {% endblock %}
 

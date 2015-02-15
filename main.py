@@ -34,7 +34,9 @@ def lookup_candidates(constituency_id):
                 m = member['person_id']
                 if m['url'] not in got_urls:
                     current_candidate_list.append({
+                        'id': m['id'],
                         'name': m['name'],
+                        'email': m['email'],
                         'party': m['party_memberships'][year]['name']
                     })
                     got_urls.add(m['url'])
@@ -92,7 +94,11 @@ def applicants():
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return flask.redirect(flask.url_for('error'))
 
-    return flask.render_template("applicants.html", name=constituency['name'], applicants=applicants)
+    applicants_no_email = [ applicant for applicant in applicants if applicant['email'] is None]
+    applicants = [ applicant for applicant in applicants if applicant['email'] is not None]
+
+    return flask.render_template("applicants.html", constituency=constituency,
+            applicants=applicants, applicants_no_email=applicants_no_email)
 
 
 if __name__ == '__main__':
