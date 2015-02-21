@@ -102,9 +102,9 @@ def upload_cv(person_id):
 
 @app.route('/upload_cv/<int:person_id>/c/<signature>')
 def upload_cv_confirmed(person_id, signature):
-    data = lookups.lookup_candidate(person_id)
-    if 'error' in data:
-        flask.flash(data['error'], 'danger')
+    candidate = lookups.lookup_candidate(person_id)
+    if 'error' in candidate:
+        flask.flash(candidate['error'], 'danger')
         return flask.redirect(flask.url_for('error'))
 
     signed_again = identity.sign_person_id(app.secret_key, person_id)
@@ -112,7 +112,7 @@ def upload_cv_confirmed(person_id, signature):
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
         return flask.redirect(flask.url_for('error'))
 
-    return flask.render_template("upload_cv_confirmed.html", candidate=data)
+    return flask.render_template("upload_cv_confirmed.html", candidate=candidate)
 
 
 
