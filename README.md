@@ -14,6 +14,8 @@ To test in development do:
 
 Will show stack traces and stuff.
 
+ZZ9 9ZZ is a test constituency postcode.
+
 
 Production
 ==========
