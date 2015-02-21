@@ -5,10 +5,18 @@ import flask
 import json
 
 import lookups
+import identity
 
 app = flask.Flask(__name__)
 app.secret_key = os.getenv('MPCV_SESSION_SECRET')
 
+
+#####################################################################
+# Global parameters, used in layout.html
+
+@app.before_request
+def set_globals(*args, **kwargs):
+    flask.g.debug_email = identity.debug_email
 
 #####################################################################
 # General utility routes
@@ -76,22 +84,43 @@ def applicants():
 #####################################################################
 # Uploading CVs
 
-@app.route('/upload_cv/<int:person_id>')
+@app.route('/upload_cv/<int:person_id>', methods=['GET','POST'])
 def upload_cv(person_id):
-    data = lookups.lookup_candidate(person_id)
+    applicant = lookups.lookup_candidate(person_id)
+    if 'error' in applicant:
+        flask.flash(applicant['error'], 'danger')
+        return flask.redirect(flask.url_for('error'))
 
+    if flask.request.method == 'POST':
+        if identity.send_upload_cv_confirmation(app, applicant['id'], applicant['email'], applicant['name']):
+            return flask.render_template("check_email.html")
+        else:
+            flask.flash("Failed to send email, please try again.", 'danger')
+
+    return flask.render_template("upload_cv.html", applicant=applicant)
+
+
+@app.route('/upload_cv/<int:person_id>/c/<signature>')
+def upload_cv_confirmed(person_id, signature):
+    data = lookups.lookup_candidate(person_id)
     if 'error' in data:
         flask.flash(data['error'], 'danger')
         return flask.redirect(flask.url_for('error'))
 
-    return flask.render_template("upload_cv.html", applicant=data)
+    signed_again = identity.sign_person_id(app.secret_key, person_id)
+    if signature != signed_again:
+        flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
+        return flask.redirect(flask.url_for('error'))
+
+    return flask.render_template("upload_cv_confirmed.html", applicant=data)
+
+
 
 #####################################################################
 # Debugging entry point
 
 if __name__ == '__main__':
-    app.config['DEBUG'] = True
+    app.debug = True
     app.run()
-
 
 

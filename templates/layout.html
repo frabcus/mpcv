@@ -12,7 +12,12 @@
 
     <body>
 
-        <div class="text-center alert alert-warning">MP CV is still pre-alpha. Email <a href="mailto:francis@flourish.org">Francis Irving</a> with comments, questions. Send pull requests to <a href="https://github.com/frabcus/mpcv">frabcus/mpcv</a>.</div>
+        <div class="text-center alert alert-warning">MP CV is still pre-alpha. Email <a href="mailto:francis@flourish.org">Francis Irving</a> with comments, questions. Send pull requests to <a href="https://github.com/frabcus/mpcv">frabcus/mpcv</a>.
+
+          {% if g.debug_email %}
+              <p>Debug email enabled, all outbound emails going to <b>{{ g.debug_email }}</b>.</p>
+          {% endif %}
+        </div>
 
         <div id="wrap">
 
