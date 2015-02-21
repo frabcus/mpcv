@@ -5,6 +5,7 @@
         <h1>Candidates for job of MP for <br>{{ constituency.name }}</h1>
         <p><a href="/clear_postcode">I live somewhere else</a></p>
 
+        {% if candidates_no_email %}
         <div class="no_email">
 
             <h2>Help find the emails of these candidates</h2>
@@ -23,7 +24,9 @@
             </p>
 
         </div>
+        {% endif %}
 
+        {% if candidates %}
         <div class="no_cv">
 
             <div class="text-center alert alert-danger">Stuff below here doesn't work yet!</div>
@@ -42,6 +45,7 @@
             </div>
 
         </div>
+        {% endif %}
 
     </div>
 
