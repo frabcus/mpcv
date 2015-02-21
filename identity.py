@@ -1,6 +1,8 @@
 import os
 import base64
 import traceback
+import email.mime.text
+import email.utils
 
 import smtplib
 import textwrap
@@ -52,10 +54,6 @@ def mail(to_email, body):
 # Specific confirmation
 
 UPLOAD_CV_MESSAGE = textwrap.dedent("""\
-    From: Democracy Club CVs <cv@democracyclub.org.uk>
-    To: {email}
-    Subject: Upload your CV for becoming an MP
-
     Hi {name},
 
     Your future constituents would like to read your Curriculum Vitae
@@ -70,11 +68,17 @@ UPLOAD_CV_MESSAGE = textwrap.dedent("""\
     Democracy Club CV team
 """)
 
-def send_upload_cv_confirmation(app, person_id, email, name):
+def send_upload_cv_confirmation(app, person_id, to_email, to_name):
     signature = sign_person_id(app.secret_key, person_id)
     link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
-    print("send_upload_cv_confirmation: ", link)
-    body = UPLOAD_CV_MESSAGE.format(email=email, name=name, link=link)
-    return mail(email, body)
+    print(to_name, "send_upload_cv_confirmation: ", link)
+
+    body = UPLOAD_CV_MESSAGE.format(email=to_email, name=to_name, link=link)
+    msg = email.mime.text.MIMEText(body)
+    msg['Subject'] = "Upload your CV for becoming an MP"
+    msg['From'] = email.utils.formataddr(("Democracy Club CVs", "cv@democracyclub.org.uk"))
+    msg['To'] = email.utils.formataddr((to_name, to_email))
+
+    return mail(msg, body)
 
 
