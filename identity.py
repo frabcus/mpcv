@@ -73,7 +73,7 @@ def send_upload_cv_confirmation(app, person_id, to_email, to_name):
     link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
     print(to_name, "send_upload_cv_confirmation: ", link)
 
-    return False
+    return False # temporarily disabled until all workflow works
 
     body = UPLOAD_CV_MESSAGE.format(email=to_email, name=to_name, link=link)
     msg = email.mime.text.MIMEText(body)
