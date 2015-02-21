@@ -33,7 +33,9 @@ MPCV\_SESSION\_SECRET=somethingfairlyrandom
 DEBUG\_EMAIL= # set to an email address to send all emails to
 
 SMTP\_HOSTNAME=localhost
+
 SMTP\_USERNAME=
+
 SMTP\_PASSWORD=
 
 
