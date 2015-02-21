@@ -41,9 +41,9 @@ def lookup_candidate(candidate_id):
     data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=id:%s" % str_id).json()
 
     if data["total"] < 1:
-        return { "error": "Applicant %s not found" % str_id }
+        return { "error": "Candidate %s not found" % str_id }
     if data["total"] > 1:
-        return { "error": "Applicant %s unexpectedly appears multiple times" % str_id }
+        return { "error": "Candidate %s unexpectedly appears multiple times" % str_id }
 
     return data['result'][0]
 

@@ -32,7 +32,7 @@ def error():
 @app.route('/')
 def index():
     if 'postcode' in flask.session:
-        return flask.redirect("/applicants")
+        return flask.redirect("/candidates")
 
     return flask.render_template('index.html')
 
@@ -48,7 +48,7 @@ def set_postcode():
     flask.session['postcode'] = postcode
     flask.session['constituency'] = constituency
 
-    return flask.redirect("/applicants")
+    return flask.redirect("/candidates")
 
 @app.route('/clear_postcode')
 def clear_postcode():
@@ -59,26 +59,26 @@ def clear_postcode():
 
 
 #####################################################################
-# List of applicants
+# List of candidates
 
-@app.route('/applicants')
-def applicants():
+@app.route('/candidates')
+def candidates():
     if 'postcode' not in flask.session:
         return flask.redirect("/")
 
     postcode = flask.session['postcode']
     constituency = flask.session['constituency']
 
-    applicants = lookups.lookup_candidates(constituency['id'])
-    if 'errors' in applicants:
+    candidates = lookups.lookup_candidates(constituency['id'])
+    if 'errors' in candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return flask.redirect(flask.url_for('error'))
 
-    applicants_no_email = [ applicant for applicant in applicants if applicant['email'] is None]
-    applicants = [ applicant for applicant in applicants if applicant['email'] is not None]
+    candidates_no_email = [ candidate for candidate in candidates if candidate['email'] is None]
+    candidates = [ candidate for candidate in candidates if candidate['email'] is not None]
 
-    return flask.render_template("applicants.html", constituency=constituency,
-            applicants=applicants, applicants_no_email=applicants_no_email)
+    return flask.render_template("candidates.html", constituency=constituency,
+            candidates=candidates, candidates_no_email=candidates_no_email)
 
 
 #####################################################################
@@ -86,18 +86,18 @@ def applicants():
 
 @app.route('/upload_cv/<int:person_id>', methods=['GET','POST'])
 def upload_cv(person_id):
-    applicant = lookups.lookup_candidate(person_id)
-    if 'error' in applicant:
-        flask.flash(applicant['error'], 'danger')
+    candidate = lookups.lookup_candidate(person_id)
+    if 'error' in candidate:
+        flask.flash(candidate['error'], 'danger')
         return flask.redirect(flask.url_for('error'))
 
     if flask.request.method == 'POST':
-        if identity.send_upload_cv_confirmation(app, applicant['id'], applicant['email'], applicant['name']):
+        if identity.send_upload_cv_confirmation(app, candidate['id'], candidate['email'], candidate['name']):
             return flask.render_template("check_email.html")
         else:
             flask.flash("Failed to send email, please try again.", 'danger')
 
-    return flask.render_template("upload_cv.html", applicant=applicant)
+    return flask.render_template("upload_cv.html", candidate=candidate)
 
 
 @app.route('/upload_cv/<int:person_id>/c/<signature>')
@@ -112,7 +112,7 @@ def upload_cv_confirmed(person_id, signature):
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
         return flask.redirect(flask.url_for('error'))
 
-    return flask.render_template("upload_cv_confirmed.html", applicant=data)
+    return flask.render_template("upload_cv_confirmed.html", candidate=data)
 
 
 

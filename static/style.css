@@ -9,31 +9,31 @@
     text-decoration: underline;
 }
 
-/* /applicants */
+/* /candidates */
 
-#applicants > div {
+#candidates > div {
     margin-top: 48px;
 }
 
-.applicant_list {
+.candidate_list {
     margin-top: 20px;
 }
 
-#applicants .no_email p {
+#candidates .no_email p {
     margin-top: 10px;
 }
 
-.applicant_list a {
+.candidate_list a {
     margin-right: 8px;
 }
 
-#applicants .applicant {
+#candidates .candidate {
     margin-top: 20px;
 }
-#applicants .applicant .name {
+#candidates .candidate .name {
     font-size: 20px;
 }
-#applicants .applicant .emailthem {
+#candidates .candidate .emailthem {
     margin-top: 4px;
     float: left;
 }

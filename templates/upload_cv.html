@@ -2,17 +2,17 @@
 {% block body %}
     <div id="upload_cv">
 
-        <h1>Hi, {{ applicant.name }}!</h1>
+        <h1>Hi, {{ candidate.name }}!</h1>
 
         <p class="lead">We need to confirm your email first.</p>
 
-        <form action="/upload_cv/{{ applicant.id }}" method="POST">
+        <form action="/upload_cv/{{ candidate.id }}" method="POST">
             <div class="form-group">
               <button type="submit" class="btn btn-default">Confirm email</button>
             </div>
         </form>
 
-        <p>We will send an email to <strong>{{ applicant.email }}</strong>. 
+        <p>We will send an email to <strong>{{ candidate.email }}</strong>. 
         </p>
 
     </div>
