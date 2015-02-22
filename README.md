@@ -23,7 +23,7 @@ Testing
 =======
 
 ```sh
-./main\_tests.py
+./main_tests.py
 ```
 
 
@@ -39,12 +39,12 @@ Environment
 You'll need to set these config variables in the environment:
 
 ```sh
-MPCV\_SESSION\_SECRET=somethingfairlyrandom
+MPCV_SESSION_SECRET=somethingfairlyrandom
 
-DEBUG\_EMAIL= # set to an email address to send all emails to
+DEBUG_EMAIL= # set to an email address to send all emails to
 
-SMTP\_HOSTNAME=localhost
-SMTP\_USERNAME=
-SMTP\_PASSWORD=
+SMTP_HOSTNAME=localhost
+SMTP_USERNAME=
+SMTP_PASSWORD=
 ```
 
