@@ -52,8 +52,10 @@ def set_postcode():
 
 @app.route('/clear_postcode')
 def clear_postcode():
-    del flask.session['postcode']
-    del flask.session['constituency']
+    if 'postcode' in flask.session:
+        del flask.session['postcode']
+    if 'constituency' in flask.session:
+        del flask.session['constituency']
 
     return flask.redirect("/")
 
