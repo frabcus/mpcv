@@ -10,11 +10,21 @@ Development
 
 To test in development do:
 
+```sh
 ./main.py
+```
 
 Will show stack traces and stuff.
 
 ZZ9 9ZZ is a test constituency postcode.
+
+
+Testing
+=======
+
+```sh
+./main\_tests.py
+```
 
 
 Production
@@ -28,6 +38,7 @@ Environment
 
 You'll need to set these config variables in the environment:
 
+```sh
 MPCV\_SESSION\_SECRET=somethingfairlyrandom
 
 DEBUG\_EMAIL= # set to an email address to send all emails to
@@ -35,6 +46,5 @@ DEBUG\_EMAIL= # set to an email address to send all emails to
 SMTP\_HOSTNAME=localhost
 SMTP\_USERNAME=
 SMTP\_PASSWORD=
-
-
+```
 
