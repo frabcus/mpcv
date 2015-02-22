@@ -84,6 +84,8 @@ def candidates():
 #####################################################################
 # Uploading CVs
 
+# GET is to say "you need to confirm email"
+# POST when they click the button to send the confirm email
 @app.route('/upload_cv/<int:person_id>', methods=['GET','POST'])
 def upload_cv(person_id):
     candidate = lookups.lookup_candidate(person_id)
@@ -100,7 +102,8 @@ def upload_cv(person_id):
     return flask.render_template("upload_cv.html", candidate=candidate)
 
 
-@app.route('/upload_cv/<int:person_id>/c/<signature>')
+# GET is to show form to upload CV
+@app.route('/upload_cv/<int:person_id>/c/<signature>', methods=['GET'])
 def upload_cv_confirmed(person_id, signature):
     candidate = lookups.lookup_candidate(person_id)
     if 'error' in candidate:
@@ -112,9 +115,33 @@ def upload_cv_confirmed(person_id, signature):
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
         return flask.redirect(flask.url_for('error'))
 
-    return flask.render_template("upload_cv_confirmed.html", candidate=candidate)
+    upload_link = flask.url_for('upload_cv_upload', person_id=person_id, signature=signature)
 
+    return flask.render_template("upload_cv_confirmed.html", candidate=candidate,
+         upload_link=flask.request.path)
 
+# POST is actual receiving of CV
+@app.route('/upload_cv/<int:person_id>/c/<signature>', methods=['POST'])
+def upload_cv_upload(person_id, signature):
+    candidate = lookups.lookup_candidate(person_id)
+    if 'error' in candidate:
+        print("error in candidate", person_id)
+        return json.dumps({ 'error': candidate['error']})
+
+    signed_again = identity.sign_person_id(app.secret_key, person_id)
+    if signature != signed_again:
+        print("error in signature", person_id, signature)
+        return json.dumps({ 'error': 'Signature token wrong'})
+
+    f = flask.request.files['file']
+    if not f:
+        print("upload missing", person_id)
+        return json.dumps({ 'error': 'Upload not received'})
+
+    print("filename", f.filename)
+    print("content_type", f.content_type)
+
+    return "{ 'moo': 1 }"
 
 #####################################################################
 # Debugging entry point

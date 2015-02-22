@@ -38,4 +38,28 @@
     float: left;
 }
 
+/* /upload_cv */
+
+.fileinput-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.fileinput-button input {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin: 0px;
+    opacity: 0;
+    font-size: 200px;
+    direction: ltr;
+    cursor: pointer;
+}
+
+.bar {
+    height: 18px;
+    background: green;
+}
+
+
 
