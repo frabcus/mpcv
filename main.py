@@ -8,7 +8,7 @@ import lookups
 import identity
 
 app = flask.Flask(__name__)
-app.secret_key = os.getenv('MPCV_SESSION_SECRET')
+app.secret_key = os.environ.get('MPCV_SESSION_SECRET')
 
 
 #####################################################################
