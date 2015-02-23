@@ -2,21 +2,24 @@
 
 import os
 import flask
+import flask_appconfig.env
+import flask_mail
 import json
 
 import lookups
 import identity
 
 app = flask.Flask(__name__)
-app.secret_key = os.environ.get('MPCV_SESSION_SECRET')
-
+flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
+mail = flask_mail.Mail(app)
 
 #####################################################################
 # Global parameters, used in layout.html
 
 @app.before_request
 def set_globals(*args, **kwargs):
-    flask.g.debug_email = identity.debug_email
+    if "DEBUG_EMAIL" in app.config:
+        flask.g.debug_email = app.config["DEBUG_EMAIL"]
 
 #####################################################################
 # General utility routes
@@ -96,10 +99,8 @@ def upload_cv(person_id):
         return flask.redirect(flask.url_for('error'))
 
     if flask.request.method == 'POST':
-        if identity.send_upload_cv_confirmation(app, candidate['id'], candidate['email'], candidate['name']):
-            return flask.render_template("check_email.html")
-        else:
-            flask.flash("Failed to send email, please try again.", 'danger')
+        identity.send_upload_cv_confirmation(app, mail, candidate['id'], candidate['email'], candidate['name'])
+        return flask.render_template("check_email.html")
 
     return flask.render_template("upload_cv.html", candidate=candidate)
 

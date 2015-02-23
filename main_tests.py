@@ -7,7 +7,8 @@ import coverage
 cov = coverage.coverage(branch = True, omit=["^/*", "main_tests.py"], include=["[a-z_]*.py"]) #, omit = ['env/*', 'run_tests.py', 'tests/*'])
 cov.start()
 
-os.environ['MPCV_SESSION_SECRET'] = 'doesnotmatterastesting'
+os.environ['MPCV_SECRET_KEY'] = 'doesnotmatterastesting'
+os.environ['MPCV_DEBUG_EMAIL'] = 'test@localhost'
 
 import main
 
@@ -26,6 +27,7 @@ class MainTestCase(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertIn('To apply, please send your CV', r.get_data(True))
         self.assertIn('<form action="/set_postcode" method="GET">', r.get_data(True))
+        self.assertIn('Debug email enabled', r.get_data(True))
 
     def test_postcode(self):
         r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)

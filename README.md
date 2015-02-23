@@ -44,12 +44,16 @@ Environment
 You'll need to set these config variables in the environment:
 
 ```sh
+# used for signing tokens in emails and sessions
 MPCV_SESSION_SECRET=somethingfairlyrandom
 
-DEBUG_EMAIL= # set to an email address to send all emails to
+# set to an email address to send all emails to
+MPCV_DEBUG_EMAIL= 
 
-SMTP_HOSTNAME=localhost
-SMTP_USERNAME=
-SMTP_PASSWORD=
+# any setting from http://pythonhosted.org//Flask-Mail/
+MPCV_MAIL_SERVER=localhost
+MPCV_MAIL_USE_SSL=True/False
+MPCV_MAIL_USERNAME=
+MPCV_MAIL_PASSWORD=
 ```
 
