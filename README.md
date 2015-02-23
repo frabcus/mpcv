@@ -29,6 +29,8 @@ Testing
 ./main_tests.py
 ```
 
+You can find a line coverage report in `covhtml/index.html`.
+
 
 Production
 ==========

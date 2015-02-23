@@ -2,6 +2,10 @@
 
 import os
 import unittest
+import coverage
+
+cov = coverage.coverage(branch = True, omit=["^/*", "main_tests.py"], include=["[a-z_]*.py"]) #, omit = ['env/*', 'run_tests.py', 'tests/*'])
+cov.start()
 
 os.environ['MPCV_SESSION_SECRET'] = 'doesnotmatterastesting'
 
@@ -42,5 +46,17 @@ class MainTestCase(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertIn('To apply, please send your CV', r.get_data(True))
 
+    def test_bad_psotcode(self):
+        r = self.app.get('/set_postcode?postcode=moo', follow_redirects=True)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('To apply, please send your CV', r.get_data(True))
+        self.assertIn("Postcode &#39;MOO&#39; is not valid.", r.get_data(True))
+
 if __name__ == '__main__':
-    unittest.main()
+    try:
+        unittest.main()
+    finally:
+        cov.stop()
+        cov.html_report(directory='covhtml')
+
+
