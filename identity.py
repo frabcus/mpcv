@@ -6,14 +6,15 @@ import textwrap
 import flask
 import flask_mail
 import hmac
+import hashlib
 
 # Given the application's secret key, and a democracy person identifier,
 # returns a token suitable for emailing to them to authenticate themselves.
 def sign_person_id(secret_key, person_id):
-    digest = hmac.new(secret_key.encode('ascii'), str(person_id).encode('ascii')).digest()
+    digest = hmac.new(secret_key.encode('ascii'), str(person_id).encode('ascii'), hashlib.sha512).digest()
     signature_bytes = base64.urlsafe_b64encode(digest)
     signature = signature_bytes.decode("ascii").rstrip("=\n")
-    return signature
+    return signature[0:16]
 
 # Confirmation they're a candidate who can upload a CV
 
