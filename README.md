@@ -45,7 +45,7 @@ You'll need to set these config variables in the environment:
 
 ```sh
 # used for signing tokens in emails and sessions
-MPCV_SESSION_SECRET=somethingfairlyrandom
+MPCV_SECRET_KEY=somethingfairlyrandom
 
 # set to an email address to send all emails to
 MPCV_DEBUG_EMAIL= 
