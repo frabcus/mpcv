@@ -63,6 +63,12 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('<button type="submit" class="btn btn-default">Confirm email</button>', r.get_data(True))
         self.assertIn('frabcus@fastmail.fm', r.get_data(True))
 
+    def test_upload_cv_error(self):
+        r = self.app.get('/upload_cv/382828281818', follow_redirects=True)
+        self.assertEqual(r.status_code, 500)
+        self.assertIn('Oh dear', r.get_data(True))
+        self.assertIn('Candidate 382828281818 not found', r.get_data(True))
+
     def test_upload_cv_send_email(self):
         with main.mail.record_messages() as outbox:
             r = self.app.post('/upload_cv/7777777')

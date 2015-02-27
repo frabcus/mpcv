@@ -26,7 +26,7 @@ def set_globals(*args, **kwargs):
 
 @app.route('/error')
 def error():
-    return flask.render_template('error.html')
+    return flask.render_template('error.html'), 500
 
 
 #####################################################################
