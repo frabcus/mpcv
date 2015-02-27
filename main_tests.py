@@ -3,6 +3,7 @@
 import os
 import unittest
 import coverage
+import re
 
 cov = coverage.coverage(branch = True, omit=["^/*", "main_tests.py"], include=["[a-z_]*.py"])
 cov.start()
@@ -76,13 +77,33 @@ class MainTestCase(unittest.TestCase):
 
     def test_upload_cv_send_email(self):
         with main.mail.record_messages() as outbox:
+            # Ask for email confirmation
             r = self.app.post('/upload_cv/7777777')
             self.assertEqual(r.status_code, 200)
             self.assertIn('Check your email!', r.get_data(True))
+
+            # Extract URL to confirm from email
             self.assertEqual(len(outbox), 1)
-            self.assertEqual( outbox[0].subject, "Upload your CV for becoming an MP")
-            self.assertEqual( outbox[0].recipients, [('Sicnarf Gnivri', 'test@localhost')])
-            self.assertEqual( outbox[0].sender, "Democracy Club CVs <cv@democracyclub.org.uk>")
+            self.assertEqual(outbox[0].subject, "Upload your CV for becoming an MP")
+            self.assertEqual(outbox[0].recipients, [('Sicnarf Gnivri', 'test@localhost')])
+            self.assertEqual(outbox[0].sender, "Democracy Club CVs <cv@democracyclub.org.uk>")
+            m = re.search("^http://localhost(/.*)$", outbox[0].body, re.M)
+            self.assertTrue(m)
+            confirmation_url = m.group(1)
+            print(confirmation_url)
+
+            # View the page where the upload form is
+            r = self.app.get(confirmation_url)
+            self.assertEqual(r.status_code, 200)
+            self.assertIn('Drop your CV in here', r.get_data(True))
+            self.assertIn('data-url="' + confirmation_url + '"', r.get_data(True))
+
+            # Upload
+            rup = self.app.post(confirmation_url, data=dict(
+               file=(open('fixtures/Example MP candidate CV.doc', 'rb'), 'Example MP candidate CV.doc'),
+             ), follow_redirects=True)
+            self.assertEqual(rup.status_code, 200)
+            print(rup.get_data(True))
 
 
 if __name__ == '__main__':
