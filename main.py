@@ -145,7 +145,7 @@ def upload_cv_upload(person_id, signature):
         return json.dumps({ 'error': 'Upload not received'})
 
     secure_filename = werkzeug.secure_filename(f.filename)
-    data = f.getvalue()
+    data = f.read()
     size = len(data)
 
     print("saving CV to S3: candidate:", person_id, "uploaded file:", secure_filename, f.content_type, size, "bytes")
