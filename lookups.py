@@ -50,15 +50,12 @@ def lookup_candidates(constituency_id):
 
     current_candidate_list = []
     for member in data['result']:
-        standing_in = member['standing_in']
-        if constants.year in standing_in and standing_in[constants.year] != None:
-            if standing_in[constants.year]['post_id'] == str_id:
-                current_candidate_list.append({
-                    'id': member['id'],
-                    'name': member['name'],
-                    'email': member['email'],
-                    'party': member['party_memberships'][constants.year]['name']
-                })
+        current_candidate_list.append({
+            'id': member['id'],
+            'name': member['name'],
+            'email': member['email'],
+            'party': member['party_memberships'][constants.year]['name']
+        })
 
     # Sort by surname (as best we can -- "Duncan Smith" won't work)
     # so it is same as on ballot paper. So can get used to it.
@@ -75,9 +72,15 @@ def lookup_candidates(constituency_id):
 def lookup_candidate(person_id):
     str_id = str(int(person_id))
     if str_id == '7777777':
-        return { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'party': 'Bunny Rabbits Rule' }
+        return {
+            'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'party': 'Bunny Rabbits Rule',
+            'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+        }
     if str_id == '7777778':
-        return { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'party': 'Mice Rule More' }
+        return {
+            'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'party': 'Mice Rule More',
+            'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+        }
 
     data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=id:%s" % str_id).json()
 
@@ -87,7 +90,19 @@ def lookup_candidate(person_id):
         return { "error": "Candidate %s unexpectedly appears multiple times" % str_id }
 
     c = data['result'][0]
-    return { 'id': c['id'], 'name': c['name'], 'email': c['email'], 'party': c['party_memberships'][constants.year]['name'] }
+
+    constituency_id = None
+    constituency_name = None
+    standing_in = c['standing_in']
+    if constants.year in standing_in and standing_in[constants.year] != None:
+        constituency_id = standing_in[constants.year]['post_id']
+        constituency_name = standing_in[constants.year]['name']
+    print("ccccccccc", constituency_id, constituency_name)
+
+    return {
+        'id': c['id'], 'name': c['name'], 'email': c['email'], 'party': c['party_memberships'][constants.year]['name'],
+        'constituency_id': constituency_id, 'constituency_name': constituency_name
+    }
 
 conn = None
 def _get_s3_bucket(config):
