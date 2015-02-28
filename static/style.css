@@ -9,8 +9,16 @@
     text-decoration: underline;
 }
 
-#wrap {
-    margin-bottom: 48px;
+.contentwrap {
+    padding-top: 42px;
+}
+
+footer ul.pull-right li:last-child {
+    margin-right: 0;
+}
+
+.top-alert {
+    margin-top: 32px;
 }
 
 /* /candidates */

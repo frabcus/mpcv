@@ -67,7 +67,7 @@ def clear_postcode():
 
 
 #####################################################################
-# List of candidates
+# List candidates and view their CVs
 
 @app.route('/candidates')
 def candidates():
@@ -81,12 +81,31 @@ def candidates():
     if 'errors' in candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return flask.redirect(flask.url_for('error'))
+    candidates = lookups.augment_if_has_cv(app.config, candidates)
 
     candidates_no_email = [ candidate for candidate in candidates if candidate['email'] is None]
-    candidates = [ candidate for candidate in candidates if candidate['email'] is not None]
+    candidates_have_cv = [ candidate for candidate in candidates if candidate['email'] is not None and candidate['has_cv']]
+    candidates = [ candidate for candidate in candidates if candidate['email'] is not None and not candidate['has_cv']]
 
     return flask.render_template("candidates.html", constituency=constituency,
-            candidates=candidates, candidates_no_email=candidates_no_email)
+            candidates=candidates,
+            candidates_have_cv=candidates_have_cv,
+            candidates_no_email=candidates_no_email
+    )
+
+
+# GET is to show form to upload CV
+@app.route('/show_cv/<int:person_id>')
+def show_cv(person_id):
+    candidate = lookups.lookup_candidate(person_id)
+    if 'error' in candidate:
+        flask.flash(candidate['error'], 'danger')
+        return flask.redirect(flask.url_for('error'))
+
+    cvs = lookups.get_cv_list(app.config, person_id)
+    current_cv = cvs[0]
+
+    return flask.render_template("show_cv.html", candidate=candidate, cv=current_cv)
 
 
 #####################################################################
@@ -159,19 +178,6 @@ def upload_cv_upload(person_id, signature):
         # "error": "not implemented"
       },
     ]})
-
-# GET is to show form to upload CV
-@app.route('/show_cv/<int:person_id>')
-def show_cv(person_id):
-    candidate = lookups.lookup_candidate(person_id)
-    if 'error' in candidate:
-        flask.flash(candidate['error'], 'danger')
-        return flask.redirect(flask.url_for('error'))
-
-    cvs = lookups.get_cv_list(app.config, person_id)
-    current_cv = cvs[0]
-
-    return flask.render_template("show_cv.html", candidate=candidate, cv=current_cv)
 
 # Main entry point
 if __name__ == '__main__':

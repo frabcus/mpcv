@@ -4,44 +4,74 @@
         <title>CVs of MP candidates</title>
 
         <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/static/bootstrap/css/bootswatch.min.css" rel="stylesheet">
         <link href="/static/style.css" rel="stylesheet">
 
     </head>
 
     <body>
 
-        <div class="text-center alert alert-warning">MP CV is still pre-alpha. Email <a href="mailto:francis@flourish.org">Francis Irving</a> with comments, questions. Send pull requests to <a href="https://github.com/frabcus/mpcv">frabcus/mpcv</a>.
-
-          {% if g.debug_email %}
-              <p>Debug email enabled, all outbound emails going to <b>{{ g.debug_email }}</b>.</p>
-          {% endif %}
-        </div>
-
-        <div id="wrap">
-
-            <div id="masthead">
-              <div class="container">
-                  <div class="row">
-                    <div class="col-md-2 col-lg-3">
-                    </div>
-                    <div class="col-md-8 col-lg-6">
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                          {% if messages %}
-                            {% for category, message in messages %}
-                              <div class="alert alert-{{ category }}">{{ message }}</div>
-                            {% endfor %}
-                          {% endif %}
-                        {% endwith %}
-
-                        {% block body %}{% endblock %}
-                    </div>
-                    <div class="col-md-2 col-lg-3">
-                    </div>
-                  </div>
-               </div>
+        <div class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a href="../" class="navbar-brand">Democracy Club CVs</a>
             </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+              <!-- <ul class="nav navbar-nav">
+                <li> <a href="/clear_postcode">Change constituency</a> </li>
+              </ul> -->
+
+              <ul class="nav navbar-nav navbar-right">
+                <li> <a href="/clear_postcode">Change constituency</a> </li>
+              </ul>
+
+            </div>
+          </div>
         </div>
 
+        <div class="container">
+
+          <div class="row">
+            <div class="col-md-8 col-lg-6">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="top-alert alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                <div class="contentwrap"> {% block body %}{% endblock %} </div>
+            </div>
+            <div class="col-md-4 col-lg-4">
+            </div>
+          </div>
+
+          <footer>
+            <div class="row">
+              <div class="col-lg-12">
+
+                <!-- <ul class="pull-right">
+                  <li><a href="http://democracyclub.org.uk/">Democracy Club</a></li>
+                  <li><a href="http://yournextmp.com/">Your Next MP</a></li>
+                </ul> -->
+
+                <ul class="list-unstyled">
+                  <li><a href="https://github.com/frabcus/mpcv">Source</a></li>
+                  <li><a href="mailto:francis@flourish.org">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+
+            {% if g.debug_email %}
+                <div class="text-center alert alert-info" style="margin-top: 1em;">
+                      <p>Debug email enabled, all outbound emails going to <b>{{ g.debug_email }}</b>.</p>
+                </div>
+            {% endif %}
+
+          </footer>
+
+        </div>
     </body>
 
 </html>

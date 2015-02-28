@@ -38,7 +38,10 @@ def lookup_postcode(postcode):
 def lookup_candidates(constituency_id):
     str_id = str(int(constituency_id))
     if str_id == '8888888':
-        return [ { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'party': 'Bunny Rabbits Rule' } ]
+        return [
+            { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'party': 'Bunny Rabbits Rule' },
+            { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'party': 'Mice Rule More' }
+        ]
 
     data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=standing_in.%s.post_id:%s" %
             (constants.year, str_id)).json()
@@ -73,6 +76,8 @@ def lookup_candidate(person_id):
     str_id = str(int(person_id))
     if str_id == '7777777':
         return { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'party': 'Bunny Rabbits Rule' }
+    if str_id == '7777778':
+        return { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'party': 'Mice Rule More' }
 
     data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=id:%s" % str_id).json()
 
@@ -136,5 +141,25 @@ def get_cv_list(config, person_id):
             'content_type': key.content_type,
         })
     return result
+
+# Takes an array of candidates of the same form list_candidates
+# returns. Auguments with a variable to say if they have a CV.
+def augment_if_has_cv(config, candidates):
+    bucket = _get_s3_bucket(config)
+
+    people_with_cvs = bucket.list("cvs/", "/")
+
+    has_cv = {}
+    for key in people_with_cvs:
+        person_id = str(key.name.replace("cvs/", "").replace("/", ""))
+        has_cv[person_id] = 1
+
+    for candidate in candidates:
+        if str(candidate['id']) in has_cv:
+            candidate['has_cv'] = True
+        else:
+            candidate['has_cv'] = False
+
+    return candidates
 
 
