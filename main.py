@@ -179,6 +179,8 @@ def upload_cv_upload(person_id, signature):
       },
     ]})
 
+
+#####################################################################
 # Main entry point
 if __name__ == '__main__':
     app.debug = True
