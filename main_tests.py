@@ -108,6 +108,11 @@ class MainTestCase(unittest.TestCase):
         self.assertEqual(r.status_code, 500)
         self.assertIn("That web link isn&#39;t right", r.get_data(True))
 
+    def test_show_cv(self):
+        r = self.app.get('/show_cv/7777777')
+        self.assertIn('Sicnarf Gnivri', r.get_data(True))
+        self.assertIn("<iframe", r.get_data(True))
+
 if __name__ == '__main__':
     try:
         unittest.main()
