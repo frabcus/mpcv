@@ -4,3 +4,4 @@ requests
 coverage
 flask-appconfig
 flask-mail
+boto>=2.36.0

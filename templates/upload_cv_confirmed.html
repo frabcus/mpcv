@@ -24,24 +24,22 @@
         <script src="/static/jquery.fileupload.js"></script>
 
         <script>
-                $(function () {
-                    $('#fileupload').fileupload({
-                        dataType: 'json',
-                        done: function (e, data) {
-                            alert("done" + data)
-                            $.each(data.result.files, function (index, file) {
-                                $('<p/>').text(file.name).appendTo(document.body);
-                            });
-                        },
-                        progressall: function (e, data) {
-                            var progress = parseInt(data.loaded / data.total * 100, 10);
-                            $('#progress .bar').css(
-                                'width',
-                                progress + '%'
-                            );
-                        }
-                    });
+            $(function () {
+                $('#fileupload').fileupload({
+                    dataType: 'json',
+                    done: function (e, data) {
+                        console.log("done file upload ok, redirecting")
+                        location.href = "{{ successful_link }}"
+                    },
+                    progressall: function (e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        $('#progress .bar').css(
+                            'width',
+                            progress + '%'
+                        );
+                    }
                 });
+            });
         </script>
 
         <p>A Word document or a PDF is best.</p>

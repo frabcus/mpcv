@@ -62,4 +62,17 @@
 }
 
 
+/* /show_cv */
+
+/* See http://stackoverflow.com/a/12121929/284340 */
+html,body        {height:100%;}
+.frame_outer_wrapper   {width:100%;height:100%;margin:0 auto;background:#CCC}
+.frame_inner_wrapper        {position:relative;}
+.frame_inner_wrapper .ratio {display:block;width:100%;height:auto;}
+.frame_inner_wrapper iframe {position:absolute;top:0;left:0;width:100%; height:100%;}
+
+.uploaded {
+    text-color: #aaa;
+}
+
 

@@ -6,8 +6,12 @@
 
 import requests
 import json
+import datetime
 
 import constants
+
+import boto.s3.connection
+import boto.s3.key
 
 # Takes a postcode returns a dict of:
 #   error - with a user friendly message, if the lookup failed
@@ -65,8 +69,8 @@ def lookup_candidates(constituency_id):
 #   name - name of the candidate
 #   email - email address of the candidate (if known)
 #   party - political party name of the candidate
-def lookup_candidate(candidate_id):
-    str_id = str(int(candidate_id))
+def lookup_candidate(person_id):
+    str_id = str(int(person_id))
     if str_id == '7777777':
         return { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'party': 'Bunny Rabbits Rule' }
 
@@ -79,5 +83,58 @@ def lookup_candidate(candidate_id):
 
     c = data['result'][0]
     return { 'id': c['id'], 'name': c['name'], 'email': c['email'], 'party': c['party_memberships'][constants.year]['name'] }
+
+conn = None
+def _get_s3_bucket(config):
+    global conn
+    if not conn:
+        conn = boto.s3.connection.S3Connection(
+            config.get('S3_ACCESS_KEY_ID'),
+            config.get('S3_SECRET_ACCESS_KEY')
+        )
+
+    bucket_name = config.get('S3_BUCKET_NAME')
+    bucket = conn.get_bucket(bucket_name)
+    return bucket
+
+# Takes the app config (for S3 keys), candidate identifier, file contents, a
+# (secured) filename and content type. Saves that new CV in S3. Raises
+# an exception if it goes wrong, returns nothing.
+def add_cv(config, person_id, contents, filename, content_type):
+    person_id = str(int(person_id))
+    assert person_id != 0
+
+    bucket = _get_s3_bucket(config)
+
+    when = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S-")
+
+    key = boto.s3.key.Key(bucket)
+    key.key = "cvs/" + str(person_id) + "/" + when + filename
+    key.set_contents_from_string(contents)
+    key.set_metadata('Content-Type', content_type)
+    key.set_acl('public-read')
+
+# Takes the app config (for S3) and candidate identifier. Returns
+# a list, ordered by reverse time, of CVs for that candidate with
+# the following fields:
+#   url - publically accessible address of the file
+#   date - when it was uploaded
+#   content_type - the mime type of the file
+def get_cv_list(config, person_id):
+    bucket = _get_s3_bucket(config)
+
+    prefix = "cvs/" + str(person_id) + "/"
+    cvs = bucket.list(prefix)
+    cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
+
+    result = []
+    for key in cvs:
+        result.append({
+            'name': key.name,
+            'url': key.generate_url(expires_in=0, query_auth=False),
+            'date': key.last_modified,
+            'content_type': key.content_type,
+        })
+    return result
 
 

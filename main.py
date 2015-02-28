@@ -122,9 +122,10 @@ def upload_cv_confirmed(person_id, signature):
         return flask.redirect(flask.url_for('error'))
 
     upload_link = flask.url_for('upload_cv_upload', person_id=person_id, signature=signature)
+    successful_link = flask.url_for('show_cv', person_id=person_id)
 
     return flask.render_template("upload_cv_confirmed.html", candidate=candidate,
-         upload_link=flask.request.path)
+         upload_link=upload_link, successful_link=successful_link)
 
 # POST is actual receiving of CV
 @app.route('/upload_cv/<int:person_id>/c/<signature>', methods=['POST'])
@@ -146,15 +147,34 @@ def upload_cv_upload(person_id, signature):
     secure_filename = werkzeug.secure_filename(f.filename)
     data = f.getvalue()
     size = len(data)
-    print("candidate:", person_id, "uploaded file:", secure_filename, f.content_type, size, "bytes")
+
+    print("saving CV to S3: candidate:", person_id, "uploaded file:", secure_filename, f.content_type, size, "bytes")
+
+    file_url = lookups.add_cv(app.config, person_id, data, secure_filename, f.content_type)
+
+    print("CV saved to URL", file_url)
 
     return json.dumps({"files": [
       {
         "name": secure_filename,
         "size": size,
-        "error": "XXX not implemented"
+        "url": file_url
+        # "error": "not implemented"
       },
     ]})
+
+# GET is to show form to upload CV
+@app.route('/show_cv/<int:person_id>')
+def show_cv(person_id):
+    candidate = lookups.lookup_candidate(person_id)
+    if 'error' in candidate:
+        flask.flash(candidate['error'], 'danger')
+        return flask.redirect(flask.url_for('error'))
+
+    cvs = lookups.get_cv_list(app.config, person_id)
+    current_cv = cvs[0]
+
+    return flask.render_template("show_cv.html", candidate=candidate, cv=current_cv)
 
 # Main entry point
 if __name__ == '__main__':
