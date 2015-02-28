@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
 import os
+import json
+import traceback
+
+import werkzeug
 import flask
 import flask_appconfig.env
 import flask_mail
-import json
 
 import lookups
 import identity
@@ -138,19 +141,23 @@ def upload_cv_upload(person_id, signature):
 
     f = flask.request.files['file']
     if not f:
-        print("upload missing", person_id)
         return json.dumps({ 'error': 'Upload not received'})
 
-    print("filename", f.filename)
-    print("content_type", f.content_type)
+    secure_filename = werkzeug.secure_filename(f.filename)
+    data = f.getvalue()
+    size = len(data)
+    print("candidate:", person_id, "uploaded file:", secure_filename, f.content_type, size, "bytes")
 
-    return "{ 'moo': 1 }"
+    return json.dumps({"files": [
+      {
+        "name": secure_filename,
+        "size": size,
+        "error": "XXX not implemented"
+      },
+    ]})
 
-#####################################################################
-# Debugging entry point
-
+# Main entry point
 if __name__ == '__main__':
     app.debug = True
     app.run()
-
 

@@ -90,7 +90,6 @@ class MainTestCase(unittest.TestCase):
             m = re.search("^http://localhost(/.*)$", outbox[0].body, re.M)
             self.assertTrue(m)
             confirmation_url = m.group(1)
-            print(confirmation_url)
 
         # View the page where the upload form is
         r = self.app.get(confirmation_url)
@@ -103,7 +102,6 @@ class MainTestCase(unittest.TestCase):
            file=(open('fixtures/Example MP candidate CV.doc', 'rb'), 'Example MP candidate CV.doc'),
          ), follow_redirects=True)
         self.assertEqual(rup.status_code, 200)
-        print(rup.get_data(True))
 
     def test_badly_signed_confirmation_link(self):
         r = self.app.get('/upload_cv/7777777/c/xxxxxyyyyyy', follow_redirects=True)
