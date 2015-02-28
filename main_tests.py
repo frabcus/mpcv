@@ -35,7 +35,9 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Candidates for job of MP', r.get_data(True))
         self.assertIn('Democracy Club Test Constituency', r.get_data(True))
         self.assertIn('Sicnarf Gnivri', r.get_data(True))
-        self.assertIn('<a href="/upload_cv/7777777">This is me, add my CV</a>', r.get_data(True))
+        self.assertIn('href="/show_cv/7777777"', r.get_data(True))
+        self.assertIn('Notlits Esuom', r.get_data(True))
+        self.assertIn('href="/upload_cv/7777778"', r.get_data(True))
 
         # make sure constituency remembered, and front page redirects back to constituency page
         r = self.app.get('/', follow_redirects=True)
@@ -44,7 +46,7 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Democracy Club Test Constituency', r.get_data(True))
 
         # "I live somewhere else" clears the memory of constituency
-        self.assertIn('<a href="/clear_postcode">I live somewhere else</a>', r.get_data(True))
+        self.assertIn('<a href="/clear_postcode">Change constituency</a>', r.get_data(True))
         r = self.app.get('/clear_postcode', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
         self.assertIn('To apply, please send your CV', r.get_data(True))
@@ -66,7 +68,7 @@ class MainTestCase(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertIn('Hi, Sicnarf Gnivri!', r.get_data(True))
         self.assertIn('<form action="/upload_cv/7777777" method="POST">', r.get_data(True))
-        self.assertIn('<button type="submit" class="btn btn-default">Confirm email</button>', r.get_data(True))
+        self.assertIn('<button type="submit" class="btn btn-primary">Confirm email</button>', r.get_data(True))
         self.assertIn('frabcus@fastmail.fm', r.get_data(True))
 
     def test_upload_cv_error(self):
