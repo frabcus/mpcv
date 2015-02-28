@@ -9,6 +9,10 @@
     text-decoration: underline;
 }
 
+#wrap {
+    margin-bottom: 5em;
+}
+
 /* /candidates */
 
 #candidates > div {
