@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% block title %} {{ candidate.name }}'s CV, {{ candidate.constituency_name }} {% endblock %}
 {% block body %}
     <div id="show_cv">
         <a href="/candidates" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> More candidates</a>
