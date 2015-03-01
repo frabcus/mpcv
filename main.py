@@ -174,7 +174,7 @@ def upload_cv_upload(person_id, signature):
     print("saving CV to S3: candidate:", person_id, "uploaded file:", secure_filename, f.content_type, size, "bytes")
     file_url = lookups.add_cv(app.config, person_id, data, secure_filename, f.content_type)
 
-    flask.flash("Thanks! Your CV has been successfully uploaded. Why not your candidate friends about it?", 'success')
+    flask.flash("Thanks! Your CV has been successfully uploaded. You can share this page on social media. We'd love it if you tell any friends who are candidates to upload theirs too!", 'success')
 
     return json.dumps({"files": [
       {
