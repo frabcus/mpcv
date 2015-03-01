@@ -101,3 +101,9 @@ html,body        {height:100%;}
 }
 
 
+.navbar-brand > img {
+    position:relative;
+    top:-20px;
+    padding-right:1em;
+    float:left;
+}
