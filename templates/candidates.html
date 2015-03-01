@@ -26,6 +26,25 @@
         </div>
         {% endif %}
 
+        {% if candidates %}
+        <div class="no_cv">
+
+            <!-- <h2>Ask these candidates to send in their CV</h2> -->
+            <h2>Add your CV, if you're a candidate</h2>
+
+            <div class="candidate_list">
+                {% for candidate in candidates %}
+                <div class="candidate">
+                    <!-- <a href="/email" class="btn btn-primary emailthem" target="_blank">Email them</a> -->
+                    <a href="/upload_cv/{{ candidate.id }}" class="btn btn-primary">Add my CV</a>
+                    <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+        {% endif %}
+
         {% if candidates_no_email %}
         <div class="no_email">
 
@@ -43,25 +62,6 @@
             <p>
                 The "add" buttons take you to <a href="https://yournextmp.com/">YourNextMP</a>, log in and edit their email.
             </p>
-
-        </div>
-        {% endif %}
-
-        {% if candidates %}
-        <div class="no_cv">
-
-            <!-- <h2>Ask these candidates to send in their CV</h2> -->
-            <h2>Add your CV, if you're a candidate</h2>
-
-            <div class="candidate_list">
-                {% for candidate in candidates %}
-                <div class="candidate">
-                    <!-- <a href="/email" class="btn btn-primary emailthem" target="_blank">Email them</a> -->
-                    <a href="/upload_cv/{{ candidate.id }}" class="btn btn-primary">Add my CV</a>
-                    <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
-                </div>
-                {% endfor %}
-            </div>
 
         </div>
         {% endif %}

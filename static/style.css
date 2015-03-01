@@ -1,7 +1,11 @@
 /* / */
 
 #front .lead {
-    margin-top: 48px;
+    margin-top: 32px;
+}
+
+#front form {
+    margin-bottom: 48px;
 }
 
 .alert-warning a {
@@ -9,7 +13,7 @@
     text-decoration: underline;
 }
 
-.contentwrap {
+.contentwrap, .sidebarwrap {
     padding-top: 42px;
 }
 
