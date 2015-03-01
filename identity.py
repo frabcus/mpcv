@@ -31,6 +31,7 @@ UPLOAD_CV_MESSAGE = textwrap.dedent("""\
     Thanks for your help!
 
     Democracy Club CV team
+    (we were behind TheyWorkForYou)
 """)
 
 def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
@@ -46,8 +47,8 @@ def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
 
     body = UPLOAD_CV_MESSAGE.format(email=to_email, name=to_name, link=link)
     msg = flask_mail.Message(body=body,
-            subject="Upload your CV for becoming an MP",
-            sender=("Democracy Club CVs", "cv@democracyclub.org.uk"),
+            subject="Upload your CV to apply to be an MP",
+            sender=("Democracy Club CV", "cv@democracyclub.org.uk"),
             recipients=[(to_name, to_email)]
           )
 

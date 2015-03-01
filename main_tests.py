@@ -88,7 +88,7 @@ class MainTestCase(unittest.TestCase):
             self.assertEqual(len(outbox), 1)
             self.assertEqual(outbox[0].subject, "Upload your CV for becoming an MP")
             self.assertEqual(outbox[0].recipients, [('Sicnarf Gnivri', 'test@localhost')])
-            self.assertEqual(outbox[0].sender, "Democracy Club CVs <cv@democracyclub.org.uk>")
+            self.assertEqual(outbox[0].sender, "Democracy Club CV <cv@democracyclub.org.uk>")
             m = re.search("^http://localhost(/.*)$", outbox[0].body, re.M)
             self.assertTrue(m)
             confirmation_url = m.group(1)
