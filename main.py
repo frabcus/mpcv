@@ -25,11 +25,15 @@ def set_globals(*args, **kwargs):
         flask.g.debug_email = app.config["DEBUG_EMAIL"]
 
 #####################################################################
-# General utility routes
+# General routes
 
 @app.route('/error')
 def error():
     return flask.render_template('error.html'), 500
+
+@app.route('/about')
+def about():
+    return flask.render_template('about.html')
 
 
 #####################################################################

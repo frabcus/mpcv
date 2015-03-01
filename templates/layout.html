@@ -23,6 +23,7 @@
 
               <ul class="nav navbar-nav navbar-right">
                 <li> <a href="/clear_postcode">Change constituency</a> </li>
+                <li> <a href="/about">About</a> </li>
               </ul>
 
             </div>
@@ -32,7 +33,7 @@
         <div class="container">
 
           <div class="row">
-            <div class="col-md-8 col-lg-6">
+            <div class="col-md-8 col-lg-7">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                   {% if messages %}
                     {% for category, message in messages %}
@@ -43,7 +44,8 @@
 
                 <div class="contentwrap"> {% block body %}{% endblock %} </div>
             </div>
-            <div class="col-md-4 col-lg-4">
+            <div class="col-md-4 col-lg-5">
+                <!-- sidebar maybe -->
             </div>
           </div>
 
