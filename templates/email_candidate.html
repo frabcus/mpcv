@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %} Confirm your email {% endblock %}
+{% block title %} Email candidate {% endblock %}
 {% block body %}
     <div id="upload_cv">
 
@@ -31,6 +31,7 @@
                 <label class="col-sm-2 control-label" for="message">Message</label>
                 <div class="col-sm-10">
                     <textarea id="message" name="message" class="form-control" rows=10>{{ message  }}</textarea>
+                    <p class="help-block">Want some ideas for your letter? See the tips to the right.</p>
                 </div>
             </div>
 
@@ -39,11 +40,23 @@
                 <div class="col-sm-2">
                 </div>
                 <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Send message</button>
+                <button type="submit" class="btn btn-primary">Send email</button>
             </div>
             </div>
         </form>
 
     </div>
 {% endblock %}
+{% block sidebar %}
 
+    <h2>Tips for a good mail</h2>
+
+     <!-- <p>Think of an intriguing subject that will encourage them to open it: they're receiving hundreds of emails a day!  A question is good.</p> -->
+     <p>1. Introduce yourself, <strong>making it clear you're in their constituency</strong> (<em>{{candidate.constituency_name}}</em>).</p>
+     <p>2. Tell them you've been looking at candidate's CVs on Democracy Club. Tell them why you think it's important they upload theirs. </p>
+     <!-- <p>Tell them that <strong></strong> candidates have answered it already, and that in <em>{{candidate.constituency_name}}</em> -->
+     <p>3. Finish by telling them there's a link at the bottom of the email to the questionnaire, and say thank you! (we automatically add the link to your email after you press 'send')</p>
+     <p>4. <strong>Sign off with your address</strong>, so they can see you're really from their constituency.</p>
+
+
+{% endblock %}
