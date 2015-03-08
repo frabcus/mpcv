@@ -22,11 +22,11 @@ def lookup_postcode(postcode):
     if "error" in data:
         return data
     if data["postcode"] == "ZZ9 9ZZ":
-        return { 'id': 8888888, 'name': "Democracy Club Test Constituency" }
+        return { 'id': 8888888, 'name': "Democracy Club Test Constituency", 'postcode': 'ZZ9 9ZZ' }
     if "shortcuts" not in data:
         return { "error": "Postcode not properly recognised" }
     c = data["areas"][str(data["shortcuts"]["WMC"])]
-    return { 'id': c['id'], 'name': c['name'] }
+    return { 'id': c['id'], 'name': c['name'], 'postcode': data['postcode'] }
 
 # Takes a constituency identifier and returns a dictionary:
 #   errors - if there was an error

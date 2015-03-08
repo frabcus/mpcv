@@ -3,6 +3,7 @@
 import os
 import json
 import traceback
+import re
 
 import werkzeug
 import flask
@@ -55,7 +56,7 @@ def set_postcode():
         flask.flash(constituency['error'], 'danger')
         return flask.redirect(flask.url_for('index'))
 
-    flask.session['postcode'] = postcode
+    flask.session['postcode'] = constituency['postcode']
     flask.session['constituency'] = constituency
 
     return flask.redirect("/candidates")
@@ -184,6 +185,48 @@ def upload_cv_upload(person_id, signature):
         # "error": "not implemented"
       },
     ]})
+
+#####################################################################
+
+@app.route('/email_candidate/<int:person_id>', methods=['GET','POST'])
+def email_candidate(person_id):
+    candidate = lookups.lookup_candidate(person_id)
+    if 'error' in candidate:
+        flask.flash(candidate['error'], 'danger')
+        return flask.redirect(flask.url_for('error'))
+
+    original_message = """Dear {0},
+
+
+
+
+Yours faithfully,
+
+""".format(candidate['name'])
+    postcode = flask.session['postcode']
+    message = original_message
+    from_email = ""
+    if flask.request.method == 'POST':
+        from_email = flask.request.form.get("from_email", "")
+        message = flask.request.form.get("message", "").replace("\r\n", "\n")
+        if from_email == "" or not re.match("^.*?@.*?\..*?$", from_email):
+            flask.flash("Please enter your email", 'danger')
+        elif message.strip() == original_message.strip():
+            flask.flash("Please enter a message", 'danger')
+        else:
+            identity.send_email_candidate(app, mail,
+                candidate['id'], candidate['email'], candidate['name'],
+                from_email, postcode, message
+            )
+            flask.flash("Thanks! Your message has been sent to " + candidate['name'], 'success')
+            return flask.redirect("/candidates")
+
+    return flask.render_template("email_candidate.html",
+        candidate=candidate,
+        postcode=postcode,
+        from_email=from_email,
+        message=message
+    )
 
 
 #####################################################################

@@ -25,6 +25,11 @@ footer ul.pull-right li:last-child {
     margin-top: 32px;
 }
 
+.top-alert + * {
+    padding-top: 0px;
+}
+
+
 /* /about */
 
 #about {

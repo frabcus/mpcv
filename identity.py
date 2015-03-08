@@ -16,6 +16,13 @@ def sign_person_id(secret_key, person_id):
     signature = signature_bytes.decode("ascii").rstrip("=\n")
     return signature[0:16]
 
+# Make debug email if appropriate
+def map_to_email(app, to_email):
+    if "DEBUG_EMAIL" in app.config:
+        to_email = app.config["DEBUG_EMAIL"]
+        print("DEBUG_EMAIL", to_email)
+    return to_email
+
 # Confirmation they're a candidate who can upload a CV
 
 UPLOAD_CV_MESSAGE = textwrap.dedent("""\
@@ -35,17 +42,13 @@ UPLOAD_CV_MESSAGE = textwrap.dedent("""\
 """)
 
 def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
-    if "DEBUG_EMAIL" in app.config:
-        to_email = app.config["DEBUG_EMAIL"]
-        print("DEBUG_EMAIL", to_email)
+    to_email = map_to_email(app, to_email)
 
     signature = sign_person_id(app.secret_key, person_id)
     link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
     print("confirm email:", to_email, link)
 
-    # return False # temporarily disabled until all workflow works
-
-    body = UPLOAD_CV_MESSAGE.format(email=to_email, name=to_name, link=link)
+    body = UPLOAD_CV_MESSAGE.format(name=to_name, link=link)
     msg = flask_mail.Message(body=body,
             subject="Upload your CV to apply to be an MP",
             sender=("Democracy Club CV", "cv@democracyclub.org.uk"),
@@ -54,4 +57,42 @@ def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
 
     mail.send(msg)
 
+
+CONSTITUENT_MAIL_MESSAGE = textwrap.dedent("""\
+    This is a message from a voter in your constituency asking you to
+    share your CV. Follow this link to do so:
+    {link}
+
+    -------------------------------------------------------------------
+
+    {message}
+
+    -------------------------------------------------------------------
+
+    NOTE: You can write to this voter at {from_email}. Their postcode
+    is {postcode}.
+
+    To share your CV please go to:
+    {link}
+    A Word document or a PDF is perfect!
+""")
+
+
+def send_email_candidate(app, mail, person_id, to_email, to_name, from_email, postcode, message):
+    to_email = map_to_email(app, to_email)
+
+    signature = sign_person_id(app.secret_key, person_id)
+    link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
+    print("email candidate link:", to_email, link)
+
+    body = CONSTITUENT_MAIL_MESSAGE.format(name=to_name, link=link,
+        from_email=from_email, postcode=postcode, message=message
+    )
+    msg = flask_mail.Message(body=body,
+            subject="Message from constituent, postcode " + postcode,
+            sender=("Democracy Club CV", "cv@democracyclub.org.uk"),
+            recipients=[(to_name, to_email)]
+          )
+
+    mail.send(msg)
 

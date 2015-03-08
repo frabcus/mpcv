@@ -1,18 +1,17 @@
 {% extends "layout.html" %}
-{% block title %} Candidate CVs for MP of {{ constituency.name }} {% endblock %}
+{% block title %} {{ constituency.name }} {% endblock %}
 {% block body %}
     <div id="candidates">
 
         <h1>
-            Candidates for job of MP of<br>{{ constituency.name }}
+            {{ constituency.name }}
         </h1>
 
 
         {% if candidates_have_cv %}
         <div class="no_cv">
 
-            <!-- <h2>Ask these candidates to send in their CV</h2> -->
-            <h2>View submitted CVs</h2>
+            <h2>View CVs of these candidates</h2>
 
             <div class="candidate_list">
                 {% for candidate in candidates_have_cv %}
@@ -29,14 +28,13 @@
         {% if candidates %}
         <div class="no_cv">
 
-            <!-- <h2>Ask these candidates to send in their CV</h2> -->
-            <h2>Add your CV, if you're a candidate</h2>
+            <h2>Ask these candidates to add their CV</h2>
 
             <div class="candidate_list">
                 {% for candidate in candidates %}
                 <div class="candidate">
-                    <!-- <a href="/email" class="btn btn-primary emailthem" target="_blank">Email them</a> -->
-                    <a href="/upload_cv/{{ candidate.id }}" class="btn btn-primary">Add my CV</a>
+                    <a href="/email_candidate/{{ candidate.id }}" class="btn btn-primary">Email them</a>
+                    <a href="/upload_cv/{{ candidate.id }}" class="btn btn-default">This is me</a>
                     <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
                 </div>
                 {% endfor %}
