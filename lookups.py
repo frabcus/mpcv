@@ -117,7 +117,6 @@ def lookup_candidate(person_id):
     if constants.year in standing_in and standing_in[constants.year] != None:
         constituency_id = standing_in[constants.year]['post_id']
         constituency_name = standing_in[constants.year]['name']
-    print("ccccccccc", constituency_id, constituency_name)
 
     return {
         'id': c['id'], 'name': c['name'], 'email': c['email'], 'party': c['party_memberships'][constants.year]['name'],
