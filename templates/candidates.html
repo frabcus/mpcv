@@ -67,4 +67,27 @@
     </div>
 
 {% endblock %}
+{% block sidebar %}
 
+        {% if not email_got %}
+
+        <form action="/updates_join" method="POST">
+            <h3>Get updates</h3>
+
+            <div class="form-group">
+              <input id="email" name="email" type="email" value="{{from_email}}" placeholder="Your email" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+            </div>
+
+            <p class="help-block">
+                We'll email you when there are new CVs in your constituency,
+                for your help getting all the CVs or for other site news.
+            </p>
+        </form>
+
+        {% endif %}
+
+{% endblock %}

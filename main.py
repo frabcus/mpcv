@@ -92,10 +92,19 @@ def candidates():
     candidates_have_cv = [ candidate for candidate in candidates if candidate['email'] is not None and candidate['has_cv']]
     candidates = [ candidate for candidate in candidates if candidate['email'] is not None and not candidate['has_cv']]
 
+    from_email = ""
+    if 'email' in flask.session:
+        from_email = flask.session['email']
+    email_got = False
+    if from_email != "":
+        email_got = lookups.updates_getting(app.config, from_email)
+
     return flask.render_template("candidates.html", constituency=constituency,
             candidates=candidates,
             candidates_have_cv=candidates_have_cv,
-            candidates_no_email=candidates_no_email
+            candidates_no_email=candidates_no_email,
+            from_email=from_email,
+            email_got = email_got
     )
 
 
@@ -236,6 +245,22 @@ Yours faithfully,
         from_email=from_email,
         message=message
     )
+
+
+#####################################################################
+# List candidates and view their CVs
+
+
+@app.route('/updates_join', methods=['POST'])
+def updates_join():
+    email = flask.request.form.get('email', "")
+    if email == "" or not re.match("^.*?@.*?\..*?$", email) or "/" in email:
+        flask.flash("Please enter your email to subscribe to updates", 'danger')
+        return flask.redirect("/candidates")
+
+    lookups.updates_join(app.config, email)
+    flask.flash("Thanks for subscribing to updates! We'll get back to you. Meanwhile, please tell your friends about this on Twitter, Facebook and so on!", 'success')
+    return flask.redirect("/candidates")
 
 
 #####################################################################

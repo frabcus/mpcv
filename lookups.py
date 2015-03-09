@@ -13,6 +13,26 @@ import constants
 import boto.s3.connection
 import boto.s3.key
 
+###################################################################
+# General helpers
+
+conn = None
+def _get_s3_bucket(config):
+    global conn
+    if not conn:
+        conn = boto.s3.connection.S3Connection(
+            config.get('S3_ACCESS_KEY_ID'),
+            config.get('S3_SECRET_ACCESS_KEY')
+        )
+
+    bucket_name = config.get('S3_BUCKET_NAME')
+    bucket = conn.get_bucket(bucket_name)
+    return bucket
+
+
+###################################################################
+# Democracy APIs
+
 # Takes a postcode returns a dict of:
 #   error - with a user friendly message, if the lookup failed
 #   id - the mySociety identifier of the constituency
@@ -104,18 +124,9 @@ def lookup_candidate(person_id):
         'constituency_id': constituency_id, 'constituency_name': constituency_name
     }
 
-conn = None
-def _get_s3_bucket(config):
-    global conn
-    if not conn:
-        conn = boto.s3.connection.S3Connection(
-            config.get('S3_ACCESS_KEY_ID'),
-            config.get('S3_SECRET_ACCESS_KEY')
-        )
 
-    bucket_name = config.get('S3_BUCKET_NAME')
-    bucket = conn.get_bucket(bucket_name)
-    return bucket
+###################################################################
+# Storing CVs
 
 # Takes the app config (for S3 keys), candidate identifier, file contents, a
 # (secured) filename and content type. Saves that new CV in S3. Raises
@@ -177,4 +188,31 @@ def augment_if_has_cv(config, candidates):
 
     return candidates
 
+
+###################################################################
+# Signup to mailings
+
+def updates_join(config, email):
+    email = email.lower().replace("/", "_")
+    bucket = _get_s3_bucket(config)
+
+    key = boto.s3.key.Key(bucket)
+    key.key = "updates/" + str(email)
+    key.set_contents_from_string("subscribed")
+
+    url = key.generate_url(expires_in=0, query_auth=False)
+    print("key url", url)
+
+def updates_getting(config, email):
+    email = email.lower().replace("/", "_")
+    bucket = _get_s3_bucket(config)
+
+    prefix = "updates/" + str(email)
+    results = bucket.list(prefix)
+
+    for result in results:
+        if result.name == "updates/" + str(email):
+            return True
+
+    return False
 
