@@ -25,7 +25,8 @@ ZZ9 9ZZ is a test constituency postcode.
 Testing
 =======
 
-Python unit tests.
+Python unit tests
+-----------------
 
 ```sh
 ./main_tests.py
@@ -33,11 +34,14 @@ Python unit tests.
 
 You can find a line coverage report in `covhtml/index.html`.
 
-Casper integration tests:
+Casper integration tests
+------------------------
 
 ```sh
 casperjs test test_casper.js --address=http://localhost:5000/
 ```
+
+You can find screen shots of every page in `screenshots/`.
 
 On a Mac I had to install casperjs and phantomjs of particular versions from
 Homebrew, so they worked together.
