@@ -203,9 +203,12 @@ def email_candidate(person_id):
 Yours faithfully,
 
 """.format(candidate['name'])
+    from_email = ""
+    if 'email' in flask.session:
+        from_email = flask.session['email']
+
     postcode = flask.session['postcode']
     message = original_message
-    from_email = ""
     if flask.request.method == 'POST':
         from_email = flask.request.form.get("from_email", "")
         message = flask.request.form.get("message", "").replace("\r\n", "\n")
@@ -214,12 +217,14 @@ Yours faithfully,
         elif message.strip() == original_message.strip():
             flask.flash("Please enter a message", 'danger')
         else:
+            flask.session['email'] = from_email
             identity.send_email_candidate(app, mail,
                 candidate['id'], candidate['email'], candidate['name'],
                 from_email, postcode, message
             )
-            flask.flash("Thanks! Your message has been sent to " + candidate['name'], 'success')
+            flask.flash("Thanks! Your message has been sent to " + candidate['name'] + '.', 'success')
             return flask.redirect("/candidates")
+
 
     return flask.render_template("email_candidate.html",
         candidate=candidate,
