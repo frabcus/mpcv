@@ -25,7 +25,7 @@ class MainTestCase(unittest.TestCase):
     def test_home(self):
         r = self.app.get('/')
         self.assertEqual(r.status_code, 200)
-        self.assertIn('To apply, please send your CV', r.get_data(True))
+        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
         self.assertIn('<form action="/set_postcode" method="GET">', r.get_data(True))
         self.assertIn('Debug email enabled', r.get_data(True))
 
@@ -49,18 +49,18 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('<a href="/clear_postcode">Change constituency</a>', r.get_data(True))
         r = self.app.get('/clear_postcode', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('To apply, please send your CV', r.get_data(True))
+        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
 
     def test_candidates_redirect(self):
         # When no cookie set, /candidates takes you to front page to choose postcode
         r = self.app.get('/candidates', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('To apply, please send your CV', r.get_data(True))
+        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
 
     def test_bad_postcode(self):
         r = self.app.get('/set_postcode?postcode=moo', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('To apply, please send your CV', r.get_data(True))
+        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
         self.assertIn("Postcode &#39;MOO&#39; is not valid.", r.get_data(True))
 
     def test_upload_cv_index(self):
@@ -86,7 +86,7 @@ class MainTestCase(unittest.TestCase):
 
             # Extract URL to confirm from email
             self.assertEqual(len(outbox), 1)
-            self.assertEqual(outbox[0].subject, "Upload your CV for becoming an MP")
+            self.assertEqual(outbox[0].subject, "Upload your CV to apply to be an MP")
             self.assertEqual(outbox[0].recipients, [('Sicnarf Gnivri', 'test@localhost')])
             self.assertEqual(outbox[0].sender, "Democracy Club CV <cv@democracyclub.org.uk>")
             m = re.search("^http://localhost(/.*)$", outbox[0].body, re.M)
