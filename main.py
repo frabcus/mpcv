@@ -145,6 +145,9 @@ def upload_cv_confirmed(person_id, signature):
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
         return flask.redirect(flask.url_for('error'))
 
+    # this is their default email now
+    flask.session['email'] = candidate['email']
+
     upload_link = flask.url_for('upload_cv_upload', person_id=person_id, signature=signature)
     successful_link = flask.url_for('show_cv', person_id=person_id)
 
@@ -217,6 +220,7 @@ Yours faithfully,
         elif message.strip() == original_message.strip():
             flask.flash("Please enter a message", 'danger')
         else:
+            # this is their default email now
             flask.session['email'] = from_email
             identity.send_email_candidate(app, mail,
                 candidate['id'], candidate['email'], candidate['name'],
