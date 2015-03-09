@@ -261,6 +261,7 @@ def updates_join():
     postcode = flask.session['postcode']
 
     lookups.updates_join(app.config, email, postcode)
+    flask.session['email'] = email
     flask.flash("Thanks for subscribing to updates! We'll get back to you. Meanwhile, please tell your friends about this on Twitter, Facebook and so on!", 'success')
     return flask.redirect("/candidates")
 
