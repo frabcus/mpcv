@@ -200,7 +200,6 @@ def updates_join(config, email, postcode):
     key.set_contents_from_string(postcode)
 
     url = key.generate_url(expires_in=0, query_auth=False)
-    print("key url", url)
 
 def updates_getting(config, email):
     email = email.lower().replace("/", "_")

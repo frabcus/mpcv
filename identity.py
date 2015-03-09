@@ -46,7 +46,7 @@ def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
 
     signature = sign_person_id(app.secret_key, person_id)
     link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
-    print("confirm email:", to_email, link)
+    print("confirm email:", person_id, to_email, link)
 
     body = UPLOAD_CV_MESSAGE.format(name=to_name, link=link)
     msg = flask_mail.Message(body=body,
@@ -83,7 +83,7 @@ def send_email_candidate(app, mail, person_id, to_email, to_name, from_email, po
 
     signature = sign_person_id(app.secret_key, person_id)
     link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
-    print("email candidate link:", to_email, link)
+    print("email candidate link:", person_id, to_email, link)
 
     body = CONSTITUENT_MAIL_MESSAGE.format(name=to_name, link=link,
         from_email=from_email, postcode=postcode, message=message
