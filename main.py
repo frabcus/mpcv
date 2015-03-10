@@ -211,8 +211,13 @@ def email_candidate(person_id):
 
     original_message = """Dear {0},
 
+I'm a resident of your constituency.
 
+I have been looking at CVs of MP candidates on the Democrcy Club website to learn more about my representatives in government. 
 
+I'd be grateful if you could add your CV too. Please click on the link at the bottom of this email to upload your CV now.
+
+Thank you very much.
 
 Yours faithfully,
 
