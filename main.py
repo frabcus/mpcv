@@ -45,7 +45,9 @@ def index():
     if 'postcode' in flask.session:
         return flask.redirect("/candidates")
 
-    return flask.render_template('index.html')
+    recent_cvs = lookups.recent_cvs(app.config)
+
+    return flask.render_template('index.html', recent_cvs=recent_cvs)
 
 @app.route('/set_postcode')
 def set_postcode():

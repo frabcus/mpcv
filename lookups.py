@@ -7,6 +7,7 @@
 import requests
 import json
 import datetime
+import itertools
 
 import constants
 
@@ -150,6 +151,7 @@ def add_cv(config, person_id, contents, filename, content_type):
 # Takes the app config (for S3) and candidate identifier. Returns
 # a list, ordered by reverse time, of CVs for that candidate with
 # the following fields:
+#   name - full name of S3 key
 #   url - publically accessible address of the file
 #   date - when it was uploaded
 #   content_type - the mime type of the file
@@ -191,6 +193,33 @@ def augment_if_has_cv(config, candidates):
     return candidates
 
 
+# Takes the app config (for S3), returns a list, ordered by reverse time,
+# of recent CVs from any candidate, up to a maximum of 4, with
+# the following fields:
+#   name - full name of S3 key
+#   url - publically accessible address of the file
+#   date - when it was uploaded
+#   content_type - the mime type of the file
+def recent_cvs(config):
+    bucket = _get_s3_bucket(config)
+
+    prefix = "cvs/"
+    cvs = bucket.list(prefix)
+    cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
+    print(cvs)
+    cvs = itertools.islice(cvs, 4)
+
+    result = []
+    for key in cvs:
+        result.append({
+            'name': key.name,
+            'url': key.generate_url(expires_in=0, query_auth=False),
+            'date': key.last_modified,
+            'content_type': key.content_type,
+        })
+    return result
+
+#
 ###################################################################
 # Signup to mailings
 

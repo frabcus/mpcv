@@ -23,6 +23,17 @@
             </div>
         </form>
 
+        <h2>Recently added CVs</h2>
+
+        {% for cv in recent_cvs %}
+        <div class="frame_small_outer">
+            <div class="frame_small_inner">
+                <img class="ratio" src="/static/transparent.gif"/>
+                <iframe src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&embedded=true" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        {% endfor %}
+
     </div>
 
 {% endblock %}
