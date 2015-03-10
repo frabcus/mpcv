@@ -258,9 +258,13 @@ def updates_join():
         flask.flash("Please enter your email to subscribe to updates", 'danger')
         return flask.redirect("/candidates")
 
-    postcode = flask.session['postcode']
+    if 'constituency' not in flask.session:
+        flask.flash("Something went wrong", 'danger')
+        return flask.redirect("/")
 
-    lookups.updates_join(app.config, email, postcode)
+    constituency = flask.session['constituency']
+
+    lookups.updates_join(app.config, email, constituency)
     flask.session['email'] = email
     flask.flash("Thanks for subscribing to updates! We'll get back to you. Meanwhile, please tell your friends about this on Twitter, Facebook and so on!", 'success')
     return flask.redirect("/candidates")
