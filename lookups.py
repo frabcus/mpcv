@@ -191,13 +191,13 @@ def augment_if_has_cv(config, candidates):
 ###################################################################
 # Signup to mailings
 
-def updates_join(config, email, postcode):
+def updates_join(config, email, constituency):
     email = email.lower().replace("/", "_")
     bucket = _get_s3_bucket(config)
 
     key = boto.s3.key.Key(bucket)
     key.key = "updates/" + str(email)
-    key.set_contents_from_string(postcode)
+    key.set_contents_from_string(constituency)
 
     url = key.generate_url(expires_in=0, query_auth=False)
 
