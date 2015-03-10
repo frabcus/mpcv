@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# Reasonably comprehensive Python unit tests
+
 import os
 import unittest
 import coverage
