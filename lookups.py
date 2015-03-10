@@ -38,7 +38,10 @@ def _get_s3_bucket(config):
 #   id - the mySociety identifier of the constituency
 #   name - the text name of the constituency
 def lookup_postcode(postcode):
-    data = requests.get("http://mapit.mysociety.org/postcode/" + postcode).json()
+    try:
+        data = requests.get("http://mapit.mysociety.org/postcode/" + postcode).json()
+    except ValueError:
+        return { "error": "Postcode is not valid." }
     if "error" in data:
         return data
     if data["postcode"] == "ZZ9 9ZZ":

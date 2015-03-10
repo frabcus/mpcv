@@ -63,6 +63,12 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
         self.assertIn("Postcode &#39;MOO&#39; is not valid.", r.get_data(True))
 
+    def test_no_postcode(self):
+        r = self.app.get('/set_postcode?postcode=', follow_redirects=True)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
+        self.assertIn("Postcode is not valid.", r.get_data(True))
+
     def test_upload_cv_index(self):
         r = self.app.get('/upload_cv/7777777')
         self.assertEqual(r.status_code, 200)
