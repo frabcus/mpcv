@@ -172,6 +172,20 @@ def get_cv_list(config, person_id):
         })
     return result
 
+# Takes the app config (for S3) and candidate identifier. Returns
+# True if the candidate has a CV; False otherwise.
+def has_cv(config, person_id):
+    bucket = _get_s3_bucket(config)
+
+    prefix = "cvs/" + str(person_id) + "/"
+    try:
+        next(bucket.list(prefix))
+        has_cv = True
+    except StopIteration:
+        has_cv = False
+
+    return has_cv
+
 # Takes an array of candidates of the same form list_candidates
 # returns. Auguments with a variable to say if they have a CV.
 def augment_if_has_cv(config, candidates):
