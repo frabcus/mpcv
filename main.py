@@ -118,6 +118,10 @@ def show_cv(person_id):
         return flask.redirect(flask.url_for('error'))
 
     cvs = lookups.get_cv_list(app.config, person_id)
+    if cvs == []:
+        flask.flash("We don't yet have a CV for that candidate", 'danger')
+        return flask.redirect('/candidates')
+
     current_cv = cvs[0]
 
     return flask.render_template("show_cv.html", candidate=candidate, cv=current_cv)
