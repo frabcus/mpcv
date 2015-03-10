@@ -1,14 +1,17 @@
 // URL we start from, read as parameter --address=
 var address = casper.cli.get("address");
+var screenshot = casper.cli.get("screenshot");
 
 // Record screenshots
-var screenshot = 0;
-casper.on("load.finished", function() {
-    screenshot += 1;
-    var name = "screenshots/" + screenshot +  ".png";
-    this.capture(name);
-    // console.log("screenshot: ", name, "url:", casper.getCurrentUrl());
-});
+var screenshot_number = 0;
+if (screenshot) {
+    casper.on("load.finished", function() {
+        screenshot += 1;
+        var name = "screenshots/" + screenshot_number +  ".png";
+        this.capture(name);
+        // console.log("screenshot: ", name, "url:", casper.getCurrentUrl());
+    });
+}
 
 // Tests in detail
 

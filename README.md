@@ -41,7 +41,7 @@ Casper integration tests
 casperjs test casper_tests.js --address=http://localhost:5000/
 ```
 
-You can find screen shots of every page in `screenshots/`.
+You can add `--screenshot` to put images of every page in `screenshots/`.
 
 On a Mac I had to install casperjs and phantomjs of particular versions from
 Homebrew, so they worked together.
