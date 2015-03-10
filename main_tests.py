@@ -32,7 +32,6 @@ class MainTestCase(unittest.TestCase):
     def test_postcode(self):
         r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Candidates for job of MP', r.get_data(True))
         self.assertIn('Democracy Club Test Constituency', r.get_data(True))
         self.assertIn('Sicnarf Gnivri', r.get_data(True))
         self.assertIn('href="/show_cv/7777777"', r.get_data(True))
@@ -42,7 +41,6 @@ class MainTestCase(unittest.TestCase):
         # make sure constituency remembered, and front page redirects back to constituency page
         r = self.app.get('/', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Candidates for job of MP', r.get_data(True))
         self.assertIn('Democracy Club Test Constituency', r.get_data(True))
 
         # "I live somewhere else" clears the memory of constituency

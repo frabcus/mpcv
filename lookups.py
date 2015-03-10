@@ -206,7 +206,6 @@ def recent_cvs(config):
     prefix = "cvs/"
     cvs = bucket.list(prefix)
     cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
-    print(cvs)
     cvs = itertools.islice(cvs, 4)
 
     result = []

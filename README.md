@@ -38,7 +38,7 @@ Casper integration tests
 ------------------------
 
 ```sh
-casperjs test test_casper.js --address=http://localhost:5000/
+casperjs test casper_tests.js --address=http://localhost:5000/
 ```
 
 You can find screen shots of every page in `screenshots/`.
