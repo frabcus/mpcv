@@ -12,26 +12,6 @@ casper.on("load.finished", function() {
 
 // Tests in detail
 
-casper.test.begin('Bad postcode entered', 5, function suite(test) {
-    casper.start(address + "candidates", function(result) {
-        test.assertEquals(result.status, 200);
-        test.assertTextExists('Before you vote, look at their CVs!');
-        test.assertTextExists('Debug email enabled');
-
-        this.fill('form[action="/set_postcode"]', { postcode: "moo" }, true);
-    });
-
-
-    casper.waitForUrl(/\/$/, function() {
-        test.assertTextExists('Before you vote, look at their CVs!');
-        test.assertTextExists("Postcode 'MOO' is not valid.");
-    });
-
-    casper.run(function() {
-        test.done();
-    });
-});
-
 casper.test.begin('Postcode lookup and constituency cookie', 13, function suite(test) {
     casper.start(address, function(result) {
         test.assertEquals(result.status, 200);
@@ -69,7 +49,7 @@ casper.test.begin('Postcode lookup and constituency cookie', 13, function suite(
     });
 });
 
-casper.test.begin('Candidates list only with postcode', 3, function suite(test) {
+casper.test.begin('Candidates list requires postcode', 3, function suite(test) {
     casper.start(address + "candidates", function(result) {
         test.assertEquals(result.status, 200);
         test.assertTextExists('Before you vote, look at their CVs!');
@@ -80,4 +60,25 @@ casper.test.begin('Candidates list only with postcode', 3, function suite(test) 
         test.done();
     });
 });
+
+casper.test.begin('Bad postcode entered', 5, function suite(test) {
+    casper.start(address + "candidates", function(result) {
+        test.assertEquals(result.status, 200);
+        test.assertTextExists('Before you vote, look at their CVs!');
+        test.assertTextExists('Debug email enabled');
+
+        this.fill('form[action="/set_postcode"]', { postcode: "moo" }, true);
+    });
+
+
+    casper.waitForUrl(/\/$/, function() {
+        test.assertTextExists('Before you vote, look at their CVs!');
+        test.assertTextExists("Postcode 'MOO' is not valid.");
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
+
 
