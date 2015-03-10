@@ -77,7 +77,7 @@ def clear_postcode():
 
 @app.route('/candidates')
 def candidates():
-    if 'postcode' not in flask.session:
+    if 'postcode' not in flask.session or 'constituency' not in flask.session:
         return flask.redirect("/")
 
     postcode = flask.session['postcode']
@@ -196,6 +196,10 @@ def upload_cv_upload(person_id, signature):
 
 @app.route('/email_candidate/<int:person_id>', methods=['GET','POST'])
 def email_candidate(person_id):
+    if 'postcode' not in flask.session:
+        flask.flash("Enter your postcode to email candidates", 'success')
+        return flask.redirect("/")
+
     candidate = lookups.lookup_candidate(person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
@@ -251,6 +255,10 @@ def updates_join():
     if email == "" or not re.match("^.*?@.*?\..*?$", email) or "/" in email:
         flask.flash("Please enter your email to subscribe to updates", 'danger')
         return flask.redirect("/candidates")
+
+    if 'postcode' not in flask.session:
+        flask.flash("Enter your postcode before signing up for updates", 'success')
+        return flask.redirect("/")
 
     postcode = flask.session['postcode']
 
