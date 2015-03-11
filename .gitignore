@@ -1,5 +1,7 @@
 run
 runtests
+runcasper
 fiddle
 covhtml
 screenshots
+todo.txt
