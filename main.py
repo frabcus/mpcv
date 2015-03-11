@@ -214,7 +214,7 @@ def email_candidate(person_id):
 
 
 
-Yours sincerely,
+Yours faithfully,
 
 """.format(candidate['name'])
     from_email = ""
