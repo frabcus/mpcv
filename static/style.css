@@ -39,12 +39,12 @@ footer ul.pull-right li:last-child {
 }
 
 /* See http://stackoverflow.com/a/12121929/284340 */
-.frame_small_outer   {width:45%;height:100%;background:#CCC; display: inline-block; margin: 4px; }
+.frame_small_outer   {width:100%; height:100%;background:#CCC; display: inline-block; margin-bottom: 16px;}
 .frame_small_inner        {position:relative;}
 .frame_small_inner .ratio {display:block;width:100%;height:auto;}
 .frame_small_inner iframe {position:absolute;top:0;left:0;width:100%; height:100%;}
 
-#front h2 {
+#recent_cvs h2 {
     margin-bottom: 32px;
 }
 
