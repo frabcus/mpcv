@@ -3,3 +3,8 @@ python:
   - "3.3"
 install: pip install -r requirements.txt
 script: ./main_tests.py
+# Encrypted S3 bucket and keys, as tests require them
+env:
+  - secure: "aFFxTQN/76fSsLSIasMib5/Nt0ojoek7jjgjpctBRgvwGETxZTjxAQUQOe/j9ikNPdBvGwW6V2DPFlrhcLj1piezmqk6eol8Vbv3SDogP/wf75PGs197OXThV+xj/fS7Yo3ZQGOJmdw/Cpyhu4cGFdGpnIRNBnraJqpG9yaAeqE="
+  - secure: "oTwgYblRTRP6vgylQ79vk+LxGT6imh0egKUXyly/6xISxEG5s16LmXoFX3ELQ9Xpx/9sgi2tRu6wwXqMhi3spFYx4WmtP7a3KjLIJlZz6qzoxM+b0+NmNk8xrQd7GTiz+dP7sZ2g4lMFTYfsZxAMYOWuV1JPQBMZDlRLUlUMT48="
+  - secure: "OZusb9/cM6gOng1r2NBRPkTc1rLYylPPLq4BCB/LUhnASdxjFaVB++SsyeCnTuIfMxqCtFa6HLVxyE4JxpskrKcFFrlwId2Eq/o1beafB2cCdlaAhNF1WiC4dku/CbGyKRURAEZXH8bEAq4iPh0K0rI9J+4XBMZTzmzW/UNVRKM="
