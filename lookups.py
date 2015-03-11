@@ -205,7 +205,7 @@ def recent_cvs(config):
 
     prefix = "cvs/"
     cvs = bucket.list(prefix)
-    cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
+    cvs = filter(lambda k: '777777' not in k.name, reversed(sorted(cvs, key=lambda k: k.last_modified)))
     cvs = itertools.islice(cvs, 4)
 
     result = []
