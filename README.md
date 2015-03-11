@@ -79,6 +79,10 @@ These test the main use paths, and any serious browser-side Javascript.
 casperjs test casper_tests.js --address=http://localhost:5000/
 ```
 
+This works with `slimerjs` (Gecko-based alternative to PhantomJS) if
+you specify `--engine=slimerjs`. Useful also if you're having trouble
+with PhantomJS.
+
 You can add `--screenshot` to put images of every page in `screenshots/`.
 
 
