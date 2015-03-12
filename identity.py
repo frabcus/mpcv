@@ -48,7 +48,7 @@ def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
     link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
 
     print("confirm email:", person_id, to_email, link)
-    open("last_confirm_url.txt", 'w').write(link) # for use in casper_tests.js
+    open("last_confirm_url.txt", 'w').write(link) # for use in selenium_tests.js
 
     body = UPLOAD_CV_MESSAGE.format(name=to_name, link=link)
     msg = flask_mail.Message(body=body,
