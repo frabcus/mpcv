@@ -5,21 +5,15 @@
 
         <h1>Hi, {{ candidate.name }}!</h1>
 
-        <p class="lead">Drop your CV in here.</p>
+        <p class="lead">Choose a Word document or PDF.</p>
 
-        <span class="btn btn-primary fileinput-button">
+        <form id="form" method="POST" enctype="multipart/form-data" action="{{ upload_link}}">
+          <a class="btn-file btn btn-lg btn-success">
             <i class="glyphicon glyphicon-plus"></i>
-            <span>Select files...</span>
-            <input id="fileupload" name="file" type="file" data-url="{{ upload_link }}">
-        </span>
-
-        <p>
-            <div id="progress">
-                <div class="bar" style="width: 0%;"></div>
-            </div>
-        </p>
-
-        <p>A Word document or a PDF is best.</p>
+            <span x-text-before="Select file...">Select file...</span>
+            <input class="files" name="files" type="file">
+          </a>
+        </form>
 
     </div>
 {% endblock %}

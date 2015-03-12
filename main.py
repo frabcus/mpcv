@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import json
 import traceback
 import re
 
@@ -160,27 +159,30 @@ def upload_cv_confirmed(person_id, signature):
     flask.session['email'] = candidate['email']
 
     upload_link = flask.url_for('upload_cv_upload', person_id=person_id, signature=signature)
-    successful_link = flask.url_for('show_cv', person_id=person_id)
 
     return flask.render_template("upload_cv_confirmed.html", candidate=candidate,
-         upload_link=upload_link, successful_link=successful_link)
+         upload_link=upload_link)
 
 # POST is actual receiving of CV
 @app.route('/upload_cv/<int:person_id>/c/<signature>', methods=['POST'])
 def upload_cv_upload(person_id, signature):
     candidate = lookups.lookup_candidate(person_id)
     if 'error' in candidate:
-        print("error in candidate", person_id)
-        return json.dumps({ 'error': candidate['error']})
+        flask.flash(candidate['error'], 'danger')
+        return flask.redirect(flask.url_for('error'))
 
     signed_again = identity.sign_person_id(app.secret_key, person_id)
     if signature != signed_again:
-        print("error in signature", person_id, signature)
-        return json.dumps({ 'error': 'Signature token wrong'})
+        flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
+        return flask.redirect(flask.url_for('error'))
 
-    f = flask.request.files['file']
+    print("request", flask.request)
+    print("request.files", flask.request.files)
+
+    f = flask.request.files['files']
     if not f:
-        return json.dumps({ 'error': 'Upload not received'})
+        flask.flash("No files were received. Please contact us for help.", 'error')
+        return flask.redirect("/")
 
     secure_filename = werkzeug.secure_filename(f.filename)
     data = f.read()
@@ -190,15 +192,8 @@ def upload_cv_upload(person_id, signature):
     file_url = lookups.add_cv(app.config, person_id, data, secure_filename, f.content_type)
 
     flask.flash("Thanks! Your CV has been successfully uploaded. You can share this page on social media. We'd love it if you tell any friends who are candidates to upload theirs too!", 'success')
-
-    return json.dumps({"files": [
-      {
-        "name": secure_filename,
-        "size": size,
-        "url": file_url
-        # "error": "not implemented"
-      },
-    ]})
+    successful_link = flask.url_for('show_cv', person_id=person_id)
+    return flask.redirect(successful_link)
 
 #####################################################################
 

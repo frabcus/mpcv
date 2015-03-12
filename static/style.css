@@ -85,27 +85,28 @@ footer ul.pull-right li:last-child {
 
 /* /upload_cv */
 
-.fileinput-button {
-    position: relative;
-    overflow: hidden;
-}
+/* Make file upload button look good */
 
-.fileinput-button input {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    margin: 0px;
-    opacity: 0;
-    font-size: 200px;
-    direction: ltr;
-    cursor: pointer;
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  margin-top: 24px;
 }
-
-.bar {
-    height: 18px;
-    background: green;
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
 }
-
 
 /* /show_cv */
 

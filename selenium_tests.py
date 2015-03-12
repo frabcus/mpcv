@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-import selenium.webdriver
 import unittest
+import os
+
+import selenium.webdriver
 
 address = "http://mpcv.bat/"
 
@@ -22,17 +24,13 @@ class UploadingCVTestCase(unittest.TestCase):
 
         url = open('last_confirm_url.txt', 'r').read()
         print("last_confirm_url: ", url);
-
         self.browser.get(url)
+        self.assertIn('Choose a Word document or PDF', self.browser.page_source)
 
-        self.assertIn('Drop your CV in here', self.browser.page_source)
+        doc_full_path = os.path.abspath('fixtures/Example MP candidate CV.doc')
+        self.browser.find_element_by_css_selector('.files').send_keys(doc_full_path)
 
-        # XXX this doesn't work
-        print("send_keys")
-        self.browser.find_element_by_id('fileupload').send_keys('fixtures/Example MP candidate CV.doc')
-        #self.browser.find_element_by_id('fileupload').click()
-
-        #self.assertIn('Your CV has been successfully uploaded', self.browser.page_source)
+        self.assertIn('Your CV has been successfully uploaded', self.browser.page_source)
 
 if __name__ == '__main__':
     unittest.main()
