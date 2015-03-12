@@ -176,9 +176,6 @@ def upload_cv_upload(person_id, signature):
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
         return flask.redirect(flask.url_for('error'))
 
-    print("request", flask.request)
-    print("request.files", flask.request.files)
-
     f = flask.request.files['files']
     if not f:
         flask.flash("No files were received. Please contact us for help.", 'error')

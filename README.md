@@ -70,22 +70,14 @@ MPCV_S3_SECRET_ACCESS_KEY=
 You can find a line coverage report in `covhtml/index.html`.
 
 
-Casper integration tests
-------------------------
+Selenium integration tests
+--------------------------
 
 These test the main use paths, and any serious browser-side Javascript.
 
 ```sh
-casperjs test casper_tests.js --address=http://localhost:5000/
+./selenium_tests.py
 ```
-
-You can use it with `slimerjs` (Gecko-based alternative to PhantomJS) too.
-
-```sh
-casperjs test casper_tests.js --engine=slimerjs  --address=http://localhost:5000/
-```
-
-You can add `--screenshot` to put images of every page in `screenshots/`.
 
 
 Production

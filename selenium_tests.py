@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# Integration tests in Selenium. No need to cover everything in this - just
+# main workflows, and anything javascript intensive (such as file upload).
+
 import unittest
 import os
 
@@ -12,6 +15,31 @@ class UploadingCVTestCase(unittest.TestCase):
     def setUp(self):
         self.browser = selenium.webdriver.Firefox()
         #self.addCleanup(self.browser.quit)
+
+    def testPostcodeLookup(self):
+        self.browser.get(address)
+        self.assertIn('Before you vote, look at their CVs!', self.browser.page_source)
+        self.assertIn('Debug email enabled', self.browser.page_source)
+
+        self.browser.find_element_by_id('postcode').send_keys('zz99zz')
+        self.browser.find_element_by_id('postcode').submit()
+
+        self.assertIn('Democracy Club Test Constituency', self.browser.page_source)
+        self.assertIn('View CVs of these candidates', self.browser.page_source)
+        self.assertIn('Sicnarf Gnivri', self.browser.page_source)
+        self.assertIn('href="/show_cv/7777777"', self.browser.page_source)
+        self.assertIn('Ask these candidates to add their CV', self.browser.page_source)
+        self.assertIn('Notlits Esuom', self.browser.page_source)
+        self.assertIn('href="/upload_cv/7777778"', self.browser.page_source)
+
+        # make sure constituency remembered, and front page redirects back to constituency page
+        self.browser.get(address)
+        self.assertIn('Democracy Club Test Constituency', self.browser.page_source)
+        self.assertIn('View CVs of these candidates', self.browser.page_source)
+
+        # "Change constituency" clears the memory of constituency
+        self.browser.find_element_by_link_text("Change constituency").click()
+        self.assertIn('Before you vote, look at their CVs!', self.browser.page_source)
 
     def testUploadCV(self):
         self.browser.get(address + "upload_cv/7777777")
