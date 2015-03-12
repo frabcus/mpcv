@@ -106,10 +106,17 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('action="' + confirmation_url + '"', r.get_data(True))
 
         # Upload
-        rup = self.app.post(confirmation_url, data=dict(
-           file=(open('fixtures/Example MP candidate CV.doc', 'rb'), 'Example MP candidate CV.doc'),
-         ), follow_redirects=True)
+
+        f = open('fixtures/Example MP candidate CV.doc', 'rb')
+        try:
+            rup = self.app.post(confirmation_url, data=dict(
+               files=(f, 'Example MP candidate CV.doc'),
+             ), follow_redirects=True)
+        finally:
+            f.close()
         self.assertEqual(rup.status_code, 200)
+        self.assertIn('Democracy Club Test Constituency', rup.get_data(True))
+        self.assertIn('Your CV has been successfully uploaded', rup.get_data(True))
 
     def test_badly_signed_confirmation_link(self):
         r = self.app.get('/upload_cv/7777777/c/xxxxxyyyyyy', follow_redirects=True)
