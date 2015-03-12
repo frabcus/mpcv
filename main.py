@@ -178,8 +178,8 @@ def upload_cv_upload(person_id, signature):
 
     f = flask.request.files['files']
     if not f:
-        flask.flash("No files were received. Please contact us for help.", 'error')
-        return flask.redirect("/")
+        flask.flash("No files were received. Please try again, or contact us for help.", 'danger')
+        return flask.redirect(flask.request.path)
 
     secure_filename = werkzeug.secure_filename(f.filename)
     data = f.read()
