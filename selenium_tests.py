@@ -14,7 +14,7 @@ class UploadingCVTestCase(unittest.TestCase):
 
     def setUp(self):
         self.browser = selenium.webdriver.Firefox()
-        #self.addCleanup(self.browser.quit)
+        self.addCleanup(self.browser.quit)
 
     def testPostcodeLookup(self):
         self.browser.get(address)
