@@ -8,6 +8,7 @@ import requests
 import json
 import datetime
 import itertools
+import re
 
 import constants
 
@@ -200,6 +201,7 @@ def augment_if_has_cv(config, candidates):
 #   url - publically accessible address of the file
 #   date - when it was uploaded
 #   content_type - the mime type of the file
+#   person_id - id of the person the CV is for
 def recent_cvs(config):
     bucket = _get_s3_bucket(config)
 
@@ -210,11 +212,13 @@ def recent_cvs(config):
 
     result = []
     for key in cvs:
+        person_id = int(re.match("cvs/([0-9]+)/", key.name).group(1))
         result.append({
             'name': key.name,
             'url': key.generate_url(expires_in=0, query_auth=False),
             'date': key.last_modified,
             'content_type': key.content_type,
+            'person_id': person_id
         })
     return result
 
