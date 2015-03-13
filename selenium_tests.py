@@ -58,7 +58,7 @@ class UploadingCVTestCase(unittest.TestCase):
         with open('last_confirm_url.txt', 'r') as o:
             url = o.read()
         self.browser.get(url)
-        self.assertIn('Choose a Word document or PDF', self.browser.page_source)
+        self.assertIn('Choose your CV to share', self.browser.page_source)
 
         doc_full_path = os.path.abspath('fixtures/Example MP candidate CV.doc')
         self.browser.find_element_by_css_selector('.files').send_keys(doc_full_path)

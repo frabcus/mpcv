@@ -108,6 +108,10 @@ footer ul.pull-right li:last-child {
   display: block;
 }
 
+#upload_cv form {
+  margin-bottom: 2em;
+}
+
 /* /show_cv */
 
 /* See http://stackoverflow.com/a/12121929/284340 */

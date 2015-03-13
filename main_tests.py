@@ -102,7 +102,7 @@ class MainTestCase(unittest.TestCase):
         # View the page where the upload form is
         r = self.app.get(confirmation_url)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Choose a Word document or PDF', r.get_data(True))
+        self.assertIn('Choose your CV to share', r.get_data(True))
         self.assertIn('action="' + confirmation_url + '"', r.get_data(True))
 
         # Upload
@@ -130,7 +130,7 @@ class MainTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     try:
-        unittest.main()
+        unittest.main(warnings='ignore')
     finally:
         cov.stop()
         cov.html_report(directory='covhtml')
