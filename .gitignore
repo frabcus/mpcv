@@ -1,6 +1,6 @@
 run
 runtests
-runcasper
+runselenium
 fiddle
 covhtml
 screenshots
