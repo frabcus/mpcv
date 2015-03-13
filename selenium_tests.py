@@ -5,12 +5,11 @@
 
 import unittest
 import os
+import sys
 
 import selenium.webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-address = "http://mpcv.bat/"
 
 class UploadingCVTestCase(unittest.TestCase):
 
@@ -66,6 +65,10 @@ class UploadingCVTestCase(unittest.TestCase):
         self.assertIn('Your CV has been successfully uploaded', self.browser.page_source)
 
 if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print("Give URL of mpcv instance to test as first parameter.")
+        sys.exit(1)
+    address = sys.argv.pop()
     unittest.main(warnings='ignore')
 
 

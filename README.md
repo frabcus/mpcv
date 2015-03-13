@@ -76,8 +76,13 @@ Selenium integration tests
 These test the main use paths, and any serious browser-side Javascript.
 
 ```sh
-./selenium_tests.py
+./selenium_tests.py http://localhost:5000/
 ```
+
+The first parameter is the URL the site to test is running on. 
+
+It makes some assumptions about the ZZ9 9ZZ postcode - in particular it will
+upload a CV to one of the test users in that postcode.
 
 
 Production
