@@ -68,8 +68,8 @@ def lookup_candidates(constituency_id):
             { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'party': 'Mice Rule More' }
         ]
 
-    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=standing_in.%s.post_id:%s" %
-            (constants.year, str_id)).json()
+    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=standing_in.{}.post_id:{}".format(
+            (constants.year, str_id))).json()
     if "errors" in data:
         return data
 
@@ -107,14 +107,13 @@ def lookup_candidate(person_id):
             'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
         }
 
-    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=id:%s" % str_id).json()
+    url = "https://yournextmp.popit.mysociety.org/api/v0.1/persons/{}".format(str_id)
+    data = requests.get(url).json()
 
-    if data["total"] < 1:
-        return { "error": "Candidate %s not found" % str_id }
-    if data["total"] > 1:
-        return { "error": "Candidate %s unexpectedly appears multiple times" % str_id }
+    if "errors" in data:
+        return { "error": "Candidate {} not found".format(str_id) }
 
-    c = data['result'][0]
+    c = data['result']
 
     constituency_id = None
     constituency_name = None
