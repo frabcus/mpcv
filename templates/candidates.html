@@ -44,57 +44,67 @@
             {{ constituency.name }} Candidates
         </h1>
 
-        <div class="row"><div class="col-sm-12 col-md-6">
+        {% if candidates or candidates_no_email %}
 
-        {% if candidates %}
-        <div class="no_cv">
-
-            <h2>These haven't shared their CV</h2>
-
-            <div class="candidate_list">
-                {% for candidate in candidates %}
-                <div class="candidate">
-                    <!-- <a href="/email_candidate/{{ candidate.id }}" class="btn btn-primary">Email them</a> -->
-                    <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
-                    <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                  <h3 class="panel-title">We don't have all the candidates' CVs here &mdash; help get them!</h3>
                 </div>
-                {% endfor %}
-            </div>
+            <div class="panel-body">
 
-            <p>
-                <a href="/email_candidate/" class="btn btn-lg btn-success">Ask them to!</a>
-            </p>
+            <div class="row"><div class="col-sm-12 col-md-6">
 
-        </div>
-        {% endif %}
+            {% if candidates %}
+            <div class="no_cv">
 
-        </div><div class="col-sm-12 col-md-6">
+                <h2>Not yet shared their CV</h2>
 
-        {% if candidates_no_email %}
-        <div class="no_email">
-
-            <h2>We don't know contact details</h2>
-
-            <div class="candidate_list">
-                {% for candidate in candidates_no_email %}
-                <div class="candidate">
-                    <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                <div class="candidate_list">
+                    {% for candidate in candidates %}
+                    <div class="candidate">
+                        <!-- <a href="/email_candidate/{{ candidate.id }}" class="btn btn-primary">Email them</a> -->
+                        <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                        <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+
+                <p>
+                    <a href="/email_candidate/" class="btn btn-lg btn-success">Ask them to!</a>
+                </p>
+
             </div>
+            {% endif %}
 
-            <p>
-                <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-lg btn-default" target="_blank">Find their emails</a>
-            </p>
+            </div><div class="col-sm-12 col-md-6">
 
-            <p>
-                (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
-            </p>
+            {% if candidates_no_email %}
+            <div class="no_email">
 
-        </div>
+                <h2>Don't know contact details</h2>
+
+                <div class="candidate_list">
+                    {% for candidate in candidates_no_email %}
+                    <div class="candidate">
+                        <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <p>
+                    <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-lg btn-default" target="_blank">Find their emails</a>
+                </p>
+
+                <p>
+                    (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
+                </p>
+
+            </div>
+            {% endif %}
+
+            </div></div> </div></div>
+
         {% endif %}
-
-        </div></div>
 
         {% if candidates_have_cv %}
         <div class="no_cv">
@@ -112,9 +122,7 @@
                                 <iframe src="http://docs.google.com/viewer?url={{ candidate.cv_url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>             
                             </div>
                         </div>
-                        <span class="cvbelow">
-                            <a class="link_full_page_right" href="/show_cv/{{ candidate.id }}">View full page</a>
-                        </span>
+                        <div class="link_full_page"><a href="/show_cv/{{ candidate.id }}">View full page</a></div>
                     </div>            
                 {% endfor %}
             </div>
