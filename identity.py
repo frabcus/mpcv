@@ -84,21 +84,30 @@ CONSTITUENT_MAIL_MESSAGE = textwrap.dedent("""\
 """)
 
 
-def send_email_candidate(app, mail, person_id, to_email, to_name, from_email, postcode, message):
-    to_email = map_to_email(app, to_email)
+def send_email_candidates(app, mail, candidates, from_email, postcode, message):
+    for candidate in candidates:
 
-    signature = sign_person_id(app.secret_key, person_id)
-    link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
-    print("email candidate link:", person_id, to_email, link)
+        person_id = candidate['id']
+        to_email = candidate['email']
+        to_name = candidate['name']
 
-    body = CONSTITUENT_MAIL_MESSAGE.format(name=to_name, link=link,
-        from_email=from_email, postcode=postcode, message=message
-    )
-    msg = flask_mail.Message(body=body,
-            subject="Message from constituent, postcode " + postcode,
-            sender=("Democracy Club CV", "cv@democracyclub.org.uk"),
-            recipients=[(to_name, to_email)]
-          )
+        to_email = map_to_email(app, to_email)
 
-    mail.send(msg)
+        signature = sign_person_id(app.secret_key, person_id)
+        link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
+        print("email candidate link: ", person_id, to_email, link)
+
+        full_message = "Dear " + to_name + ", \n\n" + message.strip()
+
+        body = CONSTITUENT_MAIL_MESSAGE.format(name=to_name, link=link,
+            from_email=from_email, postcode=postcode, message=full_message
+        )
+        msg = flask_mail.Message(body=body,
+                subject="Message from constituent, postcode " + postcode,
+                sender=("Democracy Club CV", "cv@democracyclub.org.uk"),
+                recipients=[(to_name, to_email)]
+              )
+
+        mail.send(msg)
+
 

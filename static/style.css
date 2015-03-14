@@ -64,7 +64,7 @@ footer ul.pull-right li:last-child {
 .frame_small_inner .ratio {display:block;width:100%;height:auto;}
 .frame_small_inner iframe {position:absolute;top:0;left:0;width:100%; height:100%;}
 
-#recent_cvs .link {
+.link_full_page {
     margin-bottom: 16px;
 }
 
@@ -80,15 +80,16 @@ footer ul.pull-right li:last-child {
 
 /* /candidates */
 
-#candidates > div {
+.candidates > div {
     margin-top: 48px;
 }
 
 .candidate_list {
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-#candidates .no_email p {
+.no_email p {
     margin-top: 10px;
 }
 
@@ -96,15 +97,23 @@ footer ul.pull-right li:last-child {
     margin-right: 8px;
 }
 
-#candidates .candidate {
-    margin-top: 20px;
+.candidate {
+    margin-top: 8px;
 }
-#candidates .candidate .name {
+.candidate .name {
     font-size: 20px;
 }
-#candidates .candidate .emailthem {
-    margin-top: 4px;
-    float: left;
+.candidate .email_them {
+}
+
+.candidate .this_is_me {
+    margin-left: 0.5em;
+}
+
+@media (min-width: 768px) { 
+  #follow_constituency {
+    float: right;
+  }
 }
 
 /* /upload_cv */

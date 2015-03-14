@@ -4,19 +4,19 @@
     <div id="show_cv">
         <a href="/candidates" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> More candidates</a>
 
-        <h1>{{ candidate.name }}'s CV</h1>
-        <h2>Candidate for MP of {{ candidate.constituency_name }} </h2>
-
     </div>
 
 {% endblock %}
 
 {% block widebelow %}
 
+        <h1>{{ candidate.name }}'s CV</h1>
+        <h2>Candidate for MP of {{ candidate.constituency_name }} </h2>
+
         <div class="frame_outer_wrapper">
             <div class="frame_inner_wrapper">
                 <img class="ratio" src="/static/transparent.gif"/>
-                <iframe id="cvframe" src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&embedded=true" frameborder="0" allowfullscreen></iframe>
+                <iframe id="cvframe" src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>
                 <!-- CV uploaded: {{ cv.date }} -->
             </div>
         </div>

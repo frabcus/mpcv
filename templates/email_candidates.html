@@ -1,15 +1,15 @@
 {% extends "layout.html" %}
-{% block title %} Email candidate {% endblock %}
+{% block title %} Email candidates {% endblock %}
 {% block body %}
     <div id="upload_cv">
 
-        <h1>Invite candidate to upload their CV</h1>
+        <h1>Ask candidates to share their CV</h1>
 
-        <form class="form-horizontal" action="/email_candidate/{{ candidate.id }}" method="POST">
+        <form class="form-horizontal" action="/email_candidates" method="POST">
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="to">To</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">{{ candidate.email }}</p>
+                    <p class="form-control-static">{{ emails_list }}</p>
                 </div>
             </div>
 
@@ -30,7 +30,8 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="message">Message</label>
                 <div class="col-sm-10">
-                    <textarea id="message" name="message" class="form-control" rows=10 autofocus>{{ message  }}</textarea>
+                    <p class="form-control-static">Dear {{ names_list }},</p>
+                    <textarea id="message" name="message" class="form-control" rows=12 autofocus>{{ message  }}</textarea>
                     <p class="help-block visible-lg-block visible-md-block hidden-sm hidden-xs">
                         Want some ideas for your letter? See the top tips to the right.
                     </p>
@@ -46,8 +47,8 @@
                 <div class="col-sm-2">
                 </div>
                 <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Send email</button>
-            </div>
+                    <button type="submit" class="btn btn-success btn-lg">Send emails</button>
+                </div>
             </div>
         </form>
 
@@ -60,9 +61,9 @@
     <h2>Writing an effective mail</h2>
 
      <!-- <p>Think of an intriguing subject that will encourage them to open it: they're receiving hundreds of emails a day!  A question is good.</p> -->
-     <p>1. Introduce yourself, <strong>making it clear you're in their constituency</strong> (<em>{{candidate.constituency_name}}</em>).</p>
+     <p>1. Introduce yourself, <strong>making it clear you're in their constituency</strong> (<em>{{constituency.name}}</em>).</p>
      <p>2. Tell them you've been looking at candidate's CVs on Democracy Club. Tell them why you think it's important they upload theirs. </p>
-     <!-- <p>Tell them that <strong></strong> candidates have answered it already, and that in <em>{{candidate.constituency_name}}</em> -->
+     <!-- <p>Tell them that <strong></strong> candidates have answered it already, and that in <em>{{constituency.name}}</em> -->
      <p>3. Finish by telling them there's a link at the bottom of the email to upload their CV, and say thank you! (we automatically add the link to your email after you press 'send')</p>
      <p>4. <strong>Sign off with your address</strong>, so they can see you're really from their constituency.</p>
 
