@@ -69,7 +69,7 @@ def lookup_candidates(constituency_id):
         ]
 
     data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=standing_in.{}.post_id:{}".format(
-            (constants.year, str_id))).json()
+            constants.year, str_id)).json()
     if "errors" in data:
         return data
 
