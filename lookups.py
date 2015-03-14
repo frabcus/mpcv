@@ -68,13 +68,22 @@ def lookup_candidates(constituency_id):
             { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'party': 'Mice Rule More' }
         ]
 
-    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/search/persons?q=standing_in.{}.post_id:{}".format(
-            constants.year, str_id)).json()
+    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/posts/{}?embed=membership.person".format(str_id)).json()
     if "errors" in data:
         return data
 
     current_candidate_list = []
-    for member in data['result']:
+    for office in data['result']['memberships']:
+        if office['start_date'] > constants.election_date or office['end_date'] < constants.election_date:
+            continue
+        assert office['role'] == 'Candidate'
+
+        member = office['person_id']
+        if constants.year not in member["standing_in"]:
+            continue
+        if member["standing_in"][constants.year] == None:
+            continue
+
         current_candidate_list.append({
             'id': member['id'],
             'name': member['name'],
