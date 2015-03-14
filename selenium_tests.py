@@ -48,7 +48,7 @@ class UploadingCVTestCase(unittest.TestCase):
     def testUploadCV(self):
         self.browser.get(address + "upload_cv/7777777")
 
-        self.assertIn('Hi, Sicnarf Gnivri', self.browser.page_source)
+        self.assertIn('Hello, Sicnarf Gnivri', self.browser.page_source)
         self.assertIn('We will send an email to', self.browser.page_source)
 
         self.browser.find_element_by_id('confirm_email').click()
