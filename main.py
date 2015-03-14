@@ -8,6 +8,7 @@ import werkzeug
 import flask
 import flask_appconfig.env
 import flask_mail
+import flask.ext.cache
 
 import lookups
 import identity
@@ -15,6 +16,7 @@ import identity
 app = flask.Flask(__name__)
 flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
 mail = flask_mail.Mail(app)
+cache = flask.ext.cache.Cache(app,config={'CACHE_TYPE': 'simple'})
 
 #####################################################################
 # Global parameters, used in layout.html
@@ -39,12 +41,16 @@ def about():
 #####################################################################
 # Postcode entry
 
+@cache.cached(600, key_prefix="recent_cvs")
+def _cache_recent_cvs():
+    return lookups.recent_cvs(app.config)
+
 @app.route('/')
 def index():
     if 'postcode' in flask.session:
         return flask.redirect("/candidates")
 
-    recent_cvs = lookups.recent_cvs(app.config)
+    recent_cvs = _cache_recent_cvs()
 
     return flask.render_template('index.html', recent_cvs=recent_cvs)
 
