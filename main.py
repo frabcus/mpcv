@@ -241,18 +241,16 @@ Yours sincerely,
         else:
             # this is their default email now
             flask.session['email'] = from_email
-            identity.send_email_candidate(app, mail,
-                candidate['id'], candidate['email'], candidate['name'],
-                from_email, postcode, message
+            identity.send_email_candidates(app, mail,
+                candidates_no_cv, from_email, postcode, message
             )
-            flask.flash("Thanks! Your message has been sent to " + candidate['name'] + '.', 'success')
+            flask.flash("Thanks! Your message has been sent to " + names_list + '.', 'success')
             return flask.redirect("/candidates")
-
 
     return flask.render_template("email_candidates.html",
         constituency=constituency,
-        emails_list=emails_list,
-        names_list=names_list,
+        emails_list=", ".join(emails_list),
+        names_list=", ".join(names_list),
         postcode=postcode,
         from_email=from_email,
         message=message
