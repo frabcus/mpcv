@@ -29,7 +29,6 @@ def set_globals(*args, **kwargs):
 #####################################################################
 # General routes
 
-@app.route('/error')
 def error():
     return flask.render_template('error.html'), 500
 
@@ -92,7 +91,7 @@ def candidates():
     candidates = lookups.lookup_candidates(constituency['id'])
     if 'errors' in candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
-        return flask.redirect(flask.url_for('error'))
+        return error()
     candidates = lookups.augment_if_has_cv(app.config, candidates)
 
     candidates_no_email = [ candidate for candidate in candidates if candidate['email'] is None]
@@ -121,7 +120,7 @@ def show_cv(person_id):
     candidate = lookups.lookup_candidate(person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
-        return flask.redirect(flask.url_for('error'))
+        return error()
 
     cvs = lookups.get_cv_list(app.config, person_id)
     if cvs == []:
@@ -143,7 +142,7 @@ def upload_cv(person_id):
     candidate = lookups.lookup_candidate(person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
-        return flask.redirect(flask.url_for('error'))
+        return error()
 
     if flask.request.method == 'POST':
         identity.send_upload_cv_confirmation(app, mail, candidate['id'], candidate['email'], candidate['name'])
@@ -158,12 +157,12 @@ def upload_cv_confirmed(person_id, signature):
     candidate = lookups.lookup_candidate(person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
-        return flask.redirect(flask.url_for('error'))
+        return error()
 
     signed_again = identity.sign_person_id(app.secret_key, person_id)
     if signature != signed_again:
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
-        return flask.redirect(flask.url_for('error'))
+        return error()
 
     # this is their default email now
     flask.session['email'] = candidate['email']
@@ -179,12 +178,12 @@ def upload_cv_upload(person_id, signature):
     candidate = lookups.lookup_candidate(person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
-        return flask.redirect(flask.url_for('error'))
+        return error()
 
     signed_again = identity.sign_person_id(app.secret_key, person_id)
     if signature != signed_again:
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
-        return flask.redirect(flask.url_for('error'))
+        return error()
 
     f = flask.request.files['files']
     if not f:
@@ -213,7 +212,7 @@ def email_candidate(person_id):
     candidate = lookups.lookup_candidate(person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
-        return flask.redirect(flask.url_for('error'))
+        return error()
 
     original_message = """Dear {0},
 
