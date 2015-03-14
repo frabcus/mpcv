@@ -1,58 +1,9 @@
 {% extends "layout.html" %}
-{% block title %} {{ constituency.name }} {% endblock %}
+{% block title %} {{ constituency.name }} Candidates {% endblock %}
+
 {% block body %}
+
     <div class="candidates">
-
-        <h1>
-            {{ constituency.name }}
-        </h1>
-
-        {% if candidates %}
-        <div class="no_cv">
-
-            <h2>Ask candidates to share CVs</h2>
-
-            <div class="candidate_list">
-                {% for candidate in candidates %}
-                <div class="candidate">
-                    <!-- <a href="/email_candidate/{{ candidate.id }}" class="btn btn-primary">Email them</a> -->
-                    <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
-                    <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me!</a>
-                </div>
-                {% endfor %}
-            </div>
-
-            <p>
-                <a href="/email_candidate/" class="btn btn-lg btn-success">Write to candidates</a>
-            </p>
-
-        </div>
-        {% endif %}
-
-
-        {% if candidates_no_email %}
-        <div class="no_email">
-
-            <h2>Help find the emails of these candidates</h2>
-
-            <div class="candidate_list">
-                {% for candidate in candidates_no_email %}
-                <div class="candidate">
-                    <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
-                </div>
-                {% endfor %}
-            </div>
-
-            <p>
-                <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-lg btn-default" target="_blank">Add their emails</a>
-            </p>
-
-            <p>
-                (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
-            </p>
-
-        </div>
-        {% endif %}
 
     </div>
 
@@ -83,9 +34,68 @@
 
 {% endblock %}
 
+
 {% block widebelow %}
 
+
     <div class="candidates">
+
+        <h1>
+            {{ constituency.name }} Candidates
+        </h1>
+
+        <div class="row"><div class="col-sm-12 col-md-6">
+
+        {% if candidates %}
+        <div class="no_cv">
+
+            <h2>Not shared their CV</h2>
+
+            <div class="candidate_list">
+                {% for candidate in candidates %}
+                <div class="candidate">
+                    <!-- <a href="/email_candidate/{{ candidate.id }}" class="btn btn-primary">Email them</a> -->
+                    <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                    <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <p>
+                <a href="/email_candidate/" class="btn btn-lg btn-success">Ask them to!</a>
+            </p>
+
+        </div>
+        {% endif %}
+
+        </div><div class="col-sm-12 col-md-6">
+
+        {% if candidates_no_email %}
+        <div class="no_email">
+
+            <h2>Not got their email</h2>
+
+            <div class="candidate_list">
+                {% for candidate in candidates_no_email %}
+                <div class="candidate">
+                    <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                </div>
+                {% endfor %}
+            </div>
+
+            <p>
+                <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-lg btn-default" target="_blank">Find their emails</a>
+            </p>
+
+            <p>
+                (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
+            </p>
+
+        </div>
+        {% endif %}
+
+        </div></div>
+
         {% if candidates_have_cv %}
         <div class="no_cv">
 
@@ -95,7 +105,6 @@
                 {% for candidate in candidates_have_cv %}
                     <div class="col-md-6 candidate">
                         <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}
-                            <a class="link_full_page_right" href="/show_cv/{{ candidate.id }}">View full page</a>
                         </span>
                         <div class="frame_small_outer">
                             <div class="frame_small_inner">
@@ -103,6 +112,9 @@
                                 <iframe src="http://docs.google.com/viewer?url={{ candidate.cv_url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>             
                             </div>
                         </div>
+                        <span class="cvbelow">
+                            <a class="link_full_page_right" href="/show_cv/{{ candidate.id }}">View full page</a>
+                        </span>
                     </div>            
                 {% endfor %}
             </div>
