@@ -98,8 +98,6 @@ def candidates():
     candidates_have_cv = [ candidate for candidate in candidates if candidate['email'] is not None and candidate['has_cv']]
     candidates = [ candidate for candidate in candidates if candidate['email'] is not None and not candidate['has_cv']]
 
-    candidates_have_cv = candidates_have_cv + candidates_have_cv + candidates_have_cv
-
     from_email = ""
     if 'email' in flask.session:
         from_email = flask.session['email']
