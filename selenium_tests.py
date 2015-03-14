@@ -28,17 +28,17 @@ class UploadingCVTestCase(unittest.TestCase):
         self.browser.find_element_by_id('postcode').submit()
 
         self.assertIn('Democracy Club Test Constituency', self.browser.page_source)
-        self.assertIn('View CVs of these candidates', self.browser.page_source)
+        self.assertIn('View candidates with CVs', self.browser.page_source)
         self.assertIn('Sicnarf Gnivri', self.browser.page_source)
         self.assertIn('href="/show_cv/7777777"', self.browser.page_source)
-        self.assertIn('Ask these candidates to add their CV', self.browser.page_source)
+        self.assertIn('Not yet shared their CV', self.browser.page_source)
         self.assertIn('Notlits Esuom', self.browser.page_source)
         self.assertIn('href="/upload_cv/7777778"', self.browser.page_source)
 
         # make sure constituency remembered, and front page redirects back to constituency page
         self.browser.get(address)
         self.assertIn('Democracy Club Test Constituency', self.browser.page_source)
-        self.assertIn('View CVs of these candidates', self.browser.page_source)
+        self.assertIn('View candidates with CVs', self.browser.page_source)
 
         # "Change constituency" clears the memory of constituency
         self.browser.find_element_by_link_text("Change constituency").click()
@@ -48,8 +48,8 @@ class UploadingCVTestCase(unittest.TestCase):
     def testUploadCV(self):
         self.browser.get(address + "upload_cv/7777777")
 
-        self.assertIn('We need to confirm your email first', self.browser.page_source)
         self.assertIn('Hi, Sicnarf Gnivri', self.browser.page_source)
+        self.assertIn('We will send an email to', self.browser.page_source)
 
         self.browser.find_element_by_id('confirm_email').click()
         self.assertIn('Check your email!', self.browser.page_source)
