@@ -80,6 +80,16 @@ def clear_postcode():
 #####################################################################
 # List candidates and view their CVs
 
+def split_candidates_by_type(all_candidates):
+    all_candidates = lookups.augment_if_has_cv(app.config, all_candidates)
+
+    candidates_no_email = [ candidate for candidate in all_candidates if candidate['email'] is None]
+    candidates_have_cv = [ candidate for candidate in all_candidates if candidate['email'] is not None and candidate['has_cv']]
+    candidates_no_cv = [ candidate for candidate in all_candidates if candidate['email'] is not None and not candidate['has_cv']]
+
+    return candidates_no_cv, candidates_no_email, candidates_have_cv
+
+
 @app.route('/candidates')
 def candidates():
     if 'postcode' not in flask.session or 'constituency' not in flask.session:
@@ -88,15 +98,11 @@ def candidates():
     postcode = flask.session['postcode']
     constituency = flask.session['constituency']
 
-    candidates = lookups.lookup_candidates(constituency['id'])
-    if 'errors' in candidates:
+    all_candidates = lookups.lookup_candidates(constituency['id'])
+    if 'errors' in all_candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return error()
-    candidates = lookups.augment_if_has_cv(app.config, candidates)
-
-    candidates_no_email = [ candidate for candidate in candidates if candidate['email'] is None]
-    candidates_have_cv = [ candidate for candidate in candidates if candidate['email'] is not None and candidate['has_cv']]
-    candidates = [ candidate for candidate in candidates if candidate['email'] is not None and not candidate['has_cv']]
+    (candidates_no_cv, candidates_no_email, candidates_have_cv) = split_candidates_by_type(all_candidates)
 
     from_email = ""
     if 'email' in flask.session:
@@ -106,7 +112,7 @@ def candidates():
         email_got = lookups.updates_getting(app.config, from_email)
 
     return flask.render_template("candidates.html", constituency=constituency,
-            candidates=candidates,
+            candidates_no_cv=candidates_no_cv,
             candidates_have_cv=candidates_have_cv,
             candidates_no_email=candidates_no_email,
             from_email=from_email,
@@ -203,16 +209,11 @@ def upload_cv_upload(person_id, signature):
 
 #####################################################################
 
-@app.route('/email_candidate/<int:person_id>', methods=['GET','POST'])
+@app.route('/email_candidates', methods=['GET','POST'])
 def email_candidate(person_id):
     if 'postcode' not in flask.session:
         flask.flash("Enter your postcode to email candidates", 'success')
         return flask.redirect("/")
-
-    candidate = lookups.lookup_candidate(person_id)
-    if 'error' in candidate:
-        flask.flash(candidate['error'], 'danger')
-        return error()
 
     original_message = """Dear {0},
 

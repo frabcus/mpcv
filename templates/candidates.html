@@ -44,7 +44,7 @@
             {{ constituency.name }} Candidates
         </h1>
 
-        {% if candidates or candidates_no_email %}
+        {% if candidates_no_cv or candidates_no_email %}
 
             <div class="panel panel-danger">
                 <div class="panel-heading">
@@ -54,19 +54,18 @@
 
             <div class="row">
 
-            {% if candidates %}
+            {% if candidates_no_cv %}
             <div class="col-sm-12 col-md-6">
                 <div class="no_cv">
 
                     <h2>Not yet shared their CV</h2>
 
                     <div class="candidate_list">
-                        {% for candidate in candidates %}
+                        {% for candidate in candidates_no_cv %}
                         <div class="candidate">
                             <!-- <a href="/email_candidate/{{ candidate.id }}" class="btn btn-primary">Email them</a> -->
                             <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
                             <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
-                            <a href="/email_candidate/{{ candidate.id }}" class="email_them">Ask them</a>
                         </div>
                         {% endfor %}
                     </div>
@@ -84,7 +83,7 @@
             <div class="col-sm-12 col-md-6">
                 <div class="no_email">
 
-                    <h2>Don't know contact details</h2>
+                    <h2>Need contact details</h2>
 
                     <div class="candidate_list">
                         {% for candidate in candidates_no_email %}
