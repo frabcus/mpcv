@@ -60,7 +60,7 @@
 
 {% block sidebar %}
 
-        {% if not email_got %}
+        {% if not email_got and from_email %}
 
         <form action="/updates_join" method="POST">
             <h3>Get updates</h3>
