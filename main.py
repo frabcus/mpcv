@@ -98,6 +98,8 @@ def candidates():
     candidates_have_cv = [ candidate for candidate in candidates if candidate['email'] is not None and candidate['has_cv']]
     candidates = [ candidate for candidate in candidates if candidate['email'] is not None and not candidate['has_cv']]
 
+    candidates_have_cv = candidates_have_cv + candidates_have_cv + candidates_have_cv
+
     from_email = ""
     if 'email' in flask.session:
         from_email = flask.session['email']
@@ -146,7 +148,7 @@ def upload_cv(person_id):
 
     if flask.request.method == 'POST':
         identity.send_upload_cv_confirmation(app, mail, candidate['id'], candidate['email'], candidate['name'])
-        return flask.render_template("check_email.html")
+        return flask.render_template("check_email.html", candidate=candidate)
 
     return flask.render_template("upload_cv.html", candidate=candidate)
 

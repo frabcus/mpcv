@@ -196,6 +196,7 @@ def augment_if_has_cv(config, candidates):
     for candidate in candidates:
         if str(candidate['id']) in has_cv:
             candidate['has_cv'] = True
+            candidate['cv_url'] = get_cv_list(config, candidate['id'])[0]['url']
         else:
             candidate['has_cv'] = False
 

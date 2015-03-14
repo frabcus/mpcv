@@ -64,7 +64,7 @@ footer ul.pull-right li:last-child {
 .frame_small_inner .ratio {display:block;width:100%;height:auto;}
 .frame_small_inner iframe {position:absolute;top:0;left:0;width:100%; height:100%;}
 
-#recent_cvs .link {
+.link_full_page {
     margin-bottom: 16px;
 }
 
@@ -86,6 +86,7 @@ footer ul.pull-right li:last-child {
 
 .candidate_list {
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 #candidates .no_email p {
@@ -97,7 +98,7 @@ footer ul.pull-right li:last-child {
 }
 
 #candidates .candidate {
-    margin-top: 20px;
+    margin-top: 8px;
 }
 #candidates .candidate .name {
     font-size: 20px;
@@ -105,6 +106,10 @@ footer ul.pull-right li:last-child {
 #candidates .candidate .emailthem {
     margin-top: 4px;
     float: left;
+}
+
+#candidates .candidate .this_is_me {
+    margin-left: 1em;
 }
 
 /* /upload_cv */
