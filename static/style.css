@@ -103,9 +103,7 @@ footer ul.pull-right li:last-child {
 .candidate .name {
     font-size: 20px;
 }
-.candidate .emailthem {
-    margin-top: 4px;
-    float: left;
+.candidate .email_them {
 }
 
 .candidate .this_is_me {

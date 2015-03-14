@@ -52,57 +52,61 @@
                 </div>
             <div class="panel-body">
 
-            <div class="row"><div class="col-sm-12 col-md-6">
+            <div class="row">
 
             {% if candidates %}
-            <div class="no_cv">
+            <div class="col-sm-12 col-md-6">
+                <div class="no_cv">
 
-                <h2>Not yet shared their CV</h2>
+                    <h2>Not yet shared their CV</h2>
 
-                <div class="candidate_list">
-                    {% for candidate in candidates %}
-                    <div class="candidate">
-                        <!-- <a href="/email_candidate/{{ candidate.id }}" class="btn btn-primary">Email them</a> -->
-                        <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
-                        <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
+                    <div class="candidate_list">
+                        {% for candidate in candidates %}
+                        <div class="candidate">
+                            <!-- <a href="/email_candidate/{{ candidate.id }}" class="btn btn-primary">Email them</a> -->
+                            <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                            <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
+                            <a href="/email_candidate/{{ candidate.id }}" class="email_them">Ask them</a>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+
+                    <p>
+                        <a href="/email_candidates" class="btn btn-lg btn-success">Ask them all!</a>
+                    </p>
+
                 </div>
-
-                <p>
-                    <a href="/email_candidate/" class="btn btn-lg btn-success">Ask them to!</a>
-                </p>
-
             </div>
             {% endif %}
 
-            </div><div class="col-sm-12 col-md-6">
 
             {% if candidates_no_email %}
-            <div class="no_email">
+            <div class="col-sm-12 col-md-6">
+                <div class="no_email">
 
-                <h2>Don't know contact details</h2>
+                    <h2>Don't know contact details</h2>
 
-                <div class="candidate_list">
-                    {% for candidate in candidates_no_email %}
-                    <div class="candidate">
-                        <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                    <div class="candidate_list">
+                        {% for candidate in candidates_no_email %}
+                        <div class="candidate">
+                            <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+
+                    <p>
+                        <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-lg btn-default" target="_blank">Find their emails</a>
+                    </p>
+
+                    <p>
+                        (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
+                    </p>
+
                 </div>
-
-                <p>
-                    <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-lg btn-default" target="_blank">Find their emails</a>
-                </p>
-
-                <p>
-                    (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
-                </p>
-
             </div>
             {% endif %}
 
-            </div></div> </div></div>
+            </div> </div></div>
 
         {% endif %}
 
