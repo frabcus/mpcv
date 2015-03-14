@@ -7,15 +7,18 @@
         <h1>{{ candidate.name }}'s CV</h1>
         <h2>Candidate for MP of {{ candidate.constituency_name }} </h2>
 
-        <div class="frame_outer_wrapper">
-            <div class="frame_inner_wrapper">
-                <img class="ratio" src="/static/transparent.gif"/>
-                <iframe src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&embedded=true" frameborder="0" allowfullscreen></iframe>
-                <!-- CV uploaded: {{ cv.date }} -->
-            </div>
-        </div>
-
     </div>
 
 {% endblock %}
 
+{% block widebelow %}
+
+        <div class="frame_outer_wrapper">
+            <div class="frame_inner_wrapper">
+                <img class="ratio" src="/static/transparent.gif"/>
+                <iframe id="cvframe" src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&embedded=true" frameborder="0" allowfullscreen></iframe>
+                <!-- CV uploaded: {{ cv.date }} -->
+            </div>
+        </div>
+
+{% endblock %}
