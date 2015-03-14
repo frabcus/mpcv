@@ -63,7 +63,6 @@
                     <div class="candidate_list">
                         {% for candidate in candidates_no_cv %}
                         <div class="candidate">
-                            <!-- <a href="/email_candidate/{{ candidate.id }}" class="btn btn-primary">Email them</a> -->
                             <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
                             <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
                         </div>
