@@ -249,8 +249,8 @@ Yours sincerely,
 
     return flask.render_template("email_candidates.html",
         constituency=constituency,
-        emails_list=", ".join(emails_list),
-        names_list=", ".join(names_list),
+        emails_list=emails_list,
+        names_list=names_list,
         postcode=postcode,
         from_email=from_email,
         message=message
