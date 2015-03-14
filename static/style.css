@@ -68,6 +68,10 @@ footer ul.pull-right li:last-child {
     margin-bottom: 16px;
 }
 
+.link_full_page_right {
+    float: right;
+}
+
 #recent_cvs h2 {
     margin-bottom: 32px;
 }
@@ -80,7 +84,7 @@ footer ul.pull-right li:last-child {
 
 /* /candidates */
 
-#candidates > div {
+.candidates > div {
     margin-top: 48px;
 }
 
@@ -89,7 +93,7 @@ footer ul.pull-right li:last-child {
     margin-bottom: 20px;
 }
 
-#candidates .no_email p {
+.no_email p {
     margin-top: 10px;
 }
 
@@ -97,18 +101,18 @@ footer ul.pull-right li:last-child {
     margin-right: 8px;
 }
 
-#candidates .candidate {
+.candidate {
     margin-top: 8px;
 }
-#candidates .candidate .name {
+.candidate .name {
     font-size: 20px;
 }
-#candidates .candidate .emailthem {
+.candidate .emailthem {
     margin-top: 4px;
     float: left;
 }
 
-#candidates .candidate .this_is_me {
+.candidate .this_is_me {
     margin-left: 1em;
 }
 
