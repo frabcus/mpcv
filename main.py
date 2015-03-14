@@ -204,15 +204,25 @@ def email_candidate():
     if 'postcode' not in flask.session:
         flask.flash("Enter your postcode to email candidates", 'success')
         return flask.redirect("/")
+    constituency = flask.session['constituency']
 
-    original_message = """Dear {0},
+    all_candidates = lookups.lookup_candidates(constituency['id'])
+    if 'errors' in all_candidates:
+        flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
+        return error()
+    (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
+
+    emails_list = ", ".join([c['email'] for c in candidates_no_cv])
+    names_list = ", ".join([c['name'] for c in candidates_no_cv])
+
+    original_message = """
 
 
 
 
 Yours sincerely,
 
-""".format(candidate['name'])
+"""
     from_email = ""
     if 'email' in flask.session:
         from_email = flask.session['email']
@@ -226,6 +236,8 @@ Yours sincerely,
             flask.flash("Please enter your email", 'danger')
         elif message.strip() == original_message.strip():
             flask.flash("Please enter a message", 'danger')
+        elif re.search("Yours sincerely,$", message.strip()):
+            flask.flash("Please sign your message.", 'danger')
         else:
             # this is their default email now
             flask.session['email'] = from_email
@@ -237,8 +249,10 @@ Yours sincerely,
             return flask.redirect("/candidates")
 
 
-    return flask.render_template("email_candidate.html",
-        candidate=candidate,
+    return flask.render_template("email_candidates.html",
+        constituency=constituency,
+        emails_list=emails_list,
+        names_list=names_list,
         postcode=postcode,
         from_email=from_email,
         message=message
