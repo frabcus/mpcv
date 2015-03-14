@@ -11,34 +11,23 @@
 
 {% block sidebar %}
 
-        {% if not email_got and from_email %}
-
-        <form action="/updates_join" method="POST">
-            <h3>Get updates</h3>
-
-            <div class="form-group">
-              <input id="email" name="email" type="email" value="{{from_email}}" placeholder="Your email" class="form-control">
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Subscribe</button>
-            </div>
-
-            <p class="help-block">
-                We'll email you when there are new CVs in your constituency,
-                for your help getting all the CVs or for other site news.
-            </p>
-        </form>
-
-        {% endif %}
 
 {% endblock %}
 
 
 {% block widebelow %}
 
-
     <div class="candidates">
+
+        {% if not email_got and from_email %}
+        <form action="/updates_join" method="POST" id="follow_constituency">
+            <input name="email" type="hidden" value="{{from_email}}">
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Follow contituency</button>
+            </div>
+        </form>
+        {% endif %}
 
         <h1>
             {{ constituency.name }} Candidates
@@ -93,7 +82,7 @@
                     </div>
 
                     <p>
-                        <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-lg btn-default" target="_blank">Find their emails</a>
+                        <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-default" target="_blank">Find their emails</a>
                     </p>
 
                     <p>

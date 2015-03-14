@@ -110,6 +110,12 @@ footer ul.pull-right li:last-child {
     margin-left: 0.5em;
 }
 
+@media (min-width: 768px) { 
+  #follow_constituency {
+    float: right;
+  }
+}
+
 /* /upload_cv */
 
 /* Make file upload button look good */
