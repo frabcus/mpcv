@@ -215,6 +215,10 @@ def email_candidate(person_id):
         flask.flash(candidate['error'], 'danger')
         return flask.redirect(flask.url_for('error'))
 
+    if lookups.has_cv(app.config, person_id):
+        flask.flash("Good news! We have a CV for that candidate.", 'success')
+        return flask.redirect('/candidates')
+
     original_message = """Dear {0},
 
 
