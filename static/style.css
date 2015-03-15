@@ -145,6 +145,11 @@ footer ul.pull-right li:last-child {
   margin-bottom: 2em;
 }
 
+#upload_cv .not_me {
+    font-size: 15px;
+    margin-left: 0.5em;
+}
+
 /* /show_cv */
 
 /* See http://stackoverflow.com/a/12121929/284340 */
