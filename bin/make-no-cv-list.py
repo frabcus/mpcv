@@ -22,7 +22,9 @@ with main.app.app_context():
     rows = csv.DictReader(codecs.iterdecode(stream, 'utf-8'))
     rows = lookups.augment_if_has_cv(main.app.config, list(rows))
 
-    writer = csv.DictWriter(sys.stdout, ['name', 'email', 'id', 'party', 'constituency', 'upload_url'])
+    fields = ['name', 'email', 'id', 'party', 'constituency', 'upload_url']
+    writer = csv.DictWriter(sys.stdout, fields)
+    writer.writeheader()
 
     for row in rows:
         if row['has_cv']:
