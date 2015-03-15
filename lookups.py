@@ -69,7 +69,7 @@ def lookup_candidates(constituency_id):
             { 'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus@fastmail.fm', 'party': 'Monkeys Are Best' }
         ]
 
-    data = requests.get("http://yournextmp.popit.mysociety.org/api/v0.1/posts/{}?embed=membership.person".format(str_id)).json()
+    data = requests.get("https://yournextmp.popit.mysociety.org/api/v0.1/posts/{}?embed=membership.person".format(str_id)).json()
     if "errors" in data:
         return data
 
