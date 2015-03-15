@@ -38,10 +38,10 @@ class UploadingCVTestCase(unittest.TestCase):
         # make sure constituency remembered, and front page redirects back to constituency page
         self.browser.get(address)
         self.assertIn('Before you vote, look at their CVs!', self.browser.page_source)
-        self.assertIn('Your constituency', self.browser.page_source)
+        self.assertIn('My constituency', self.browser.page_source)
 
         # "Change constituency" clears the memory of constituency
-        self.browser.find_element_by_link_text("Your constituency").click()
+        self.browser.find_element_by_link_text("My constituency").click()
         self.assertIn('Democracy Club Test Constituency', self.browser.page_source)
 
     def testUploadCV(self):

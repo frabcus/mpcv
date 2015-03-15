@@ -43,10 +43,10 @@ class MainTestCase(unittest.TestCase):
         # make sure constituency remembered, and front page redirects back to constituency page
         r = self.app.get('/', follow_redirects=True)
         self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
-        self.assertIn('Your constituency', r.get_data(True))
+        self.assertIn('My constituency', r.get_data(True))
 
         # "I live somewhere else" clears the memory of constituency
-        self.assertIn('<a href="/candidates">Your constituency</a>', r.get_data(True))
+        self.assertIn('<a href="/candidates">My constituency</a>', r.get_data(True))
         r = self.app.get('/candidates', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
         self.assertIn('Democracy Club Test Constituency', r.get_data(True))
