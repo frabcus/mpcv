@@ -66,6 +66,9 @@ def set_postcode():
 
     return flask.redirect("/candidates")
 
+#####################################################################
+# Clear data
+
 @app.route('/clear_postcode')
 def clear_postcode():
     if 'postcode' in flask.session:
@@ -75,6 +78,16 @@ def clear_postcode():
 
     return flask.redirect("/")
 
+@app.route('/clear_all')
+def clear_all():
+    # clear constituency and postcode
+    clear_postcode()
+
+    # clear email
+    if 'email' in flask.session:
+        del flask.session['email']
+
+    return flask.redirect("/")
 
 #####################################################################
 # List candidates and view their CVs
