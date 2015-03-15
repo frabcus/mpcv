@@ -42,14 +42,14 @@ class MainTestCase(unittest.TestCase):
 
         # make sure constituency remembered, and front page redirects back to constituency page
         r = self.app.get('/', follow_redirects=True)
-        self.assertEqual(r.status_code, 200)
-        self.assertIn('Democracy Club Test Constituency', r.get_data(True))
+        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
+        self.assertIn('Your constituency', r.get_data(True))
 
         # "I live somewhere else" clears the memory of constituency
-        self.assertIn('<a href="/clear_postcode">Change constituency</a>', r.get_data(True))
-        r = self.app.get('/clear_postcode', follow_redirects=True)
+        self.assertIn('<a href="/candidates">Your constituency</a>', r.get_data(True))
+        r = self.app.get('/candidates', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
+        self.assertIn('Democracy Club Test Constituency', r.get_data(True))
 
     def test_candidates_redirect(self):
         # When no cookie set, /candidates takes you to front page to choose postcode

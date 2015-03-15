@@ -25,6 +25,8 @@ cache = flask.ext.cache.Cache(app,config={'CACHE_TYPE': 'simple'})
 def set_globals(*args, **kwargs):
     if "DEBUG_EMAIL" in app.config:
         flask.g.debug_email = app.config["DEBUG_EMAIL"]
+    if 'constituency' in flask.session:
+        flask.g.constituency = flask.session['constituency']
 
 #####################################################################
 # General routes
@@ -46,9 +48,6 @@ def _cache_recent_cvs():
 
 @app.route('/')
 def index():
-    if 'postcode' in flask.session:
-        return flask.redirect("/candidates")
-
     recent_cvs = _cache_recent_cvs()
 
     return flask.render_template('index.html', recent_cvs=recent_cvs)
