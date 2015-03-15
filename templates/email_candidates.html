@@ -5,7 +5,7 @@
 
         <h1>Ask candidates to share their CV</h1>
 
-        <form class="form-horizontal" action="/email_candidates" method="POST">
+        <form class="form-horizontal button-disabling-form" action="/email_candidates" method="POST">
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="to">To</label>
                 <div class="col-sm-10">
@@ -47,7 +47,7 @@
                 <div class="col-sm-2">
                 </div>
                 <div class="col-sm-10">
-                    <button type="submit" class="btn btn-success btn-lg">Send emails</button>
+                    <button type="submit" class="btn btn-success btn-lg" id="send-emails" data-loading-text="Sending...">Send emails</button>
                 </div>
             </div>
         </form>

@@ -13,6 +13,7 @@ $(function () {
     btn.parent().attr("disabled", "")
     // (Note that we can't use jquery's button.reset here due to this complexity)
   })
+
   // Reset buttons, on Firefox this is needed when doing back button.
   // http://duckranger.com/2012/01/double-submit-prevention-disabled-buttons-firefox-and-the-back-button/
   $(window).on("pageshow.files", function() {
@@ -29,5 +30,17 @@ $(function () {
     })
 
   })
+
+  // Used on send email page (initially)
+  var initiator = ""
+  $(".button-disabling-form .btn").click(function() { initiator = this.id });
+  $(".button-disabling-form").on('submit', function() {
+    $("#" + initiator).button('loading')
+  })
+  // Needed for Firefox / back button
+  $(window).on("pageshow.button-disabling-form", function() {
+    $(".button-disabling-form .btn").button('reset').prop('disabled', false)
+  });
+
 
 });
