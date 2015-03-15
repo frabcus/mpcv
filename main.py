@@ -160,8 +160,9 @@ def upload_cv_confirmed(person_id, signature):
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
         return error()
 
-    # this is their default email now
-    flask.session['email'] = candidate['email']
+    if candidate['email'] is not None:
+        # this is their default email now
+        flask.session['email'] = candidate['email']
 
     upload_link = flask.url_for('upload_cv_upload', person_id=person_id, signature=signature)
 
