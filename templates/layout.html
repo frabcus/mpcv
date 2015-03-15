@@ -42,9 +42,6 @@
                </button>
             </div>
             <div class="navbar-collapse collapse" id="navbar-main">
-              <!-- <ul class="nav navbar-nav">
-                <li> <a href="/clear_postcode">Change constituency</a> </li>
-              </ul> -->
 
               <p class="navbar-text visible-lg-block visible-md-block hidden-sm hidden-xs">
                   Curriculum Vitae of future Members of Parliament
@@ -54,10 +51,12 @@
               </p>
 
               <ul class="nav navbar-nav navbar-right">
-                {% if g.constituency %}
-                <li> <a href="/candidates">My constituency</a> </li>
-                {% else %}
-                <li> <a href="/">Choose constituency</a> </li>
+                {% if request.path == "/candidates" %}
+                    <li> <a href="/">Change constituency</a> </li>
+                {% elif g.constituency %}
+                    <li> <a href="/candidates">My constituency</a> </li>
+                {% elif request.path != "/" %}
+                    <li> <a href="/">Choose constituency</a> </li>
                 {% endif %}
                 <li> <a href="/about">About</a> </li>
               </ul>
