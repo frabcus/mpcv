@@ -16,6 +16,13 @@ def sign_person_id(secret_key, person_id):
     signature = signature_bytes.decode("ascii").rstrip("=\n")
     return signature[0:16]
 
+# Returns a URL that lets someone upload a CV
+def generate_upload_url(secret_key, person_id):
+    signature = sign_person_id(secret_key, person_id)
+    link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
+
+    return link
+
 # Make debug email if appropriate
 def map_to_email(app, to_email):
     if "DEBUG_EMAIL" in app.config:
@@ -44,8 +51,7 @@ UPLOAD_CV_MESSAGE = textwrap.dedent("""\
 def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
     to_email = map_to_email(app, to_email)
 
-    signature = sign_person_id(app.secret_key, person_id)
-    link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
+    link = generate_upload_url(app.secret_key, person_id)
 
     print("confirm email:", person_id, to_email, link)
     f = open("last_confirm_url.txt", 'w')
@@ -83,7 +89,6 @@ CONSTITUENT_MAIL_MESSAGE = textwrap.dedent("""\
     A Word document or a PDF is perfect!
 """)
 
-
 def send_email_candidates(app, mail, candidates, from_email, postcode, message):
     for candidate in candidates:
 
@@ -93,8 +98,7 @@ def send_email_candidates(app, mail, candidates, from_email, postcode, message):
 
         to_email = map_to_email(app, to_email)
 
-        signature = sign_person_id(app.secret_key, person_id)
-        link = flask.url_for("upload_cv_confirmed", person_id=person_id, signature=signature, _external=True)
+        link = generate_upload_url(app.secret_key, person_id)
         print("email candidate link: ", person_id, to_email, link)
 
         full_message = "Dear " + to_name + ", \n\n" + message.strip()
