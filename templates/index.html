@@ -35,13 +35,8 @@
         <div class="row">
             {% for cv in recent_cvs %}
                 <div class="col-md-6">
-                    <div class="frame_outer_wrapper">
-                        <div class="frame_inner_wrapper">
-                            <img class="ratio" src="/static/transparent.gif"/>
-                            <iframe src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                    </div>
-                    <div class="link_full_page"><a href="/show_cv/{{ cv.person_id }}">View full page</a></div>
+                    {% import 'embed_cv.html' as embed_cv %}
+                    {{ embed_cv.embed_cv(cv, full_page_link=True) }}
                 </div>
             {% endfor %}
         </div>
