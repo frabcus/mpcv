@@ -69,20 +69,14 @@ def set_postcode():
 #####################################################################
 # Clear data
 
-@app.route('/clear_postcode')
-def clear_postcode():
-    if 'postcode' in flask.session:
-        del flask.session['postcode']
-    if 'constituency' in flask.session:
-        del flask.session['constituency']
-
-    return flask.redirect("/")
-
 @app.route('/clear_all')
 def clear_all():
-    # clear constituency and postcode
-    clear_postcode()
-
+    # clear postcode
+    if 'postcode' in flask.session:
+        del flask.session['postcode']
+    # clear constituency
+    if 'constituency' in flask.session:
+        del flask.session['constituency']
     # clear email
     if 'email' in flask.session:
         del flask.session['email']
