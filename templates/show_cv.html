@@ -10,6 +10,8 @@
 
 {% block widebelow %}
 
+    <div id="show_cv">
+
         <h1>{{ candidate.name }}'s CV</h1>
         <h2>Candidate for MP of {{ candidate.constituency_name }} </h2>
 
@@ -20,5 +22,7 @@
                 <!-- CV uploaded: {{ cv.date }} -->
             </div>
         </div>
+
+    </div>
 
 {% endblock %}
