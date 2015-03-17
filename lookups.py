@@ -224,11 +224,13 @@ def recent_cvs(config):
     prefix = "cvs/"
     cvs = bucket.list(prefix)
     cvs = filter(lambda k: '777777' not in k.name, reversed(sorted(cvs, key=lambda k: k.last_modified)))
-    cvs = itertools.islice(cvs, 4)
 
+    person_ids = []
     result = []
     for key in cvs:
         person_id = int(re.match("cvs/([0-9]+)/", key.name).group(1))
+        if person_id in person_ids:
+            continue
         result.append({
             'name': key.name,
             'url': key.generate_url(expires_in=0, query_auth=False),
@@ -236,6 +238,10 @@ def recent_cvs(config):
             'content_type': key.content_type,
             'person_id': person_id
         })
+        person_ids.append(person_id)
+        if len(result) == 4:
+            break
+
     return result
 
 
