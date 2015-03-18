@@ -1,27 +1,38 @@
 {% extends "layout.html" %}
 {% block title %} {{ candidate.name }}'s CV, {{ candidate.constituency_name }}, {{ candidate.party}} {% endblock %}
 {% block body %}
-    <div id="show_cv">
-        <a href="/candidates" class="btn btn-success btn-md"><i class="glyphicon glyphicon-arrow-left"></i> More candidates</a>
-
-    </div>
-
 {% endblock %}
 
 {% block widebelow %}
 
     <div id="show_cv">
 
+        <a href="/candidates" class="pull-right btn btn-lg btn-success"><i class="glyphicon glyphicon-arrow-left"></i> More candidates</a>
+
         <h1>{{ candidate.name }}'s CV</h1>
+
         <h2>Candidate for MP of {{ candidate.constituency_name }} </h2>
+        <p id="ynmp_link" class="pull-right clear">
+           <a href="https://yournextmp.com/person/{{ candidate.id }}">About this candidate</a>
+        </p>
         <h3>{{ candidate.party }} </h3>
 
         {% import 'embed_cv.html' as embed_cv %}
         {{ embed_cv.embed_cv(cv, full_page_link=False) }}
 
-        <p id="ynmp_link">
-           <a href="https://yournextmp.com/person/{{ candidate.id }}">About this candidate</a> (on YourNextMP)
-        </p>
+        <script>
+
+            $(document).ready(function(){
+                 // #page is the id of the iframe
+                 $('.frame_inner_wrapper').scroll(function(){
+                     // $(this)[0].contentWindow is the window of your nested browsing context/ iframe
+                     $($(this)[0].contentWindow).scroll(function(){
+                         console.log($(this).scrollTop());
+                     });
+                 });
+              });
+
+        </script>
 
    </div>
 
