@@ -170,6 +170,15 @@ html,body        {height:100%;}
     margin-left: 8px;
 }
 
+.navbar-default.show-cv-navbar:hover .navbar-brand {
+  color: white; 
+}
+
+.navbar-default.show-cv-navbar .navbar-brand, .navbar-default.show-cv-navbar .navbar-text {
+  cursor: default;
+}
+
+
 @media (min-width: 768px) { 
   .show-cv-navbar .navbar-brand {
       padding-left: 40px;
@@ -185,5 +194,4 @@ html,body        {height:100%;}
   width: 100%;
   height: 100%;
 }
-
 
