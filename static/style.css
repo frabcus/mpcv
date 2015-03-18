@@ -146,6 +146,8 @@ html,body        {height:100%;}
 
 .link_full_page {
     margin-bottom: 16px;
+    text-align: center;
+    padding-top: 6px;
 }
 
 #recent_cvs h2 {
