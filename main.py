@@ -49,7 +49,7 @@ def _cache_all_cvs():
 
 @app.route('/')
 def index():
-    recent_cvs = _cache_all_cvs()[0:4]
+    recent_cvs = _cache_all_cvs()[0:2]
     return flask.render_template('index.html', recent_cvs=recent_cvs)
 
 @app.route('/all_cvs/page/<int:page>')

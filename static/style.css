@@ -151,11 +151,14 @@ html,body        {height:100%;}
 #recent_cvs h2 {
     margin-bottom: 32px;
 }
-#show_cv h2, #all_cvs h1 {
+#show_cv h3, #all_cvs h1 {
     margin-bottom: 48px;
 }
 
-#all_cvs_link {
+#all_cvs_link, #ynmp_link a {
     font-size: 20px;
+}
+#ynmp_link {
+    margin-top: 32px;
 }
 

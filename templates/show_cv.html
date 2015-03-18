@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %} {{ candidate.name }}'s CV, {{ candidate.constituency_name }} {% endblock %}
+{% block title %} {{ candidate.name }}'s CV, {{ candidate.constituency_name }}, {{ candidate.party}} {% endblock %}
 {% block body %}
     <div id="show_cv">
         <a href="/candidates" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> More candidates</a>
@@ -14,9 +14,14 @@
 
         <h1>{{ candidate.name }}'s CV</h1>
         <h2>Candidate for MP of {{ candidate.constituency_name }} </h2>
+        <h3>{{ candidate.party }} </h3>
 
         {% import 'embed_cv.html' as embed_cv %}
         {{ embed_cv.embed_cv(cv, full_page_link=False) }}
+
+        <p id="ynmp_link">
+           <a href="https://yournextmp.com/person/{{ candidate.id }}">More about this candidate</a>
+        </p>
 
    </div>
 
