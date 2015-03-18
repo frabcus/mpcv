@@ -1,19 +1,64 @@
 {% extends "layout.html" %}
-{% block title %} {{ candidate.name }}'s CV, {{ candidate.constituency_name }}, {{ candidate.party}} {% endblock %}
+{% block title %} {{ candidate.name }}'s CV, {{ candidate.constituency_name }}, MP Candidate, {{ candidate.party}} {% endblock %}
 
-{% block wide %}
+{% block allbody %}
+<body>
+    <div class="navbar navbar-default navbar-fixed-top show-cv-navbar">
+      <div class="container">
+        <div class="navbar-header">
+
+          <div class="pull-left">
+             <span class="visible-lg-block visible-md-block hidden-sm hidden-xs">
+                <a href="/candidates" class="btn btn-success"><i class="glyphicon glyphicon-arrow-left"></i> More candidates</a>
+             </span>
+             <span class="hidden-lg hidden-md visible-sm-block visible-xs-block">
+                <a href="/candidates" class="btn btn-success"><i class="glyphicon glyphicon-arrow-left"></i></a>
+             </span>
+          </div>
+
+          <a href="/" class="navbar-brand">
+             {{ candidate.name }}'s CV
+          </a>
+
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+             <span class="sr-only">Toggle navigation</span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+
+          <p class="navbar-text">
+             <span class="visible-lg-block visible-md-block hidden-sm hidden-xs">
+                MP Candidate, 
+                {{ candidate.constituency_name }},
+                {{ candidate.party }}
+             </span>
+             <span class="hidden-lg hidden-md visible-sm-block visible-xs-block">
+                {{ candidate.constituency_name }},
+                {{ candidate.party }}
+             </span>
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+<!--      <div class="row">
+        <div class="col-xs-12">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="top-alert alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
+     </div> -->
+
 
     <div id="show_cv">
-
-        <a href="/candidates" class="pull-right btn btn-lg btn-success"><i class="glyphicon glyphicon-arrow-left"></i> More candidates</a>
-
-        <h1>{{ candidate.name }}'s CV</h1>
-
-        <h2>Candidate for MP of {{ candidate.constituency_name }} </h2>
-        <p id="ynmp_link" class="pull-right clear">
-           <a href="https://yournextmp.com/person/{{ candidate.id }}">About this candidate</a>
-        </p>
-        <h3>{{ candidate.party }} </h3>
 
         {% import 'embed_cv.html' as embed_cv %}
         {{ embed_cv.embed_cv(cv, full_page_link=False) }}
@@ -34,4 +79,7 @@
 
    </div>
 
-{% endblock %}
+
+</body>
+{% endblock allbody %}
+

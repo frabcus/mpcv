@@ -174,3 +174,19 @@ html,body        {height:100%;}
     margin-top: 32px;
 }
 
+.show-cv-navbar .navbar-brand {
+    padding-left: 12px;
+}
+.show-cv-navbar .btn-success {
+    margin-top: 8px;
+    margin-left: 8px;
+}
+
+@media (min-width: 768px) { 
+  .show-cv-navbar .navbar-brand {
+      padding-left: 40px;
+      margin-left: 0px;
+  }
+}
+
+
