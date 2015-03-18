@@ -3,6 +3,21 @@
 
 {% block allbody %}
 <body>
+    <div class="row">
+       <div class="col-xs-2">
+       </div>
+       <div class="col-xs-8">
+           {% with messages = get_flashed_messages(with_categories=true) %}
+             {% if messages %}
+               {% for category, message in messages %}
+                 <div class="top-alert alert alert-{{ category }}">{{ message }}</div>
+               {% endfor %}
+             {% endif %}
+            {% endwith %}
+       </div>
+    </div> 
+
+
     <div class="navbar navbar-default navbar-fixed-top show-cv-navbar">
       <div class="container">
         <div class="navbar-header">
@@ -44,19 +59,6 @@
         </div>
       </div>
     </div>
-
-<!--      <div class="row">
-        <div class="col-xs-12">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div class="top-alert alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-        </div>
-     </div> -->
-
 
     <div id="show_cv">
 
