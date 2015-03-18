@@ -11,7 +11,7 @@
 
         <div class="row">
             {% for cv in page_cvs %}
-                <div class="col-md-4">
+                <div class="col-md-4 col-xs-6">
                      {% import 'embed_cv.html' as embed_cv %}
                     {{ embed_cv.embed_cv(cv, full_page_link=True) }} 
                 </div>

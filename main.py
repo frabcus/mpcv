@@ -54,7 +54,7 @@ def index():
 
 @app.route('/all_cvs/page/<int:page>')
 def all_cvs(page):
-    PAGE_SIZE = 9
+    PAGE_SIZE = 12
 
     all_cvs = _cache_all_cvs()
     page_cvs = all_cvs[(page-1)*PAGE_SIZE : (page-1)*PAGE_SIZE+PAGE_SIZE]
@@ -78,7 +78,6 @@ def all_cvs(page):
             max_page = max_page,
             numbers = range(start, end + 1)
     )
-
 
 @app.route('/set_postcode')
 def set_postcode():

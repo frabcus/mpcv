@@ -222,12 +222,14 @@ def all_cvs(config):
 
     prefix = "cvs/"
     cvs = bucket.list(prefix)
-    cvs = filter(lambda k: '777777' not in k.name, reversed(sorted(cvs, key=lambda k: k.last_modified)))
+    cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
 
     person_ids = []
     result = []
     for key in cvs:
         person_id = int(re.match("cvs/([0-9]+)/", key.name).group(1))
+        if person_id == 7777777:
+            continue
         if person_id in person_ids:
             continue
         result.append({
