@@ -62,22 +62,8 @@
 
     <div id="show_cv">
 
-        {% import 'embed_cv.html' as embed_cv %}
-        {{ embed_cv.embed_cv(cv, full_page_link=False) }}
-
-        <script>
-
-            $(document).ready(function(){
-                 // #page is the id of the iframe
-                 $('.frame_inner_wrapper').scroll(function(){
-                     // $(this)[0].contentWindow is the window of your nested browsing context/ iframe
-                     $($(this)[0].contentWindow).scroll(function(){
-                         console.log($(this).scrollTop());
-                     });
-                 });
-              });
-
-        </script>
+        <iframe class="showcvframe" src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>
+        <!-- CV uploaded: {{ cv.date }} -->
 
    </div>
 
