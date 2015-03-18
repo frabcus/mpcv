@@ -87,6 +87,7 @@ footer ul.pull-right li:last-child {
 }
 .candidate .name {
     font-size: 20px;
+    margin-bottom: 6px;
 }
 .candidate .email_them {
 }
