@@ -222,3 +222,12 @@ html,body        {height:100%;}
   height: 100%;
 }
 
+.show-cv-alert-row {
+  margin-left: 0;    
+  margin-right: 0;    
+}
+
+.show-cv-alert-row .col-xs-2, .show-cv-alert-row .col-xs-8 {
+  padding-left: 0;
+  padding-right: 0;
+}

@@ -3,19 +3,19 @@
 
 {% block allbody %}
 <body>
-    <div class="row">
-       <div class="col-xs-2">
-       </div>
-       <div class="col-xs-8">
-           {% with messages = get_flashed_messages(with_categories=true) %}
-             {% if messages %}
-               {% for category, message in messages %}
-                 <div class="top-alert alert alert-{{ category }}">{{ message }}</div>
-               {% endfor %}
-             {% endif %}
-            {% endwith %}
-       </div>
-    </div> 
+   {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+       <div class="row show-cv-alert-row">
+          <div class="col-xs-2">
+          </div>
+          <div class="col-xs-8">
+            {% for category, message in messages %}
+              <div class="top-alert alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+          </div>
+       </div> 
+   {% endwith %}
 
 
     <div class="navbar navbar-default navbar-fixed-top show-cv-navbar">
