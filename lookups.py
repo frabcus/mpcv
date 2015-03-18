@@ -211,14 +211,13 @@ def augment_if_has_cv(config, candidates):
 
 
 # Takes the app config (for S3), returns a list, ordered by reverse time,
-# of recent CVs from any candidate, up to a maximum of 4, with
-# the following fields:
+# of all CVs from any candidate, with the following fields:
 #   name - full name of S3 key
 #   url - publically accessible address of the file
 #   date - when it was uploaded
 #   content_type - the mime type of the file
 #   person_id - id of the person the CV is for
-def recent_cvs(config):
+def all_cvs(config):
     bucket = _get_s3_bucket(config)
 
     prefix = "cvs/"
@@ -239,8 +238,6 @@ def recent_cvs(config):
             'person_id': person_id
         })
         person_ids.append(person_id)
-        if len(result) == 4:
-            break
 
     return result
 

@@ -151,7 +151,7 @@ html,body        {height:100%;}
 #recent_cvs h2 {
     margin-bottom: 32px;
 }
-#show_cv h2 {
+#show_cv h2, #all_cvs h1 {
     margin-bottom: 48px;
 }
 

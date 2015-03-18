@@ -3,6 +3,7 @@
 import os
 import traceback
 import re
+import math
 
 import werkzeug
 import flask
@@ -42,15 +43,42 @@ def about():
 #####################################################################
 # Postcode entry
 
-@cache.cached(600, key_prefix="recent_cvs")
-def _cache_recent_cvs():
-    return lookups.recent_cvs(app.config)
+@cache.cached(600, key_prefix="all_cvs")
+def _cache_all_cvs():
+    return lookups.all_cvs(app.config)
 
 @app.route('/')
 def index():
-    recent_cvs = _cache_recent_cvs()
-
+    recent_cvs = _cache_all_cvs()[0:4]
     return flask.render_template('index.html', recent_cvs=recent_cvs)
+
+@app.route('/all_cvs/page/<int:page>')
+def all_cvs(page):
+    PAGE_SIZE = 9
+
+    all_cvs = _cache_all_cvs()
+    page_cvs = all_cvs[(page-1)*PAGE_SIZE : (page-1)*PAGE_SIZE+PAGE_SIZE]
+
+    max_page = math.ceil(len(all_cvs) / PAGE_SIZE)
+
+    start = page - 5
+    end = page + 5
+    if start < 1:
+        end += (1 - start)
+        start += (1 - start)
+    if end > max_page:
+        start -= (end - max_page)
+        end -= (end - max_page)
+    if start < 1:
+        start = 1
+
+    return flask.render_template('all_cvs.html',
+            page = page,
+            page_cvs = page_cvs,
+            max_page = max_page,
+            numbers = range(start, end + 1)
+    )
+
 
 @app.route('/set_postcode')
 def set_postcode():

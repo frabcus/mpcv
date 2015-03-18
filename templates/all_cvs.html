@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title %} CVs of MPs {% endblock %}
+{% block body %}
+{% endblock %}
+
+{% block widebelow %}
+    
+    <div id="all_cvs">
+
+        <h1>All CVs</h1>
+
+        <div class="row">
+            {% for cv in page_cvs %}
+                <div class="col-md-4">
+                     {% import 'embed_cv.html' as embed_cv %}
+                    {{ embed_cv.embed_cv(cv, full_page_link=True) }} 
+                </div>
+            {% endfor %}
+        </div>
+
+        <nav>
+          <ul class="pagination">
+            {% if page == 1 %}
+                <li class="disabled"> <a href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>
+            {% else %}
+                <li> <a href="{{ page - 1 }}" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>
+            {% endif %}
+
+            {% if page > 3000 %}
+            <li class="disabled"> <a href="#">...</a> </li>
+            {% endif %}
+
+            {% for n in numbers %}
+                {% if n == page %}
+                    <li class="disabled"><a href="#">{{ page }}</a></li>
+                {% else %}
+                    <li><a href="{{ n }}">{{ n }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < max_page - 3000 %}
+            <li class="disabled"> <a href="#">...</a> </li>
+            {% endif %}
+
+            {% if page == max_page %}
+                <li class="disabled"> <a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>
+            {% else %}
+                <li> <a href="{{ page + 1 }}" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>
+            {% endif %}
+          </ul>
+        </nav>
+
+    </div>
+
+{% endblock %}
