@@ -7,10 +7,6 @@
 
         <p class="lead">Choose your CV to share.</p>
 
-        <p>A CV is a document with a separate, dated section for each job held
-        with title, employer and nature of the role.
-        </p>
-
         <form id="form" method="POST" enctype="multipart/form-data" action="{{ upload_link}}">
           <a class="btn-file btn btn-lg btn-success">
             <i class="glyphicon glyphicon-plus"></i>
@@ -18,6 +14,29 @@
             <input class="files" name="files" type="file">
           </a>
         </form>
+
+        <div class="row is_is_not">
+            <div class="col-xs-5">
+                <div class="top">This is a CV</div>
+                <img src="/static/this-is-cv.png">
+                <div class="bottom">
+                    List of jobs including dates and names of employers
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="top">Not a CV</div>
+                <img src="/static/not-cv.png">
+                <div class="bottom">
+                    List of jobs is in a block of text. No dates or employers given.
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+        <h2>Making your CV</h2>
 
         <p>You can use a variety of formats.</p>
         
@@ -29,6 +48,8 @@
 
         <p>If all fails, <a href="/about">email us</a> an attachment.</p>
 
-    </div>
-{% endblock %}
+        <p>If you're not sure what to put, the National Careers Service has 
+        <a href="https://nationalcareersservice.direct.gov.uk/advice/getajob/cvs/Pages/default.aspx">advice
+            for jobseekers</a> on writing a CV.</p>
 
+{% endblock %}

@@ -136,6 +136,28 @@ footer ul.pull-right li:last-child {
     margin-left: 0.5em;
 }
 
+.is_is_not img {
+    width: 99%;
+    height: auto;
+}
+
+.is_is_not div {
+    text-align: center;
+}
+
+.is_is_not .top {
+    padding-bottom: 4px;
+    font-weight: bold;
+}
+.is_is_not .bottom {
+    padding-top: 6px;
+    font-weight: bold;
+}
+
+.is_is_not {
+    padding-top: 16px;
+}
+
 /* /show_cv and / */
 
 /* See http://stackoverflow.com/a/12121929/284340 */
