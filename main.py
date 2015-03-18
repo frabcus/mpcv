@@ -54,7 +54,7 @@ def index():
 
 @app.route('/all_cvs/page/<int:page>')
 def all_cvs(page):
-    PAGE_SIZE = 12
+    PAGE_SIZE = 8
 
     all_cvs = _cache_all_cvs()
     page_cvs = all_cvs[(page-1)*PAGE_SIZE : (page-1)*PAGE_SIZE+PAGE_SIZE]
