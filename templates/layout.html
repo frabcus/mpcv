@@ -1,111 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>{% block title %}{% endblock %} - Democracy Club CV</title>
+{% extends "bumf.html" %}
 
-        <meta name="description" content="Before you vote, look at their CVs! This site helps MP candidates share their CV with voters." />
-        <meta name="twitter:card" value="summary">
-        <meta property="og:title" content="Democracy Club CV" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://cv.democracyclub.org.uk/" />
-        <meta property="og:image" content="http://cv.democracyclub.org.uk/static/cv_snip.png" />
-        <meta property="og:description" content="Before you vote, look at their CVs! This site helps MP candidates share their CV with voters." /> 
+{% block allbody %}
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="/" class="navbar-brand">
+              <img src="/static/dc_logo.png">
+              Democracy Club CVs
+          </a>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/static/bootstrap/css/bootswatch.min.css" rel="stylesheet">
-        <link href="/static/style.css" rel="stylesheet">
-
-        <script src="/static/jquery-1.11.2.min.js"></script>
-        <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-        <script src="/static/main.js"></script>
-
-        <link rel="icon" type="image/png" href="/static/dc_logo.png">
-
-    </head>
-
-    <body>
-        <div class="navbar navbar-default navbar-fixed-top">
-          <div class="container">
-            <div class="navbar-header">
-              <a href="/" class="navbar-brand">
-                  <img src="/static/dc_logo.png">
-                  Democracy Club CVs
-              </a>
-
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
-                 <span class="sr-only">Toggle navigation</span>
-                 <span class="icon-bar"></span>
-                 <span class="icon-bar"></span>
-                 <span class="icon-bar"></span>
-               </button>
-            </div>
-            <div class="navbar-collapse collapse" id="navbar-main">
-
-              <p class="navbar-text visible-lg-block visible-md-block hidden-sm hidden-xs">
-                  Curriculum Vitae of future Members of Parliament
-              </p>
-              <p class="navbar-text hidden-lg hidden-md visible-sm-block visible-xs-block">
-                  CVs of MPs
-              </p>
-
-              <ul class="nav navbar-nav navbar-right">
-                {% if request.path == "/candidates" %}
-                    <li> <a href="/">Change constituency</a> </li>
-                {% elif g.constituency %}
-                    <li> <a href="/candidates">My constituency</a> </li>
-                {% elif request.path != "/" %}
-                    <li> <a href="/">Choose constituency</a> </li>
-                {% endif %}
-                <li> <a href="/about">About</a> </li>
-              </ul>
-
-            </div>
-          </div>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+             <span class="sr-only">Toggle navigation</span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
         </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
 
-        <div class="container">
+          <p class="navbar-text visible-lg-block visible-md-block hidden-sm hidden-xs">
+              Curriculum Vitae of future Members of Parliament
+          </p>
+          <p class="navbar-text hidden-lg hidden-md visible-sm-block visible-xs-block">
+              CVs of MPs
+          </p>
 
-          <div class="row">
-            <div class="col-xs-12">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                  {% if messages %}
-                    {% for category, message in messages %}
-                      <div class="top-alert alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                  {% endif %}
-                {% endwith %}
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-8 col-lg-7">
-                <div class="contentwrap"> {% block body %}{% endblock %} </div>
-            </div>
-            <div class="col-md-1 col-lg-1">
-            </div>
-            <div class="col-md-3 col-lg-4">
-                <div class="sidebarwrap"> {% block sidebar %}{% endblock %} </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12">
-                <div class="widebelowwrap"> {% block widebelow %}{% endblock %} </div>
-            </div>
-          </div>
-
-          <footer>
-
-            {% if g.debug_email %}
-                <div class="text-center alert alert-info" style="margin-top: 1em;">
-                      <p>Debug email enabled, all outbound emails going to <b>{{ g.debug_email }}</b></p>
-                </div>
+          <ul class="nav navbar-nav navbar-right">
+            {% if request.path == "/candidates" %}
+                <li> <a href="/">Change constituency</a> </li>
+            {% elif g.constituency %}
+                <li> <a href="/candidates">My constituency</a> </li>
+            {% elif request.path != "/" %}
+                <li> <a href="/">Choose constituency</a> </li>
             {% endif %}
-
-          </footer>
+            <li> <a href="/about">About</a> </li>
+          </ul>
 
         </div>
-    </body>
+      </div>
+    </div>
 
-</html>
+    <div class="container">
+
+      <div class="row">
+        <div class="col-xs-12">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="top-alert alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8 col-lg-7">
+            <div class="contentwrap"> {% block body %}{% endblock %} </div>
+        </div>
+        <div class="col-md-1 col-lg-1">
+        </div>
+        <div class="col-md-3 col-lg-4">
+            <div class="sidebarwrap"> {% block sidebar %}{% endblock %} </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+            <div class="widewrap"> {% block wide %}{% endblock %} </div>
+        </div>
+      </div>
+
+      <footer>
+
+        {% if g.debug_email %}
+            <div class="text-center alert alert-info" style="margin-top: 1em;">
+                  <p>Debug email enabled, all outbound emails going to <b>{{ g.debug_email }}</b></p>
+            </div>
+        {% endif %}
+
+      </footer>
+
+    </div>
+</body>
+{% endblock allbody %}
+
