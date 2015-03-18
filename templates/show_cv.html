@@ -2,7 +2,7 @@
 {% block title %} {{ candidate.name }}'s CV, {{ candidate.constituency_name }}, {{ candidate.party}} {% endblock %}
 {% block body %}
     <div id="show_cv">
-        <a href="/candidates" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> More candidates</a>
+        <a href="/candidates" class="btn btn-success btn-md"><i class="glyphicon glyphicon-arrow-left"></i> More candidates</a>
 
     </div>
 
@@ -20,7 +20,7 @@
         {{ embed_cv.embed_cv(cv, full_page_link=False) }}
 
         <p id="ynmp_link">
-           <a href="https://yournextmp.com/person/{{ candidate.id }}">More about this candidate</a>
+           <a href="https://yournextmp.com/person/{{ candidate.id }}">About this candidate</a> (on YourNextMP)
         </p>
 
    </div>

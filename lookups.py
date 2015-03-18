@@ -185,6 +185,7 @@ def get_cv_list(config, person_id):
             'url': key.generate_url(expires_in=0, query_auth=False),
             'date': key.last_modified,
             'content_type': key.content_type,
+            'person_id': person_id
         })
     return result
 
@@ -203,7 +204,7 @@ def augment_if_has_cv(config, candidates):
     for candidate in candidates:
         if str(candidate['id']) in has_cv:
             candidate['has_cv'] = True
-            candidate['cv_url'] = get_cv_list(config, candidate['id'])[0]['url']
+            candidate['cv'] = get_cv_list(config, candidate['id'])[0]
         else:
             candidate['has_cv'] = False
 

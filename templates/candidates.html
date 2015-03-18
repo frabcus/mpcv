@@ -100,20 +100,15 @@
         {% if candidates_have_cv %}
         <div class="no_cv">
 
-           <h2>View candidates with CVs</h2>
+           <h2>Candidates with CVs</h2>
 
            <div class="row">
                 {% for candidate in candidates_have_cv %}
                     <div class="col-md-6 candidate">
                         <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}
                         </span>
-                        <div class="frame_small_outer">
-                            <div class="frame_small_inner">
-                                <img class="ratio" src="/static/transparent.gif"/>
-                                <iframe src="http://docs.google.com/viewer?url={{ candidate.cv_url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>             
-                            </div>
-                        </div>
-                        <div class="link_full_page"><a href="/show_cv/{{ candidate.id }}">View full page</a></div>
+                        {% import 'embed_cv.html' as embed_cv %}
+                        {{ embed_cv.embed_cv(candidate.cv, full_page_link=True) }}
                     </div>            
                 {% endfor %}
             </div>
