@@ -74,7 +74,7 @@ class MainTestCase(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertIn('Hello, Sicnarf Gnivri', r.get_data(True))
         self.assertIn('<form action="/upload_cv/7777777" method="POST">', r.get_data(True))
-        self.assertIn('<button id="confirm_email" type="submit" class="btn btn-success btn-lg">Share my CV</button>', r.get_data(True))
+        self.assertIn('<button id="confirm_email" type="submit" class="btn btn-success btn-lg">Confirm email</button>', r.get_data(True))
         self.assertIn('frabcus@fastmail.fm', r.get_data(True))
 
     def test_upload_cv_error(self):
