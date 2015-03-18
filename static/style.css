@@ -155,5 +155,7 @@ html,body        {height:100%;}
     margin-bottom: 48px;
 }
 
-
+#all_cvs_link {
+    font-size: 20px;
+}
 
