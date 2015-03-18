@@ -29,6 +29,14 @@ def set_globals(*args, **kwargs):
     if 'constituency' in flask.session:
         flask.g.constituency = flask.session['constituency']
 
+@app.before_request
+def check_ie():
+    ua = flask.request.user_agent
+
+    if "/static/" not in flask.request.path:
+        if ua.browser == "msie" and float(ua.version) < 9.0:
+            flask.flash("This site doesn't work on Internet Explorer versions 8 and earlier. Please use a more recent browser.", 'danger')
+
 #####################################################################
 # General routes
 
