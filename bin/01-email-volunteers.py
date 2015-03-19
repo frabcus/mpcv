@@ -23,7 +23,7 @@ subscribers = lookups.updates_list(main.app.config)
 
 # Loop over them
 for subscriber in subscribers:
-    # Only mail to recent
+    # Only mail to ones we haven't mailed recently
     back_to = datetime.datetime.now() - datetime.timedelta(days=3)
     if subscriber['last_modified'] > back_to:
         print("skipping too recent", subscriber['email'], subscriber['last_modified'], ">", back_to)
@@ -119,13 +119,16 @@ P.P.S. To unsubscribe, reply to this email and just ask.
             recipients=[subscriber['email']]
           )
 
+    print("DEBUG aborted just before send")
+    sys.exit(1)
+
     with main.app.app_context():
         main.mail.send(msg)
         print("mail sent!")
+        # Touch the timestamp so we don't mail them again until time passes
         lookups.updates_join(main.app.config, subscriber['email'], subscriber['postcode'])
         print("touched stamp!")
 
     print("========================================")
-    sys.exit(1)
 
 
