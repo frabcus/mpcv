@@ -3,17 +3,36 @@
 
 {% block wide %}
 
-    <div class="candidates">
+        {% if not email_got and from_email and not g.dismiss %}
 
-        {% if not email_got and from_email %}
-        <form action="/updates_join" method="POST" id="follow_constituency">
-            <input name="email" type="hidden" value="{{from_email}}">
+            <div class="row"><div class="col-xs-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading panel-title">
+                    Get updates
+                </div>
+                <div class="panel-body">
+                    <form action="/updates_join" method="POST">
+                        <div class="form-group">
+                          <input id="email" name="email" type="email" value="{{from_email}}" placeholder="Your email" class="form-control">
+                        </div>
 
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Follow constituency</button>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" name="subscribe">Subscribe</button>
+                            <button type="submit" class="btn btn-default" name="dismiss">Dismiss</button>
+                        </div>
+
+                        <p class="help-block">
+                            We'll email you when there are new CVs in your constituency,
+                            for your help getting all the CVs or for other site news.
+                        </p>
+                    </form>
+                </div>
             </div>
-        </form>
+            </div></div> 
         {% endif %}
+
+
+    <div class="candidates">
 
         <h1>
             {{ constituency.name }} Candidates
@@ -45,7 +64,7 @@
                     </div>
 
                     <p>
-                        <a href="/email_candidates" class="btn btn-lg btn-success">Ask them all!</a>
+                        <a href="/email_candidates" class="btn btn-lg btn-success">Email them all!</a>
                     </p>
 
                 </div>

@@ -41,6 +41,7 @@ footer ul.pull-right li:last-child {
 
 .top-alert {
     margin-top: 32px;
+    margin-bottom: 0px;
 }
 
 .top-alert + * {
@@ -225,6 +226,7 @@ html,body        {height:100%;}
 .show-cv-alert-row {
   margin-left: 0;    
   margin-right: 0;    
+  margin-bottom: 24px;
 }
 
 .show-cv-alert-row .col-xs-2, .show-cv-alert-row .col-xs-8 {

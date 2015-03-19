@@ -28,6 +28,8 @@ def set_globals(*args, **kwargs):
         flask.g.debug_email = app.config["DEBUG_EMAIL"]
     if 'constituency' in flask.session:
         flask.g.constituency = flask.session['constituency']
+    if 'dismiss' in flask.session and flask.session['dismiss']:
+        flask.g.dismiss = True
 
 @app.before_request
 def check_ie():
@@ -283,6 +285,9 @@ Yours sincerely,
         else:
             # this is their default email now
             flask.session['email'] = from_email
+            # prompt for signup again
+            flask.session['dismiss'] = False
+            # send the mail
             identity.send_email_candidates(app, mail,
                 candidates_no_cv, from_email, postcode, message
             )
@@ -305,6 +310,10 @@ Yours sincerely,
 
 @app.route('/updates_join', methods=['POST'])
 def updates_join():
+    if 'dismiss' in flask.request.form:
+        flask.session['dismiss'] = True
+        return flask.redirect("/candidates")
+
     email = flask.request.form.get('email', "")
     if email == "" or not re.match("^.*?@.*?\..*?$", email) or "/" in email:
         flask.flash("Please enter your email to subscribe to updates", 'danger')
