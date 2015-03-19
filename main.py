@@ -262,8 +262,6 @@ def email_candidate():
     original_message = """
 
 
-
-
 Yours sincerely,
 
 """
