@@ -14,6 +14,7 @@ import constants
 
 import boto.s3.connection
 import boto.s3.key
+import boto.utils
 
 ###################################################################
 # General helpers
@@ -283,4 +284,41 @@ def updates_getting(config, email):
             return True
 
     return False
+
+def updates_list(config):
+    bucket = _get_s3_bucket(config)
+
+    prefix = "updates/"
+    results = bucket.list(prefix)
+    results = sorted(results, key=lambda k: k.last_modified)
+
+    for key in results:
+        email = re.match("updates/(.*)", key.name).group(1)
+        postcode = key.get_contents_as_string().strip().decode('ascii')
+        constituency = lookup_postcode(postcode)
+        if 'error' in constituency:
+            print("ERROR looking up postcode", postcode)
+            continue
+
+        candidates = lookup_candidates(constituency['id'])
+        if 'errors' in candidates:
+            print("ERROR looking up candidates", postcode)
+            continue
+        candidates = augment_if_has_cv(config, candidates)
+
+        candidates_no_cv, candidates_no_email, candidates_have_cv = split_candidates_by_type(config, candidates)
+
+        subscriber = {
+            'email': email,
+            'postcode': postcode,
+            'constituency': constituency,
+            'candidates': candidates,
+            'has_cv_count': len(candidates_have_cv),
+            'no_cv_count': len(candidates_no_cv),
+            'no_email_count': len(candidates_no_email),
+            'last_modified': boto.utils.parse_ts(key.last_modified)
+        }
+
+
+        yield subscriber
 

@@ -6,3 +6,4 @@ flask-appconfig
 flask-mail
 flask-cache
 boto>=2.36.0
+inflect
