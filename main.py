@@ -247,7 +247,7 @@ def upload_cv_upload(person_id, signature):
 #####################################################################
 
 @app.route('/email_candidates', methods=['GET','POST'])
-def email_candidate():
+def email_candidates():
     if 'postcode' not in flask.session:
         flask.flash("Enter your postcode to email candidates", 'success')
         return flask.redirect("/")
@@ -273,12 +273,14 @@ Yours sincerely,
         from_email = flask.session['email']
 
     postcode = flask.session['postcode']
-    message = original_message
     if flask.request.method == 'POST':
         from_email = flask.request.form.get("from_email", "")
+        subject = flask.request.form.get("subject", "")
         message = flask.request.form.get("message", "").replace("\r\n", "\n")
         if from_email == "" or not re.match("^.*?@.*?\..*?$", from_email):
             flask.flash("Please enter your email", 'danger')
+        elif subject.strip() == "":
+            flask.flash("Please write a subject for your email. Candidates pay more attention if it is unique and local!", 'danger')
         elif message.strip() == original_message.strip():
             flask.flash("Please enter a message", 'danger')
         elif re.search("Yours sincerely,$", message.strip()):
@@ -290,10 +292,13 @@ Yours sincerely,
             flask.session['dismiss'] = False
             # send the mail
             identity.send_email_candidates(app, mail,
-                candidates_no_cv, from_email, postcode, message
+                candidates_no_cv, from_email, postcode,
+                subject, message
             )
             flask.flash("Thanks! Your message has been sent to " + names_list + '.', 'success')
             return flask.redirect("/candidates")
+
+    message = original_message
 
     return flask.render_template("email_candidates.html",
         constituency=constituency,

@@ -89,7 +89,7 @@ CONSTITUENT_MAIL_MESSAGE = textwrap.dedent("""\
     A Word document or a PDF is perfect!
 """)
 
-def send_email_candidates(app, mail, candidates, from_email, postcode, message):
+def send_email_candidates(app, mail, candidates, from_email, postcode, subject, message):
     for candidate in candidates:
 
         person_id = candidate['id']
@@ -107,7 +107,7 @@ def send_email_candidates(app, mail, candidates, from_email, postcode, message):
             from_email=from_email, postcode=postcode, message=full_message
         )
         msg = flask_mail.Message(body=body,
-                subject="Message from constituent, postcode " + postcode,
+                subject=subject.strip(),
                 sender=("Democracy Club CV", "cv@democracyclub.org.uk"),
                 recipients=[(to_name, to_email)]
               )
