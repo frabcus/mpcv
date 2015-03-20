@@ -44,10 +44,6 @@ footer ul.pull-right li:last-child {
     margin-bottom: 0px;
 }
 
-.top-alert + * {
-    padding-top: 0px;
-}
-
 
 /* / */
 
