@@ -91,11 +91,14 @@ def all_cvs(page):
 
 @app.route('/set_postcode')
 def set_postcode():
-    postcode = flask.request.args.get('postcode')
+    postcode = flask.request.args.get('postcode').strip()
     constituency = lookups.lookup_postcode(postcode)
 
     if 'error' in constituency:
-        flask.flash(constituency['error'], 'danger')
+        if re.search(r"^[A-Z][A-Z]?[0-9][0-9]?[A-Z]?$", postcode, re.IGNORECASE):
+            flask.flash("Please use your complete postcode, e.g. NE1 4ST. Partial ones aren't accurate enough to work out your constituency.", 'danger')
+        else:
+            flask.flash(constituency['error'], 'danger')
         return flask.redirect(flask.url_for('index'))
 
     flask.session['postcode'] = constituency['postcode']
