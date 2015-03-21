@@ -59,6 +59,9 @@
                         <div class="candidate">
                             <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
                             <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
+                            {% if candidate.twitter %}
+                                <a class="twitter-share-button" href="https://twitter.com/{{ candidate.twitter }}" data-text=". @{{ candidate.twitter }} I vote in your seat. I'd love to see your CV - could you share it here?" data-related="democlub" data-hashtags="ge2015" data-count="none" data-size="large" data-url="http://cv.democracyclub.org.uk">@{{ candidate.twitter }}</a>
+                            {% endif %}
                         </div>
                         {% endfor %}
                     </div>
@@ -82,6 +85,9 @@
                         {% for candidate in candidates_no_email %}
                         <div class="candidate">
                             <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
+                            {% if twitter %}
+                                <a href="https://twitter.com/{{ twitter }}">@{{ twitter }}</a>
+                            {% endif %}
                         </div>
                         {% endfor %}
                     </div>

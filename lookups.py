@@ -65,7 +65,7 @@ def lookup_candidates(constituency_id):
     str_id = str(int(constituency_id))
     if str_id == '8888888':
         return [
-            { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'party': 'Bunny Rabbits Rule' },
+            { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Bunny Rabbits Rule' },
             { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'party': 'Mice Rule More' },
             { 'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus@fastmail.fm', 'party': 'Monkeys Are Best' }
         ]
@@ -86,10 +86,22 @@ def lookup_candidates(constituency_id):
         if member["standing_in"][constants.year] == None:
             continue
 
+        twitter = None
+        if 'contact_details' in member:
+            print("found contact_details")
+            for contact_detail in member['contact_details']:
+                print("moo contact_details", contact_detail)
+                if contact_detail['type'] == 'twitter':
+                    print("moo two", contact_detail)
+                    twitter = contact_detail['value']
+                    break
+
+        print("twitter", twitter)
         current_candidate_list.append({
             'id': member['id'],
             'name': member['name'],
             'email': member['email'],
+            'twitter': twitter,
             'party': member['party_memberships'][constants.year]['name']
         })
 
