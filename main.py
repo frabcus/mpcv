@@ -313,7 +313,7 @@ Yours sincerely,
 @app.route('/tweet_candidates')
 def tweet_candidates():
     if 'postcode' not in flask.session:
-        flask.flash("Enter your postcode to email candidates", 'success')
+        flask.flash("Enter your postcode to tweet candidates", 'success')
         return flask.redirect("/")
     constituency = flask.session['constituency']
 
