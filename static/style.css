@@ -185,6 +185,10 @@ html,body        {height:100%;}
     margin-bottom: 48px;
 }
 
+#all_cvs nav {
+    margin-top: 16px;
+}
+
 
 .show-cv-navbar .navbar-brand {
     padding-left: 12px;
