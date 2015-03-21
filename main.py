@@ -140,6 +140,12 @@ def candidates():
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
+    show_twitter_button = False
+    for candidate in candidates_no_cv:
+        if 'twitter' in candidate and candidate['twitter'] is not None:
+            show_twitter_button = True
+            break
+
     from_email = ""
     if 'email' in flask.session:
         from_email = flask.session['email']
@@ -152,7 +158,8 @@ def candidates():
             candidates_have_cv=candidates_have_cv,
             candidates_no_email=candidates_no_email,
             from_email=from_email,
-            email_got = email_got
+            email_got=email_got,
+            show_twitter_button=show_twitter_button
     )
 
 

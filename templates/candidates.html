@@ -65,8 +65,10 @@
 
                     <p>
                         <a href="/email_candidates" class="btn btn-lg btn-success">Email them all!</a>
+                        {% if show_twitter_button %}
                         &nbsp;
                         <a href="/tweet_candidates" class="btn btn-lg btn-info">Tweet them all!</a>
+                        {% endif %}
                     </p>
 
                 </div>
