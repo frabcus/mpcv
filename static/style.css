@@ -155,7 +155,7 @@ footer ul.pull-right li:last-child {
     padding-top: 16px;
 }
 
-/* /show_cv and / */
+/* /show_cv and / and /all_cvs*/
 
 /* See http://stackoverflow.com/a/12121929/284340 */
 html,body        {height:100%;}
@@ -217,6 +217,7 @@ html,body        {height:100%;}
 #show_cv {
   height: 100%;
   overflow: hidden; /* prevent double scroll bars due to slight differences on some browsers */
+  margin-top: 10px;
 }
 
 #show_cv iframe {
