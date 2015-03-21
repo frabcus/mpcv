@@ -90,11 +90,9 @@ def lookup_candidates(constituency_id):
         if 'contact_details' in member:
             for contact_detail in member['contact_details']:
                 if contact_detail['type'] == 'twitter':
-                    print("moo two", contact_detail)
                     twitter = contact_detail['value']
                     break
 
-        print("twitter", twitter)
         current_candidate_list.append({
             'id': member['id'],
             'name': member['name'],
