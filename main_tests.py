@@ -92,7 +92,7 @@ class MainTestCase(unittest.TestCase):
 
             # Extract URL to confirm from email
             self.assertEqual(len(outbox), 1)
-            self.assertEqual(outbox[0].subject, "Upload your CV to apply to be an MP")
+            self.assertEqual(outbox[0].subject, "Share your CV with voters using this link")
             self.assertEqual(outbox[0].recipients, [('Sicnarf Gnivri', 'test@localhost')])
             self.assertEqual(outbox[0].sender, "Democracy Club CV <cv@democracyclub.org.uk>")
             m = re.search("^http://localhost(/.*)$", outbox[0].body, re.M)
