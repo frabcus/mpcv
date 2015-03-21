@@ -35,16 +35,18 @@ def map_to_email(app, to_email):
 UPLOAD_CV_MESSAGE = textwrap.dedent("""\
     Hi {name},
 
-    Your future constituents would like to read your Curriculum Vitae
-    before deciding how to vote.
+    Thanks for offering to share your Curriculum Vitae with your future
+    constituents.
 
-    Click the link below to share your CV with the world.
+    Click the link below to confirm your email, then upload your CV.
 
     {link}
 
     Thanks for your help!
 
-    Democracy Club CV team
+    Francis Irving
+    Volunteer
+    Democracy Club CVs
     (we were behind TheyWorkForYou)
 """)
 
@@ -62,7 +64,7 @@ def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
 
     body = UPLOAD_CV_MESSAGE.format(name=to_name, link=link)
     msg = flask_mail.Message(body=body,
-            subject="Upload your CV to apply to be an MP",
+            subject="Share your CV with voters using this link",
             sender=("Democracy Club CV", "cv@democracyclub.org.uk"),
             recipients=[(to_name, to_email)]
           )
@@ -89,7 +91,7 @@ CONSTITUENT_MAIL_MESSAGE = textwrap.dedent("""\
     A Word document or a PDF is perfect!
 """)
 
-def send_email_candidates(app, mail, candidates, from_email, postcode, message):
+def send_email_candidates(app, mail, candidates, from_email, postcode, subject, message):
     for candidate in candidates:
 
         person_id = candidate['id']
@@ -107,7 +109,7 @@ def send_email_candidates(app, mail, candidates, from_email, postcode, message):
             from_email=from_email, postcode=postcode, message=full_message
         )
         msg = flask_mail.Message(body=body,
-                subject="Message from constituent, postcode " + postcode,
+                subject=subject.strip(),
                 sender=("Democracy Club CV", "cv@democracyclub.org.uk"),
                 recipients=[(to_name, to_email)]
               )

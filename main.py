@@ -140,6 +140,12 @@ def candidates():
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
+    show_twitter_button = False
+    for candidate in candidates_no_cv:
+        if 'twitter' in candidate and candidate['twitter'] is not None:
+            show_twitter_button = True
+            break
+
     from_email = ""
     if 'email' in flask.session:
         from_email = flask.session['email']
@@ -152,7 +158,8 @@ def candidates():
             candidates_have_cv=candidates_have_cv,
             candidates_no_email=candidates_no_email,
             from_email=from_email,
-            email_got = email_got
+            email_got=email_got,
+            show_twitter_button=show_twitter_button
     )
 
 
@@ -245,9 +252,10 @@ def upload_cv_upload(person_id, signature):
     return flask.redirect(successful_link)
 
 #####################################################################
+# Ask candidates to upload their CV
 
 @app.route('/email_candidates', methods=['GET','POST'])
-def email_candidate():
+def email_candidates():
     if 'postcode' not in flask.session:
         flask.flash("Enter your postcode to email candidates", 'success')
         return flask.redirect("/")
@@ -273,12 +281,14 @@ Yours sincerely,
         from_email = flask.session['email']
 
     postcode = flask.session['postcode']
-    message = original_message
     if flask.request.method == 'POST':
         from_email = flask.request.form.get("from_email", "")
+        subject = flask.request.form.get("subject", "")
         message = flask.request.form.get("message", "").replace("\r\n", "\n")
         if from_email == "" or not re.match("^.*?@.*?\..*?$", from_email):
             flask.flash("Please enter your email", 'danger')
+        elif subject.strip() == "":
+            flask.flash("Please write a subject for your email. Candidates pay more attention if it is unique and local!", 'danger')
         elif message.strip() == original_message.strip():
             flask.flash("Please enter a message", 'danger')
         elif re.search("Yours sincerely,$", message.strip()):
@@ -290,10 +300,13 @@ Yours sincerely,
             flask.session['dismiss'] = False
             # send the mail
             identity.send_email_candidates(app, mail,
-                candidates_no_cv, from_email, postcode, message
+                candidates_no_cv, from_email, postcode,
+                subject, message
             )
             flask.flash("Thanks! Your message has been sent to " + names_list + '.', 'success')
             return flask.redirect("/candidates")
+
+    message = original_message
 
     return flask.render_template("email_candidates.html",
         constituency=constituency,
@@ -302,6 +315,24 @@ Yours sincerely,
         postcode=postcode,
         from_email=from_email,
         message=message
+    )
+
+@app.route('/tweet_candidates')
+def tweet_candidates():
+    if 'postcode' not in flask.session:
+        flask.flash("Enter your postcode to tweet candidates", 'success')
+        return flask.redirect("/")
+    constituency = flask.session['constituency']
+
+    all_candidates = lookups.lookup_candidates(constituency['id'])
+    if 'errors' in all_candidates:
+        flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
+        return error()
+    (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
+
+    return flask.render_template("tweet_candidates.html",
+        constituency=constituency,
+        candidates_no_cv=candidates_no_cv
     )
 
 
