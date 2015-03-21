@@ -216,6 +216,7 @@ html,body        {height:100%;}
 
 #show_cv {
   height: 100%;
+  overflow: hidden; /* prevent double scroll bars due to slight differences on some browsers */
 }
 
 #show_cv iframe {
