@@ -66,7 +66,7 @@ def lookup_candidates(constituency_id):
     if str_id == '8888888':
         return [
             { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Bunny Rabbits Rule' },
-            { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'party': 'Mice Rule More' },
+            { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Mice Rule More' },
             { 'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus@fastmail.fm', 'party': 'Monkeys Are Best' }
         ]
 

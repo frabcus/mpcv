@@ -245,6 +245,7 @@ def upload_cv_upload(person_id, signature):
     return flask.redirect(successful_link)
 
 #####################################################################
+# Ask candidates to upload their CV
 
 @app.route('/email_candidates', methods=['GET','POST'])
 def email_candidates():
@@ -307,6 +308,24 @@ Yours sincerely,
         postcode=postcode,
         from_email=from_email,
         message=message
+    )
+
+@app.route('/tweet_candidates')
+def tweet_candidates():
+    if 'postcode' not in flask.session:
+        flask.flash("Enter your postcode to email candidates", 'success')
+        return flask.redirect("/")
+    constituency = flask.session['constituency']
+
+    all_candidates = lookups.lookup_candidates(constituency['id'])
+    if 'errors' in all_candidates:
+        flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
+        return error()
+    (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
+
+    return flask.render_template("tweet_candidates.html",
+        constituency=constituency,
+        candidates_no_cv=candidates_no_cv
     )
 
 

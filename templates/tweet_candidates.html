@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %} Email candidates {% endblock %}
+{% block body %}
+
+    <div id="tweet_candidates">
+
+        <h1>Tweet each candidate in turn</h1>
+
+        <p class="lead">You can customise your messages, if you like.</p>
+
+        {% for candidate in candidates_no_cv %}
+            {% if candidate.twitter %}
+                <h2>{{ candidate.name }}, {{ candidate.party }}</h2>
+                <p>
+                    <a class="btn btn-info btn-lg tweet" title=". @{{ candidate.twitter }} I'd love to see your CV before I vote, could you upload it here?" href="http://cv.democracyclub.org.uk/upload_cv/{{ candidate.id }}" data-hashtags="ge2015,mpcv" data-via="democlub" data-related="{{ candidate.twitter }}">
+                        Tweet @{{ candidate.twitter }}
+                    </a>
+                </p>
+            {% endif %}
+        {% endfor %}
+
+        <p>
+            <a href="/candidates" class="done-button btn btn-md btn-success">Done all</a>
+        </p>
+
+   </div>
+{% endblock %}
