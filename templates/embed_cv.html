@@ -1,8 +1,12 @@
 {% macro embed_cv(cv, full_page_link) %}
     <div class="frame_outer_wrapper">
         <div class="frame_inner_wrapper">
-            <img class="ratio" src="/static/transparent.gif"/>
-            <iframe class="cvframe" src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>
+            {% if cv.has_thumb %}
+                <img class="ratio" src="{{ cv.thumb.url }}" />
+            {% else %}
+                <img class="ratio" src="/static/transparent.gif"/>
+                <iframe class="cvframe" src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>
+            {% endif %}
             <!-- CV uploaded: {{ cv.last_modified }} -->
         </div>
     </div>
