@@ -145,6 +145,7 @@ def candidates():
     if 'errors' in all_candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return error()
+    all_candidates = lookups.augment_if_has_cv(app.config, all_candidates)
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
     show_twitter_button = False
@@ -282,6 +283,7 @@ def email_candidates():
     if 'errors' in all_candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return error()
+    all_candidates = lookups.augment_if_has_cv(app.config, all_candidates)
     (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
 
     emails_list = ", ".join([c['email'] for c in candidates_no_cv])
@@ -298,6 +300,8 @@ Yours sincerely,
         from_email = flask.session['email']
 
     postcode = flask.session['postcode']
+    message = original_message
+    subject = ""
     if flask.request.method == 'POST':
         from_email = flask.request.form.get("from_email", "")
         subject = flask.request.form.get("subject", "")
@@ -323,14 +327,13 @@ Yours sincerely,
             flask.flash("Thanks! Your message has been sent to " + names_list + '.', 'success')
             return flask.redirect("/candidates")
 
-    message = original_message
-
     return flask.render_template("email_candidates.html",
         constituency=constituency,
         emails_list=emails_list,
         names_list=names_list,
         postcode=postcode,
         from_email=from_email,
+        subject=subject,
         message=message
     )
 
@@ -345,6 +348,7 @@ def tweet_candidates():
     if 'errors' in all_candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return error()
+    all_candidates = lookups.augment_if_has_cv(app.config, all_candidates)
     (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
 
     return flask.render_template("tweet_candidates.html",

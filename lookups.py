@@ -192,28 +192,25 @@ def get_cv_list(config, person_id):
         result.append({
             'name': key.name,
             'url': key.generate_url(expires_in=0, query_auth=False),
-            'date': key.last_modified,
+            'last_modified': boto.utils.parse_ts(key.last_modified),
             'content_type': key.content_type,
             'person_id': person_id
         })
     return result
 
-# Takes an array of candidates of the same form list_candidates
-# returns. Auguments with a variable to say if they have a CV.
+# Takes an array of candidates of the same form list_candidates returns.
+# Auguments with a variable to say if they have a CV, and when last updated.
 def augment_if_has_cv(config, candidates):
     bucket = _get_s3_bucket(config)
 
-    people_with_cvs = bucket.list("cvs/", "/")
-
-    has_cv = {}
-    for key in people_with_cvs:
-        person_id = str(key.name.replace("cvs/", "").replace("/", ""))
-        has_cv[person_id] = 1
-
     for candidate in candidates:
-        if str(candidate['id']) in has_cv:
+        cvs = get_cv_list(config, candidate['id'])
+
+        if len(cvs) > 0:
             candidate['has_cv'] = True
-            candidate['cv'] = get_cv_list(config, candidate['id'])[0]
+            candidate['cv'] = cvs[0]
+            candidate['cv_created'] = min(cv['last_modified'] for cv in cvs)
+            candidate['cv_updated'] = max(cv['last_modified'] for cv in cvs)
         else:
             candidate['has_cv'] = False
 
@@ -245,7 +242,7 @@ def all_cvs(config):
         result.append({
             'name': key.name,
             'url': key.generate_url(expires_in=0, query_auth=False),
-            'date': key.last_modified,
+            'last_modified': boto.utils.parse_ts(key.last_modified),
             'content_type': key.content_type,
             'person_id': person_id
         })
@@ -258,13 +255,17 @@ def all_cvs(config):
 # Combinations of things
 
 def split_candidates_by_type(config, all_candidates):
-    all_candidates = augment_if_has_cv(config, all_candidates)
-
     candidates_no_email = [ candidate for candidate in all_candidates if candidate['email'] is None]
     candidates_have_cv = [ candidate for candidate in all_candidates if candidate['email'] is not None and candidate['has_cv']]
     candidates_no_cv = [ candidate for candidate in all_candidates if candidate['email'] is not None and not candidate['has_cv']]
 
     return candidates_no_cv, candidates_no_email, candidates_have_cv
+
+def split_candidates_by_updates(config, all_candidates, since):
+    candidates_cv_created = [ candidate for candidate in all_candidates if 'cv_created' in candidate and candidate['cv_created'] >= since ]
+    candidates_cv_updated = [ candidate for candidate in all_candidates if 'cv_updated' in candidate and candidate['cv_updated'] >= since and candidate['cv_created'] < since]
+
+    return candidates_cv_created, candidates_cv_updated
 
 
 ###################################################################
@@ -307,24 +308,31 @@ def updates_list(config):
         if 'error' in constituency:
             print("ERROR looking up postcode", postcode)
             continue
+        last_modified = boto.utils.parse_ts(key.last_modified)
 
         candidates = lookup_candidates(constituency['id'])
         if 'errors' in candidates:
             print("ERROR looking up candidates", postcode)
             continue
-        candidates = augment_if_has_cv(config, candidates)
 
+        candidates = augment_if_has_cv(config, candidates)
         candidates_no_cv, candidates_no_email, candidates_have_cv = split_candidates_by_type(config, candidates)
+        candidates_cv_created, candidates_cv_updated = split_candidates_by_updates(config, candidates, last_modified)
 
         subscriber = {
             'email': email,
             'postcode': postcode,
             'constituency': constituency,
+
             'candidates': candidates,
+
             'has_cv_count': len(candidates_have_cv),
             'no_cv_count': len(candidates_no_cv),
             'no_email_count': len(candidates_no_email),
-            'last_modified': boto.utils.parse_ts(key.last_modified)
+
+            'candidates_cv_created': candidates_cv_created,
+            'candidates_cv_updated': candidates_cv_updated,
+            'last_modified': last_modified
         }
 
 
