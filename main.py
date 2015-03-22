@@ -20,7 +20,7 @@ mail = flask_mail.Mail(app)
 cache = flask.ext.cache.Cache(app,config={'CACHE_TYPE': 'simple'})
 
 #####################################################################
-# Global parameters, used in layout.html
+# Global parameters and checks
 
 @app.before_request
 def set_globals(*args, **kwargs):
@@ -36,6 +36,27 @@ def check_ie():
     if "/static/" not in flask.request.path:
         if ua.browser == "msie" and float(ua.version) < 9.0:
             flask.flash("This site doesn't work on Internet Explorer versions 8 and earlier. Please use a more recent browser.", 'danger')
+
+# You can force postcode setting on any page
+@app.before_request
+def look_for_postcode():
+    if 'postcode' not in flask.request.args:
+        return
+
+    postcode = flask.request.args.get('postcode').strip()
+    constituency = lookups.lookup_postcode(postcode)
+
+    if 'error' in constituency:
+        if re.search(r"^[A-Z][A-Z]?[0-9][0-9]?[A-Z]?$", postcode, re.IGNORECASE):
+            flask.flash("Please use your complete postcode, e.g. NE1 4ST. Partial ones aren't accurate enough to work out your constituency.", 'danger')
+        else:
+            flask.flash(constituency['error'], 'danger')
+        return flask.redirect(flask.url_for('index'))
+
+    flask.session['postcode'] = constituency['postcode']
+    flask.session['constituency'] = constituency
+
+
 
 #####################################################################
 # General routes
@@ -87,21 +108,9 @@ def all_cvs(page):
             numbers = range(start, end + 1)
     )
 
+# The lookup_postcode before request does the actual setting
 @app.route('/set_postcode')
 def set_postcode():
-    postcode = flask.request.args.get('postcode').strip()
-    constituency = lookups.lookup_postcode(postcode)
-
-    if 'error' in constituency:
-        if re.search(r"^[A-Z][A-Z]?[0-9][0-9]?[A-Z]?$", postcode, re.IGNORECASE):
-            flask.flash("Please use your complete postcode, e.g. NE1 4ST. Partial ones aren't accurate enough to work out your constituency.", 'danger')
-        else:
-            flask.flash(constituency['error'], 'danger')
-        return flask.redirect(flask.url_for('index'))
-
-    flask.session['postcode'] = constituency['postcode']
-    flask.session['constituency'] = constituency
-
     return flask.redirect("/candidates")
 
 #####################################################################
