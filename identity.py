@@ -55,7 +55,7 @@ def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
 
     link = generate_upload_url(app.secret_key, person_id)
 
-    print("confirm email:", person_id, to_email, link)
+    print("confirm candidate email: ", person_id, " ", to_email, "\n", link, sep='')
     f = open("last_confirm_url.txt", 'w')
     try:
         f.write(link) # for use in selenium_tests.js
@@ -101,7 +101,7 @@ def send_email_candidates(app, mail, candidates, from_email, postcode, subject, 
         to_email = map_to_email(app, to_email)
 
         link = generate_upload_url(app.secret_key, person_id)
-        print("email candidate link: ", person_id, to_email, link)
+        print("email candidate asking: ", person_id, " ", to_email, "\n", link, sep='')
 
         full_message = "Dear " + to_name + ", \n\n" + message.strip()
 
