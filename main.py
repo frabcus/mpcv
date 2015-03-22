@@ -28,8 +28,6 @@ def set_globals(*args, **kwargs):
         flask.g.debug_email = app.config["DEBUG_EMAIL"]
     if 'constituency' in flask.session:
         flask.g.constituency = flask.session['constituency']
-    if 'dismiss' in flask.session and flask.session['dismiss']:
-        flask.g.dismiss = True
 
 @app.before_request
 def check_ie():
@@ -146,19 +144,29 @@ def candidates():
             show_twitter_button = True
             break
 
+    # should we show subscribe button?
     from_email = ""
     if 'email' in flask.session:
         from_email = flask.session['email']
     email_got = False
     if from_email != "":
         email_got = lookups.updates_getting(app.config, from_email)
+    dismiss = False
+    if 'dismiss' in flask.session and flask.session['dismiss']:
+        dismiss = True
+    # ... this is set after tweeting them
+    force_show = False
+    if 'show_subscribe' in flask.request.args:
+        force_show = True
+
+    show_subscribe = not email_got and ((from_email and not dismiss) or force_show)
 
     return flask.render_template("candidates.html", constituency=constituency,
             candidates_no_cv=candidates_no_cv,
             candidates_have_cv=candidates_have_cv,
             candidates_no_email=candidates_no_email,
             from_email=from_email,
-            email_got=email_got,
+            show_subscribe=show_subscribe,
             show_twitter_button=show_twitter_button
     )
 
