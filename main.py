@@ -10,6 +10,7 @@ import flask
 import flask_appconfig.env
 import flask_mail
 import flask.ext.cache
+import flask_sitemap
 
 import lookups
 import identity
@@ -18,6 +19,26 @@ app = flask.Flask(__name__)
 flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
 mail = flask_mail.Mail(app)
 cache = flask.ext.cache.Cache(app,config={'CACHE_TYPE': 'simple'})
+sitemap = flask_sitemap.Sitemap(app=app)
+
+PAGE_SIZE = 8
+
+#####################################################################
+# Sitemap
+
+@sitemap.register_generator
+def sitemap_generator():
+    yield 'index', {}
+    yield 'about', {}
+
+    all_cvs = _cache_all_cvs()
+    max_page = math.ceil(len(all_cvs) / PAGE_SIZE)
+    for page in range(1, max_page + 1):
+        yield 'all_cvs', { 'page': page }
+
+    for cv in all_cvs:
+        yield 'show_cv', { 'person_id': cv['person_id'] }
+
 
 #####################################################################
 # Global parameters and checks
@@ -83,8 +104,6 @@ def index():
 
 @app.route('/all_cvs/page/<int:page>')
 def all_cvs(page):
-    PAGE_SIZE = 8
-
     all_cvs = _cache_all_cvs()
     page_cvs = all_cvs[(page-1)*PAGE_SIZE : (page-1)*PAGE_SIZE+PAGE_SIZE]
 
@@ -358,8 +377,7 @@ def tweet_candidates():
 
 
 #####################################################################
-# List candidates and view their CVs
-
+# Subscribing
 
 @app.route('/updates_join', methods=['POST'])
 def updates_join():
