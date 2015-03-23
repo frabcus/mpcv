@@ -164,6 +164,7 @@ html,body        {height:100%;}
 .frame_inner_wrapper        {position:relative;}
 .frame_inner_wrapper .ratio {display:block;width:100%;height:auto;}
 .frame_inner_wrapper iframe {position:absolute;top:0;left:0;width:100%; height:100%;}
+img.ratio   {display:block;width:100%;height:auto;padding-bottom:5%;}
 
 .link_full_page {
     margin-bottom: 16px;
