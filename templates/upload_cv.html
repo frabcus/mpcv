@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %} Confirm your email {% endblock %}
+{% block title %} Confirm email of {{ candidate.name }} {% endblock %}
 {% block body %}
     <div id="upload_cv">
 
@@ -16,7 +16,16 @@
         </form>
 
         <p>If it's not, please <a href="https://yournextmp.com/person/{{ candidate.id }}">correct it</a> (on YourNextMP) </p>
-        
+
+
+        <h1 class="what_this">What's this about?</h1>
+
+        <p>This site helps MP candidates share their CV with voters.
+        </p>
+
+        <p>You can check out your own candidates! Visit the <a href="/">home page</a>.
+        </p>
+
     </div>
 {% endblock %}
 

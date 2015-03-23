@@ -104,33 +104,36 @@ footer ul.pull-right li:last-child {
 /* Make file upload button look good */
 
 .btn-file {
-  position: relative;
-  overflow: hidden;
-  margin-top: 24px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 24px;
 }
 .btn-file input[type=file] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  min-width: 100%;
-  min-height: 100%;
-  font-size: 100px;
-  text-align: right;
-  filter: alpha(opacity=0);
-  opacity: 0;
-  outline: none;
-  background: white;
-  cursor: inherit;
-  display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
 }
 
 #upload_cv form {
-  margin-bottom: 2em;
 }
 
 #upload_cv .not_me {
     font-size: 15px;
     margin-left: 0.5em;
+}
+
+#upload_cv .what_this {
+    margin-top: 48px;
 }
 
 .is_is_not img {
@@ -215,35 +218,35 @@ html,body        {height:100%;}
 }
 
 #show_cv {
-  height: 100%;
-  overflow: hidden; /* prevent double scroll bars due to slight differences on some browsers */
-  padding-top: 10px;
+    height: 100%;
+    overflow: hidden; /* prevent double scroll bars due to slight differences on some browsers */
+    padding-top: 10px;
 }
 
 #show_cv iframe {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .show-cv-alert-row {
-  margin-left: 0;    
-  margin-right: 0;    
-  margin-bottom: 24px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 24px;
 }
 
 .show-cv-alert-row .col-xs-2, .show-cv-alert-row .col-xs-8 {
-  padding-left: 0;
-  padding-right: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 /* /email_candidates */
 
 .dear-message {
-  margin-left: 15px;
+    margin-left: 15px;
 }
 
 /* /tweet_candidates */
 
 .done-button {
-  margin-top: 48px;
+    margin-top: 48px;
 }
