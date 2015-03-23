@@ -43,8 +43,12 @@ def sitemap_xml():
         url = {}
         url['loc'] = flask.url_for(name, _external=True, **params)
         urlset.append(url)
-    return flask.render_template('sitemap.xml', urlset=urlset), 500
 
+    sitemap_xml = flask.render_template('sitemap.xml', urlset=urlset)
+    response = flask.make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
 
 #####################################################################
 # Global parameters and checks
