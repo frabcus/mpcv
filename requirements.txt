@@ -5,6 +5,5 @@ coverage
 flask-appconfig
 flask-mail
 flask-cache
-flask-sitemap
 boto>=2.36.0
 inflect

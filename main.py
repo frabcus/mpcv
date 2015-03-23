@@ -10,7 +10,6 @@ import flask
 import flask_appconfig.env
 import flask_mail
 import flask.ext.cache
-import flask_sitemap
 
 import lookups
 import identity
@@ -19,14 +18,12 @@ app = flask.Flask(__name__)
 flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
 mail = flask_mail.Mail(app)
 cache = flask.ext.cache.Cache(app,config={'CACHE_TYPE': 'simple'})
-sitemap = flask_sitemap.Sitemap(app=app)
 
 PAGE_SIZE = 8
 
 #####################################################################
 # Sitemap
 
-@sitemap.register_generator
 def sitemap_generator():
     yield 'index', {}
     yield 'about', {}
@@ -38,6 +35,15 @@ def sitemap_generator():
 
     for cv in all_cvs:
         yield 'show_cv', { 'person_id': cv['person_id'] }
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    urlset = []
+    for name, params in sitemap_generator():
+        url = {}
+        url['loc'] = flask.url_for(name, _external=True, **params)
+        urlset.append(url)
+    return flask.render_template('sitemap.xml', urlset=urlset), 500
 
 
 #####################################################################
