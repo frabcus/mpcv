@@ -4,6 +4,7 @@ import os
 import traceback
 import re
 import math
+import logging
 
 import werkzeug
 import flask
@@ -18,6 +19,11 @@ app = flask.Flask(__name__)
 flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
 mail = flask_mail.Mail(app)
 cache = flask.ext.cache.Cache(app,config={'CACHE_TYPE': 'simple'})
+
+# Log to stderr for Heroku
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.INFO)
+app.logger.addHandler(stream_handler)
 
 PAGE_SIZE = 8
 
@@ -98,6 +104,10 @@ def error():
 @app.route('/about')
 def about():
     return flask.render_template('about.html')
+
+@app.route('/exception')
+def exception():
+    raise Exception("This is a test error")
 
 
 #####################################################################
