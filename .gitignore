@@ -1,6 +1,7 @@
 run
 runtests
 runselenium
+runcron
 fiddle
 covhtml
 screenshots

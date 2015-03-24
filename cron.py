@@ -11,7 +11,7 @@ def gen_thumbs():
     # find all the CVs missing a thumbnail
     cvs_missing_thumbs = lookups.all_cvs_no_thumbnails(main.app.config)
     for x in cvs_missing_thumbs:
-        print(x)
+        print("cron missing thumb:", x)
         filename = "tmp/{0}.png".format(x["person_id"])
         # generate thumbnail with phantom
         subprocess.call(["phantomjs", "screenshot.js", x["url"], filename])
