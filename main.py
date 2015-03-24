@@ -12,13 +12,14 @@ import flask_appconfig.env
 import flask_mail
 import flask.ext.cache
 
-import lookups
 import identity
 
 app = flask.Flask(__name__)
 flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
 mail = flask_mail.Mail(app)
 cache = flask.ext.cache.Cache(app,config={'CACHE_TYPE': 'simple'})
+
+import lookups
 
 # Log to stderr for Heroku
 stream_handler = logging.StreamHandler()

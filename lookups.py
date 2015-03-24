@@ -10,7 +10,6 @@ import datetime
 import itertools
 import re
 import collections
-import time
 
 import constants
 import main
@@ -18,6 +17,8 @@ import main
 import boto.s3.connection
 import boto.s3.key
 import boto.utils
+
+import flask.ext.cache
 
 
 ###################################################################
@@ -279,17 +280,8 @@ def all_cvs_no_thumbnails(config):
 #   content_type - the mime type of the file
 #   person_id - id of the person the CV is for
 # Caches for 10 minutes for speed.
-_cache = {}
-_cache_time = 0
+@main.cache.memoize(600)
 def _hash_by_prefix(config, prefix):
-    global _cache, _cache_time
-    if time.time() > _cache_time + 600:
-        _cache = {}
-        _cache_time = time.time()
-
-    if prefix in _cache:
-        return _cache[prefix]
-
     bucket = _get_s3_bucket(config)
 
     cvs = bucket.list(prefix)
@@ -311,8 +303,7 @@ def _hash_by_prefix(config, prefix):
             }
         result[person_id]['cv_created'] = key_last_modified
 
-    _cache[prefix] = result
-    print("cache filled up", prefix)
+    print("cache miss _hash_by_prefix", prefix)
     return result
 
 
