@@ -118,7 +118,7 @@ def _cache_all_cvs():
     return lookups.all_cvs_with_thumbnails(app.config)
 
 
-@cache.memoize(3600)
+@cache.memoize(600)
 def _cache_candidates_augmented(constituency_id):
     all_candidates = lookups.lookup_candidates(constituency_id)
     if 'errors' in all_candidates:
