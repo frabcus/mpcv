@@ -113,12 +113,12 @@ def exception():
 #####################################################################
 # Caches
 
-@cache.cached(600, key_prefix="all_cvs")
+#@cache.cached(600, key_prefix="all_cvs")
 def _cache_all_cvs():
-    return lookups.all_cvs_with_thumbs(app.config)
+    return lookups.all_cvs_list(app.config)
 
 
-@cache.memoize(3600)
+#@cache.memoize(3600)
 def _cache_candidates_augmented(constituency_id):
     all_candidates = lookups.lookup_candidates(constituency_id)
     if 'errors' in all_candidates:
@@ -242,12 +242,11 @@ def show_cv(person_id):
         flask.flash(candidate['error'], 'danger')
         return error()
 
-    cvs = lookups.get_cv_list(app.config, person_id)
-    if cvs == []:
+    current_cv = lookups.get_current_cv(app.config, candidate['id'])
+    print("current_cv", current_cv)
+    if current_cv is None:
         flask.flash("We don't yet have a CV for that candidate", 'danger')
         return flask.redirect('/candidates')
-
-    current_cv = cvs[0]
 
     return flask.render_template("show_cv.html", candidate=candidate, cv=current_cv)
 
