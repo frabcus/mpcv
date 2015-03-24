@@ -63,7 +63,8 @@ footer ul.pull-right li:last-child {
 /* /candidates */
 
 .candidates h2 {
-    margin-top: 32px;
+    margin-top: 48px;
+    margin-bottom: 16px;
 }
 
 .party {
@@ -79,6 +80,9 @@ footer ul.pull-right li:last-child {
     font-size: 20px;
 }
 
+.candidates .get-updates {
+    margin-top: 24px;
+}
 
 /* /upload_cv */
 
