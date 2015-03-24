@@ -70,6 +70,10 @@ footer ul.pull-right li:last-child {
     color: #bbb;
 }
 
+.candidates .frame_outer_wrapper {
+  margin-top: 6px;
+}
+
 
 /* /upload_cv */
 

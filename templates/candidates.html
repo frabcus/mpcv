@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% import 'subscribe.html' as subscribe %}
-{% block title %} Ask {{ constituency.name }} Candidates {% endblock %}
+{% block title %} {{ constituency.name }} Candidates {% endblock %}
 
 {% block wide %}
 
@@ -27,7 +27,7 @@
 
                         <p>
                         {% for candidate in candidates_no_cv %}
-                        {{ candidate.name}} <span class="party">{{ candidate.party}}</span>
+                        <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>
                         (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>){% if loop.last %}.{% else %},{% endif %}
                         {% endfor %}
                         </p>
@@ -53,7 +53,7 @@
 
                 <p>
                 {% for candidate in candidates_no_email %}
-                    {{ candidate.name}} <span class="party">{{ candidate.party}}</span>{% if loop.last %}.{% else %},{% endif %}
+                    <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>{% if loop.last %}.{% else %},{% endif %}
                 {% endfor %}
                 </p>
 
@@ -81,8 +81,7 @@
            <div class="row">
                 {% for candidate in candidates_have_cv %}
                     <div class="col-sm-6 col-md-4 candidate">
-                        <div class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}
-                        </div>
+                        <span class="name">{{ candidate.name }}</span> <span class="party">{{ candidate.party}}</span>
                         {% import 'embed_cv.html' as embed_cv %}
                         {{ embed_cv.embed_cv(candidate.cv, full_page_link=True) }}
                     </div>            
