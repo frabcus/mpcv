@@ -243,7 +243,6 @@ def show_cv(person_id):
         return error()
 
     current_cv = lookups.get_current_cv(app.config, candidate['id'])
-    print("current_cv", current_cv)
     if current_cv is None:
         flask.flash("We don't yet have a CV for that candidate", 'danger')
         return flask.redirect('/candidates')

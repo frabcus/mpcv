@@ -10,6 +10,7 @@ import datetime
 import itertools
 import re
 import collections
+import time
 
 import constants
 import main
@@ -17,6 +18,7 @@ import main
 import boto.s3.connection
 import boto.s3.key
 import boto.utils
+
 
 ###################################################################
 # General helpers
@@ -276,8 +278,19 @@ def all_cvs_no_thumbnails(config):
 #   last_modified - when it was uploaded
 #   content_type - the mime type of the file
 #   person_id - id of the person the CV is for
-@main.cache.memoize(600)
+# Caches for 10 minutes for speed.
+_cache = {}
+_cache_time = 0
 def _hash_by_prefix(config, prefix):
+    global _cache, _cache_time
+    if time.time() > _cache_time + 600:
+        _cache = {}
+        _cache_time = time.time()
+
+    if prefix in _cache:
+        print("cache hit", prefix)
+        return _cache[prefix]
+
     bucket = _get_s3_bucket(config)
 
     cvs = bucket.list(prefix)
@@ -293,12 +306,14 @@ def _hash_by_prefix(config, prefix):
                 'name': key.name,
                 'url': key.generate_url(expires_in=0, query_auth=False),
                 'last_modified': key_last_modified,
+                'cv_created': key_last_modified,
                 'content_type': key.content_type,
                 'person_id': person_id
             }
-        result[person_id]['cv_created'] = min(result[person_id]['last_modified'], key_last_modified)
-        result[person_id]['cv_updated'] = max(result[person_id]['last_modified'], key_last_modified)
+        result[person_id]['cv_created'] = key_last_modified
 
+    _cache[prefix] = result
+    print("cache miss", prefix)
     return result
 
 
