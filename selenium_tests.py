@@ -28,10 +28,10 @@ class UploadingCVTestCase(unittest.TestCase):
         self.browser.find_element_by_id('postcode').submit()
 
         self.assertIn('Democracy Club Test Constituency', self.browser.page_source)
-        self.assertIn('Candidates with CVs', self.browser.page_source)
+        self.assertIn('Have a look at these CVs so far', self.browser.page_source)
         self.assertIn('Sicnarf Gnivri', self.browser.page_source)
         self.assertIn('href="/show_cv/7777777"', self.browser.page_source)
-        self.assertIn('Not yet shared their CV', self.browser.page_source)
+        self.assertIn('Invite these candidates to share their CV', self.browser.page_source)
         self.assertIn('Notlits Esuom', self.browser.page_source)
         self.assertIn('href="/upload_cv/7777778"', self.browser.page_source)
 

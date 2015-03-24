@@ -56,7 +56,8 @@
             </div>
         {% else %}
            {% if email_got %}
-               <p>You're already on our updates list, we'll email you when one arrives.</p>
+               <h2>We'll email you when one arrives</h2>
+               <p>You already joined our updates list.</p>
            {% else %}
                <h2>We can email you when we get CVs</h2>
                 {{ subscribe.subscribe(show_dismiss=False) }} 
