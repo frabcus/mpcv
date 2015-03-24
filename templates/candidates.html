@@ -9,9 +9,11 @@
     {% endif %}
 
     <div class="candidates">
-        <h1>
-            {{ constituency.name }} Candidates
-        </h1>
+        {% if candidates_no_cv or candidates_no_email %}
+            <h1> We're missing some CVs for {{ constituency.name }} </h1>
+        {% else %}
+            <h1> {{ constituency.name }} Candidates </h1>
+        {% endif %}
 
         {% if candidates_no_cv or candidates_no_email %}
             <div class="row">
