@@ -64,7 +64,7 @@ footer ul.pull-right li:last-child {
 
 .candidates h2 {
     margin-top: 48px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .party {
@@ -82,6 +82,14 @@ footer ul.pull-right li:last-child {
 
 .candidates .get-updates {
     margin-top: 24px;
+}
+
+.candidates .whole_name {
+    white-space: nowrap;
+}
+
+.candidates .btn {
+    margin-top: 6px;
 }
 
 /* /upload_cv */
@@ -109,10 +117,11 @@ footer ul.pull-right li:last-child {
     display: block;
 }
 
-#upload_cv form {
+#upload_cv_confirmed form {
+  margin-bottom: 2em;
 }
 
-#upload_cv .not_me {
+.not_me {
     font-size: 15px;
     margin-left: 0.5em;
 }

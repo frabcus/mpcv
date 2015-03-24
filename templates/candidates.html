@@ -9,7 +9,9 @@
     {% endif %}
 
     <div class="candidates">
-        {% if candidates_no_cv or candidates_no_email %}
+        {% if not candidates_have_cv %}
+            <h1> We've no CVs yet for {{ constituency.name }} </h1>
+        {% elif candidates_no_cv or candidates_no_email %}
             <h1> We're missing some CVs for {{ constituency.name }} </h1>
         {% else %}
             <h1> {{ constituency.name }} Candidates </h1>
@@ -18,10 +20,12 @@
         {% if candidates_no_cv %}
             <h2>Invite these candidates to share their CV</h2>
 
-            <p>
+            <p class="names_paragraph">
                 {% for candidate in candidates_no_cv %}
-                <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>
-                (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>){% if not loop.last %},{% endif %}
+                    <span class="whole_name">
+                        <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>
+                        (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>){% if not loop.last %},{% endif %}
+                    </span>
                 {% endfor %}
             </p>
 
@@ -51,10 +55,10 @@
                 {% endfor %}
             </div>
         {% else %}
-           <h2>Sorry! We don't have any CVs yet</h2>
            {% if email_got %}
                <p>You're already on our updates list, we'll email you when one arrives.</p>
            {% else %}
+               <h2>We can email you when we get CVs</h2>
                 {{ subscribe.subscribe(show_dismiss=False) }} 
            {% endif %}
         {% endif %}
@@ -62,9 +66,11 @@
         {% if candidates_no_email %}
             <h2>Find the email of these candidates</h2>
 
-            <p>
+            <p class="names_paragraph">
             {% for candidate in candidates_no_email %}
-                <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>{% if not loop.last %},{% endif %}
+                <span class="whole_name">
+                    <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>{% if not loop.last %},{% endif %}
+                </span>
             {% endfor %}
             </p>
 
