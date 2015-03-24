@@ -1,50 +1,29 @@
 {% extends "layout.html" %}
+{% import 'subscribe.html' as subscribe %}
 {% block title %} Ask {{ constituency.name }} Candidates {% endblock %}
 
 {% block wide %}
 
-        {% if show_subscribe %}
-
-            <div class="row"><div class="col-xs-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading panel-title">
-                    Get updates
-                </div>
-                <div class="panel-body">
-                    <form action="/updates_join" method="POST">
-                        <div class="form-group">
-                          <input id="email" name="email" type="email" value="{{from_email}}" placeholder="Your email" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary" name="subscribe">Subscribe</button>
-                            <button type="submit" class="btn btn-default" name="dismiss">Dismiss</button>
-                        </div>
-
-                        <p class="help-block">
-                            We'll email you when there are new CVs in your constituency,
-                            for your help getting all the CVs or for other site news.
-                        </p>
-                    </form>
-                </div>
-            </div>
-            </div></div> 
-        {% endif %}
-
+    {% if show_subscribe %}
+        {{ subscribe.subscribe(show_dismiss=True) }} 
+    {% endif %}
 
     <div class="candidates">
-
         <h1>
             {{ constituency.name }} Candidates
         </h1>
 
         {% if candidates_no_cv or candidates_no_email %}
-
             <div class="row">
 
             {% if candidates_no_cv %}
             <div class="col-sm-12">
+
+                    {% if candidates_no_email %}
                     <h2>First, invite these candidates to share their CV</h2>
+                    {% else %}
+                    <h2>Invite these candidates to share their CV</h2>
+                    {% endif %}
 
                         <p>
                         {% for candidate in candidates_no_cv %}
@@ -66,7 +45,11 @@
             {% if candidates_no_email %}
             <div class="col-sm-12">
 
+                {% if candidates_no_cv %}
                 <h2>Second, find the email of these candidates</h2>
+                {% else %}
+                <h2>Find the email of these candidates</h2>
+                {% endif %}
 
                 <p>
                 {% for candidate in candidates_no_email %}
@@ -86,11 +69,14 @@
             {% endif %}
 
             </div>
-
         {% endif %}
 
         {% if candidates_have_cv %}
+           {% if candidates_no_email  or candidates_no_cv %}
            <h2>Done that? Have a look at these CVs</h2>
+           {% else %}
+           <h2>Have a look at these CVs</h2>
+           {% endif %}
 
            <div class="row">
                 {% for candidate in candidates_have_cv %}
@@ -102,6 +88,13 @@
                     </div>            
                 {% endfor %}
             </div>
+        {% else %}
+           <h2>Sorry! We don't have any CVs yet</h2>
+            {% if email_got %}
+                <p>You're already on our updates list, we'll email you when one arrives.</p>
+            {% else %}
+                {{ subscribe.subscribe(show_dismiss=False) }} 
+            {% endif %}
         {% endif %}
     </div>
 

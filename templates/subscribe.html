@@ -1,0 +1,28 @@
+{% macro subscribe(show_dismiss) %}
+<div class="row"><div class="col-xs-6">
+<div class="panel panel-primary">
+    <div class="panel-heading panel-title">
+        Get updates
+    </div>
+    <div class="panel-body">
+        <form action="/updates_join" method="POST">
+            <div class="form-group">
+              <input name="email" type="email" value="{{from_email}}" placeholder="Your email" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" name="subscribe">Subscribe</button>
+                {% if show_dismiss %}
+                <button type="submit" class="btn btn-default" name="dismiss">Dismiss</button>
+                {% endif %}
+            </div>
+
+            <p class="help-block">
+                We'll email you when there are new CVs in your constituency,
+                for your help getting all the CVs or for other site news.
+            </p>
+        </form>
+    </div>
+</div>
+</div></div> 
+{% endmacro %}
