@@ -88,6 +88,23 @@ upload a CV to one of the test users in that postcode.
 Production
 ==========
 
-In production, Heroku uses the config in Procfile.
+In production, Heroku uses the config in `Procfile`.
 
+We use a custom Heroku buildpack to install phantom.js and python stuff. To
+set this up, run:
 
+```
+heroku buildpack set:https://github.com/ddollar/heroku-buildpack-multi.git
+```
+
+We use the scheduler add-on to build thumbnails. Install that with:
+
+```
+heroku addons:add scheduler
+```
+
+Then add the following to your cron task:
+
+```
+python cron.py
+```

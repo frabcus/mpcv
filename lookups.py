@@ -173,6 +173,18 @@ def add_cv(config, person_id, contents, filename, content_type):
     key.set_metadata('Content-Type', content_type)
     key.set_acl('public-read')
 
+def add_thumb(config, person_id, filename):
+    person_id = str(int(person_id))
+    assert person_id != 0
+
+    bucket = _get_s3_bucket(config)
+
+    key = boto.s3.key.Key(bucket)
+    key.key = "thumbs/{0}.png".format(str(person_id))
+    key.set_contents_from_filename(filename)
+    key.set_metadata('Content-Type', "image/png")
+    key.set_acl('public-read')
+
 # Takes the app config (for S3) and candidate identifier. Returns
 # a list, ordered by reverse time, of CVs for that candidate with
 # the following fields:
@@ -203,6 +215,14 @@ def get_cv_list(config, person_id):
 def augment_if_has_cv(config, candidates):
     bucket = _get_s3_bucket(config)
 
+    people_with_cvs = bucket.list("cvs/", "/")
+    thumbs = {str(x['person_id']): x for x in all_thumbnails(config)}
+
+    has_cv = {}
+    for key in people_with_cvs:
+        person_id = str(key.name.replace("cvs/", "").replace("/", ""))
+        has_cv[person_id] = 1
+
     for candidate in candidates:
         cvs = get_cv_list(config, candidate['id'])
 
@@ -211,11 +231,20 @@ def augment_if_has_cv(config, candidates):
             candidate['cv'] = cvs[0]
             candidate['cv_created'] = min(cv['last_modified'] for cv in cvs)
             candidate['cv_updated'] = max(cv['last_modified'] for cv in cvs)
+
+            if str(candidate['id']) in thumbs:
+                candidate['cv']['has_thumb'] = True
+                candidate['cv']['thumb'] = thumbs[candidate['id']]
+            else:
+                candidate['cv']['has_thumb'] = False
         else:
             candidate['has_cv'] = False
 
     return candidates
 
+
+def all_thumbnails(config):
+    return all_by_prefix(config, "thumbs/")
 
 # Takes the app config (for S3), returns a list, ordered by reverse time,
 # of all CVs from any candidate, with the following fields:
@@ -224,17 +253,29 @@ def augment_if_has_cv(config, candidates):
 #   date - when it was uploaded
 #   content_type - the mime type of the file
 #   person_id - id of the person the CV is for
+#   has_thumb - True
+#   thumb - thumbnail details
 def all_cvs(config):
+    thumbs = {x['person_id']: x for x in all_thumbnails(config)}
+    cvs = all_by_prefix(config, "cvs/")
+    for x in cvs:
+        if x['person_id'] in thumbs:
+            x['has_thumb'] = True
+            x['thumb'] = thumbs[x['person_id']]
+        else:
+            del cvs[x]
+    return cvs
+
+def all_by_prefix(config, prefix):
     bucket = _get_s3_bucket(config)
 
-    prefix = "cvs/"
     cvs = bucket.list(prefix)
     cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
 
     person_ids = []
     result = []
     for key in cvs:
-        person_id = int(re.match("cvs/([0-9]+)/", key.name).group(1))
+        person_id = int(re.match(prefix + "([0-9]+)[^0-9]", key.name).group(1))
         if person_id == 7777777:
             continue
         if person_id in person_ids:
