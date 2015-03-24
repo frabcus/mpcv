@@ -244,10 +244,10 @@ def augment_if_has_cv(config, candidates):
 
 
 def all_thumbnails(config):
-    return all_by_prefix(config, "thumbs/")
+    return _all_by_prefix(config, "thumbs/")
 
 def all_cvs(config):
-    return all_by_prefix(config, "cvs/")
+    return _all_by_prefix(config, "cvs/")
 
 # Takes the app config (for S3), returns a list, ordered by reverse time,
 # of all CVs from any candidate, with the following fields:
@@ -269,7 +269,7 @@ def all_cvs_with_thumbs(config):
             cvs_with_thumbs.append(x)
     return cvs_with_thumbs
 
-def all_by_prefix(config, prefix):
+def _all_by_prefix(config, prefix):
     bucket = _get_s3_bucket(config)
 
     cvs = bucket.list(prefix)
