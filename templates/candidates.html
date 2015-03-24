@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %} {{ constituency.name }} Candidates {% endblock %}
+{% block title %} Ask {{ constituency.name }} Candidates {% endblock %}
 
 {% block wide %}
 
@@ -40,83 +40,61 @@
 
         {% if candidates_no_cv or candidates_no_email %}
 
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                  <h3 class="panel-title">We don't have all the candidates' CVs here &mdash; help get them!</h3>
-                </div>
-            <div class="panel-body">
-
             <div class="row">
 
             {% if candidates_no_cv %}
-            <div class="col-sm-12 col-md-6">
-                <div class="no_cv">
+            <div class="col-sm-12">
+                    <h2>First, invite these candidates to share their CV</h2>
 
-                    <h2>Not yet shared their CV</h2>
-
-                    <div class="candidate_list">
+                        <p>
                         {% for candidate in candidates_no_cv %}
-                        <div class="candidate">
-                            <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
-                            <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
-                        </div>
+                        {{ candidate.name}} <span class="party">{{ candidate.party}}</span>
+                        (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>){% if loop.last %}.{% else %},{% endif %}
                         {% endfor %}
-                    </div>
+                        </p>
 
                     <p>
-                        <a href="/email_candidates" class="btn btn-lg btn-success">Email them all!</a>
+                        <a href="/email_candidates" class="btn btn-lg btn-success">Ask them by email</a>
                         {% if show_twitter_button %}
                         &nbsp;
-                        <a href="/tweet_candidates" class="btn btn-lg btn-info">Tweet them all!</a>
+                        <a href="/tweet_candidates" class="btn btn-lg btn-info">Ask them by Twitter</a>
                         {% endif %}
                     </p>
-
-                </div>
             </div>
             {% endif %}
-
 
             {% if candidates_no_email %}
-            <div class="col-sm-12 col-md-6">
-                <div class="no_email">
+            <div class="col-sm-12">
 
-                    <h2>Need contact details</h2>
+                <h2>Second, find the email of these candidates</h2>
 
-                    <div class="candidate_list">
-                        {% for candidate in candidates_no_email %}
-                        <div class="candidate">
-                            <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
-                            {% if twitter %}
-                                <a href="https://twitter.com/{{ twitter }}">@{{ twitter }}</a>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-                    </div>
+                <p>
+                {% for candidate in candidates_no_email %}
+                    {{ candidate.name}} <span class="party">{{ candidate.party}}</span>{% if loop.last %}.{% else %},{% endif %}
+                {% endfor %}
+                </p>
 
-                    <p>
-                        <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-default" target="_blank">Find their emails</a>
-                    </p>
+                <p>
+                    <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-default" target="_blank">Find their emails</a>
+                </p>
 
-                    <p>
-                        (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
-                    </p>
+                <p>
+                    (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
+                </p>
 
-                </div>
             </div>
             {% endif %}
 
-            </div> </div></div>
+            </div>
 
         {% endif %}
 
         {% if candidates_have_cv %}
-        <div class="no_cv">
-
-           <h2>Candidates with CVs</h2>
+           <h2>Done that? Have a look at these CVs</h2>
 
            <div class="row">
                 {% for candidate in candidates_have_cv %}
-                    <div class="col-md-6 candidate">
+                    <div class="col-sm-6 col-md-4 candidate">
                         <div class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}
                         </div>
                         {% import 'embed_cv.html' as embed_cv %}
@@ -124,11 +102,8 @@
                     </div>            
                 {% endfor %}
             </div>
-
-
-        </div>
         {% endif %}
-        </div>
+    </div>
 
 {% endblock %}
 
