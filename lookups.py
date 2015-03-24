@@ -253,6 +253,8 @@ def all_thumbnails(config):
 #   date - when it was uploaded
 #   content_type - the mime type of the file
 #   person_id - id of the person the CV is for
+#   has_thumb - True
+#   thumb - thumbnail details
 def all_cvs(config):
     thumbs = {x['person_id']: x for x in all_thumbnails(config)}
     cvs = all_by_prefix(config, "cvs/")
@@ -261,7 +263,7 @@ def all_cvs(config):
             x['has_thumb'] = True
             x['thumb'] = thumbs[x['person_id']]
         else:
-            x['has_thumb'] = False
+            del cvs[x]
     return cvs
 
 def all_by_prefix(config, prefix):
