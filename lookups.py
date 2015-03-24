@@ -9,12 +9,16 @@ import json
 import datetime
 import itertools
 import re
+import collections
+import time
 
 import constants
+import main
 
 import boto.s3.connection
 import boto.s3.key
 import boto.utils
+
 
 ###################################################################
 # General helpers
@@ -94,7 +98,7 @@ def lookup_candidates(constituency_id):
                     break
 
         current_candidate_list.append({
-            'id': member['id'],
+            'id': int(member['id']),
             'name': member['name'],
             'email': member['email'],
             'twitter': twitter,
@@ -148,13 +152,14 @@ def lookup_candidate(person_id):
         constituency_name = standing_in[constants.year]['name']
 
     return {
-        'id': c['id'], 'name': c['name'], 'email': c['email'], 'party': c['party_memberships'][constants.year]['name'],
+        'id': int(c['id']), 'name': c['name'], 'email': c['email'], 'party': c['party_memberships'][constants.year]['name'],
         'constituency_id': constituency_id, 'constituency_name': constituency_name
     }
 
 
 ###################################################################
 # Storing CVs
+
 
 # Takes the app config (for S3 keys), candidate identifier, file contents, a
 # (secured) filename and content type. Saves that new CV in S3. Raises
@@ -173,6 +178,9 @@ def add_cv(config, person_id, contents, filename, content_type):
     key.set_metadata('Content-Type', content_type)
     key.set_acl('public-read')
 
+
+# Takes the app config (for S3 keys), candidate identifier, a local filename.
+# Saves thumbnail in S3. Raises an exception if it goes wrong, returns nothing.
 def add_thumb(config, person_id, filename):
     person_id = str(int(person_id))
     assert person_id != 0
@@ -185,56 +193,34 @@ def add_thumb(config, person_id, filename):
     key.set_metadata('Content-Type', "image/png")
     key.set_acl('public-read')
 
-# Takes the app config (for S3) and candidate identifier. Returns
-# a list, ordered by reverse time, of CVs for that candidate with
-# the following fields:
-#   name - full name of S3 key
-#   url - publically accessible address of the file
-#   date - when it was uploaded
-#   content_type - the mime type of the file
-def get_cv_list(config, person_id):
-    bucket = _get_s3_bucket(config)
 
-    prefix = "cvs/" + str(person_id) + "/"
-    cvs = bucket.list(prefix)
-    cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
+# Takes a candidate id, and returns most recent CV. Fields of CV
+# are as in _hash_by_prefix.
+def get_current_cv(config, person_id):
+    cv_hash = _hash_by_prefix(config, "cvs/")
 
-    result = []
-    for key in cvs:
-        result.append({
-            'name': key.name,
-            'url': key.generate_url(expires_in=0, query_auth=False),
-            'last_modified': boto.utils.parse_ts(key.last_modified),
-            'content_type': key.content_type,
-            'person_id': person_id
-        })
-    return result
+    if person_id not in cv_hash:
+        return None
+
+    return cv_hash[person_id]
+
 
 # Takes an array of candidates of the same form list_candidates returns.
 # Auguments with a variable to say if they have a CV, and when last updated.
 def augment_if_has_cv(config, candidates):
-    bucket = _get_s3_bucket(config)
-
-    people_with_cvs = bucket.list("cvs/", "/")
-    thumbs = {str(x['person_id']): x for x in all_thumbnails(config)}
-
-    has_cv = {}
-    for key in people_with_cvs:
-        person_id = str(key.name.replace("cvs/", "").replace("/", ""))
-        has_cv[person_id] = 1
+    cv_hash = _hash_by_prefix(config, "cvs/")
+    thumb_hash = _hash_by_prefix(config, "thumbs/")
 
     for candidate in candidates:
-        cvs = get_cv_list(config, candidate['id'])
 
-        if len(cvs) > 0:
+        if candidate['id'] in cv_hash:
+
             candidate['has_cv'] = True
-            candidate['cv'] = cvs[0]
-            candidate['cv_created'] = min(cv['last_modified'] for cv in cvs)
-            candidate['cv_updated'] = max(cv['last_modified'] for cv in cvs)
+            candidate['cv'] = cv_hash[candidate['id']]
 
-            if str(candidate['id']) in thumbs:
+            if candidate['id'] in thumb_hash:
                 candidate['cv']['has_thumb'] = True
-                candidate['cv']['thumb'] = thumbs[candidate['id']]
+                candidate['cv']['thumb'] = thumb_hash[candidate['id']]
             else:
                 candidate['cv']['has_thumb'] = False
         else:
@@ -243,55 +229,90 @@ def augment_if_has_cv(config, candidates):
     return candidates
 
 
-def all_thumbnails(config):
-    return _all_by_prefix(config, "thumbs/")
+# Takes the app config (for S3), returns a list, ordered by reverse time,
+# of all CVs which have thumbnails from any candidate, with the following
+# fields:
+#   all the fields of _hash_by_prefix
+#   has_thumb - True
+#   thumb - dictionary of details, including all the fields of _hash_by_prefix
+def all_cvs_with_thumbnails(config):
+    cv_hash = _hash_by_prefix(config, "cvs/")
+    thumb_hash = _hash_by_prefix(config, "thumbs/")
 
-def all_cvs(config):
-    return _all_by_prefix(config, "cvs/")
+    cvs = []
+    for person_id, cv in cv_hash.items():
+        # strip out the test one
+        if person_id == 7777777:
+            continue
+        if cv['person_id'] in thumb_hash:
+            cv['has_thumb'] = True
+            cv['thumb'] = thumb_hash[person_id]
+            cvs.append(cv)
+
+    return cvs
 
 # Takes the app config (for S3), returns a list, ordered by reverse time,
-# of all CVs from any candidate, with the following fields:
+# of all CVs from any candidate which have no thumbnails, with the following fields:
+#   all the fields of _hash_by_prefix
+#   has_thumb - False
+def all_cvs_no_thumbnails(config):
+    cv_hash = _hash_by_prefix(config, "cvs/")
+    thumb_hash = _hash_by_prefix(config, "thumbs/")
+
+    cvs = []
+    for person_id, cv in cv_hash.items():
+        # strip out the test one
+        if person_id == 7777777:
+            continue
+        if cv['person_id'] not in thumb_hash:
+            cv['has_thumb'] = False
+            cvs.append(cv)
+
+    return cvs
+
+
+# Given a prefix, returns a hash from integer person_id to
+# a dictionary with the following fields:
 #   name - full name of S3 key
 #   url - publically accessible address of the file
-#   date - when it was uploaded
+#   last_modified - when it was uploaded
 #   content_type - the mime type of the file
 #   person_id - id of the person the CV is for
-#   has_thumb - True
-#   thumb - thumbnail details
-def all_cvs_with_thumbs(config):
-    cvs = all_cvs(config)
-    thumbs = {x['person_id']: x for x in all_thumbnails(config)}
-    cvs_with_thumbs = []
-    for x in cvs:
-        if x['person_id'] in thumbs:
-            x['has_thumb'] = True
-            x['thumb'] = thumbs[x['person_id']]
-            cvs_with_thumbs.append(x)
-    return cvs_with_thumbs
+# Caches for 10 minutes for speed.
+_cache = {}
+_cache_time = 0
+def _hash_by_prefix(config, prefix):
+    global _cache, _cache_time
+    if time.time() > _cache_time + 600:
+        _cache = {}
+        _cache_time = time.time()
 
-def _all_by_prefix(config, prefix):
+    if prefix in _cache:
+        return _cache[prefix]
+
     bucket = _get_s3_bucket(config)
 
     cvs = bucket.list(prefix)
     cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
 
     person_ids = []
-    result = []
+    result = collections.OrderedDict()
     for key in cvs:
+        key_last_modified = boto.utils.parse_ts(key.last_modified)
         person_id = int(re.match(prefix + "([0-9]+)[^0-9]", key.name).group(1))
-        if person_id == 7777777:
-            continue
-        if person_id in person_ids:
-            continue
-        result.append({
-            'name': key.name,
-            'url': key.generate_url(expires_in=0, query_auth=False),
-            'last_modified': boto.utils.parse_ts(key.last_modified),
-            'content_type': key.content_type,
-            'person_id': person_id
-        })
-        person_ids.append(person_id)
+        if person_id not in result:
+            result[person_id] =  {
+                'name': key.name,
+                'url': key.generate_url(expires_in=0, query_auth=False),
+                'last_modified': key_last_modified,
+                'cv_created': key_last_modified,
+                'content_type': key.content_type,
+                'person_id': person_id
+            }
+        result[person_id]['cv_created'] = key_last_modified
 
+    _cache[prefix] = result
+    print("cache filled up", prefix)
     return result
 
 
