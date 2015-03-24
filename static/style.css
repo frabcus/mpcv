@@ -71,7 +71,11 @@ footer ul.pull-right li:last-child {
 }
 
 .candidates .frame_outer_wrapper {
-  margin-top: 6px;
+    margin-top: 6px;
+}
+
+.candidates .name {
+    font-size: 20px;
 }
 
 
@@ -225,4 +229,8 @@ html,body        {height:100%;}
 
 .done-button {
     margin-top: 48px;
+}
+
+#tweet_candidates .party {
+    font-size: 22.5px;
 }
