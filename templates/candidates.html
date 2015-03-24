@@ -1,134 +1,89 @@
 {% extends "layout.html" %}
+{% import 'subscribe.html' as subscribe %}
 {% block title %} {{ constituency.name }} Candidates {% endblock %}
 
 {% block wide %}
 
-        {% if show_subscribe %}
-
-            <div class="row"><div class="col-xs-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading panel-title">
-                    Get updates
-                </div>
-                <div class="panel-body">
-                    <form action="/updates_join" method="POST">
-                        <div class="form-group">
-                          <input id="email" name="email" type="email" value="{{from_email}}" placeholder="Your email" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary" name="subscribe">Subscribe</button>
-                            <button type="submit" class="btn btn-default" name="dismiss">Dismiss</button>
-                        </div>
-
-                        <p class="help-block">
-                            We'll email you when there are new CVs in your constituency,
-                            for your help getting all the CVs or for other site news.
-                        </p>
-                    </form>
-                </div>
-            </div>
-            </div></div> 
-        {% endif %}
-
+    {% if show_subscribe %}
+        {{ subscribe.subscribe(show_dismiss=True) }} 
+    {% endif %}
 
     <div class="candidates">
+        {% if not candidates_have_cv %}
+            <h1> We've no CVs yet for {{ constituency.name }} </h1>
+        {% elif candidates_no_cv or candidates_no_email %}
+            <h1> We're missing some CVs for {{ constituency.name }} </h1>
+        {% else %}
+            <h1> {{ constituency.name }} Candidates </h1>
+        {% endif %}
 
-        <h1>
-            {{ constituency.name }} Candidates
-        </h1>
+        {% if candidates_no_cv %}
+            <h2>Invite these candidates to share their CV</h2>
 
-        {% if candidates_no_cv or candidates_no_email %}
+            <p class="names_paragraph">
+                {% for candidate in candidates_no_cv %}
+                    <span class="whole_name">
+                        <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>
+                        (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>){% if not loop.last %},{% endif %}
+                    </span>
+                {% endfor %}
+            </p>
 
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                  <h3 class="panel-title">We don't have all the candidates' CVs here &mdash; help get them!</h3>
-                </div>
-            <div class="panel-body">
-
-            <div class="row">
-
-            {% if candidates_no_cv %}
-            <div class="col-sm-12 col-md-6">
-                <div class="no_cv">
-
-                    <h2>Not yet shared their CV</h2>
-
-                    <div class="candidate_list">
-                        {% for candidate in candidates_no_cv %}
-                        <div class="candidate">
-                            <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
-                            <a href="/upload_cv/{{ candidate.id }}" class="this_is_me">This is me</a>
-                        </div>
-                        {% endfor %}
-                    </div>
-
-                    <p>
-                        <a href="/email_candidates" class="btn btn-lg btn-success">Email them all!</a>
-                        {% if show_twitter_button %}
-                        &nbsp;
-                        <a href="/tweet_candidates" class="btn btn-lg btn-info">Tweet them all!</a>
-                        {% endif %}
-                    </p>
-
-                </div>
-            </div>
-            {% endif %}
-
-
-            {% if candidates_no_email %}
-            <div class="col-sm-12 col-md-6">
-                <div class="no_email">
-
-                    <h2>Need contact details</h2>
-
-                    <div class="candidate_list">
-                        {% for candidate in candidates_no_email %}
-                        <div class="candidate">
-                            <span class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}</span>
-                            {% if twitter %}
-                                <a href="https://twitter.com/{{ twitter }}">@{{ twitter }}</a>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-                    </div>
-
-                    <p>
-                        <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-default" target="_blank">Find their emails</a>
-                    </p>
-
-                    <p>
-                        (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
-                    </p>
-
-                </div>
-            </div>
-            {% endif %}
-
-            </div> </div></div>
-
+            <p>
+                <a href="/email_candidates" class="btn btn-lg btn-success">Ask them by email</a>
+                {% if show_twitter_button %}
+                &nbsp;
+                <a href="/tweet_candidates" class="btn btn-lg btn-info">Ask them by Twitter</a>
+                {% endif %}
+            </p>
         {% endif %}
 
         {% if candidates_have_cv %}
-        <div class="no_cv">
+            {% if candidates_no_email or candidates_no_cv %}
+            <h2>Have a look at these CVs so far</h2>
+            {% else %}
+            <!-- we got them all! -->
+            {% endif %}
 
-           <h2>Candidates with CVs</h2>
-
-           <div class="row">
-                {% for candidate in candidates_have_cv %}
-                    <div class="col-md-6 candidate">
-                        <div class="name">{{ candidate.name }}</span> &mdash; <span class="party">{{ candidate.party}}
-                        </div>
-                        {% import 'embed_cv.html' as embed_cv %}
-                        {{ embed_cv.embed_cv(candidate.cv, full_page_link=True) }}
-                    </div>            
+            <div class="row">
+                 {% for candidate in candidates_have_cv %}
+                     <div class="col-sm-6 col-md-4 candidate">
+                         <span class="name">{{ candidate.name }}</span> <span class="party">{{ candidate.party}}</span>
+                         {% import 'embed_cv.html' as embed_cv %}
+                         {{ embed_cv.embed_cv(candidate.cv, full_page_link=True) }}
+                     </div>            
                 {% endfor %}
             </div>
-
-
-        </div>
+        {% else %}
+           {% if email_got %}
+               <h2>We'll email you when one arrives</h2>
+               <p>You already joined our updates list.</p>
+           {% else %}
+               <h2>We can email you when we get CVs</h2>
+                {{ subscribe.subscribe(show_dismiss=False) }} 
+           {% endif %}
         {% endif %}
-        </div>
+
+        {% if candidates_no_email %}
+            <h2>Find the email of these candidates</h2>
+
+            <p class="names_paragraph">
+            {% for candidate in candidates_no_email %}
+                <span class="whole_name">
+                    <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>{% if not loop.last %},{% endif %}
+                </span>
+            {% endfor %}
+            </p>
+
+            <p>
+                <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-lg btn-success" target="_blank">Add their emails</a>
+            </p>
+
+            <p>
+                (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
+            </p>
+        {% endif %}
+    </div>
 
 {% endblock %}
 

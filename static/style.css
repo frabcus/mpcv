@@ -55,6 +55,10 @@ footer ul.pull-right li:last-child {
     margin-bottom: 48px;
 }
 
+#front input {
+    max-width: 24em;
+}
+
 /* /about */
 
 #about {
@@ -62,41 +66,34 @@ footer ul.pull-right li:last-child {
 
 /* /candidates */
 
-.candidates > div {
+.candidates h2 {
     margin-top: 48px;
-}
-
-.candidate_list {
-    margin-top: 20px;
     margin-bottom: 20px;
 }
 
-.no_email p {
-    margin-top: 10px;
+.party {
+    margin-left: 0.1em;
+    color: #bbb;
 }
 
-.candidate_list a {
-    margin-right: 8px;
+.candidates .frame_outer_wrapper {
+    margin-top: 6px;
 }
 
-.candidate {
-    margin-top: 8px;
-}
-.candidate .name {
+.candidates .name {
     font-size: 20px;
-    margin-bottom: 6px;
-}
-.candidate .email_them {
 }
 
-.candidate .this_is_me {
-    margin-left: 0.5em;
+.candidates .get-updates {
+    margin-top: 24px;
 }
 
-@media (min-width: 768px) { 
-  #follow_constituency {
-    float: right;
-  }
+.candidates .whole_name {
+    white-space: nowrap;
+}
+
+.candidates .btn {
+    margin-top: 6px;
 }
 
 /* /upload_cv */
@@ -124,10 +121,11 @@ footer ul.pull-right li:last-child {
     display: block;
 }
 
-#upload_cv form {
+#upload_cv_confirmed form {
+  margin-bottom: 2em;
 }
 
-#upload_cv .not_me {
+.not_me {
     font-size: 15px;
     margin-left: 0.5em;
 }
@@ -249,4 +247,8 @@ html,body        {height:100%;}
 
 .done-button {
     margin-top: 48px;
+}
+
+#tweet_candidates .party {
+    font-size: 22.5px;
 }

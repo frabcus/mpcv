@@ -216,7 +216,8 @@ def candidates():
             candidates_no_email=candidates_no_email,
             from_email=from_email,
             show_subscribe=show_subscribe,
-            show_twitter_button=show_twitter_button
+            show_twitter_button=show_twitter_button,
+            email_got=email_got
     )
 
 
