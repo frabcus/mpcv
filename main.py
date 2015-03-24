@@ -111,11 +111,25 @@ def exception():
 
 
 #####################################################################
-# Postcode entry
+# Caches
 
 @cache.cached(600, key_prefix="all_cvs")
 def _cache_all_cvs():
     return lookups.all_cvs_with_thumbs(app.config)
+
+
+@cache.memoize(3600)
+def _cache_candidates_augmented(constituency_id):
+    all_candidates = lookups.lookup_candidates(constituency_id)
+    if 'errors' in all_candidates:
+        return all_candidates
+    all_candidates = lookups.augment_if_has_cv(app.config, all_candidates)
+
+    return all_candidates
+
+
+#####################################################################
+# Postcode entry
 
 @app.route('/')
 def index():
@@ -180,11 +194,10 @@ def candidates():
     postcode = flask.session['postcode']
     constituency = flask.session['constituency']
 
-    all_candidates = lookups.lookup_candidates(constituency['id'])
+    all_candidates = _cache_candidates_augmented(constituency['id'])
     if 'errors' in all_candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return error()
-    all_candidates = lookups.augment_if_has_cv(app.config, all_candidates)
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
     show_twitter_button = False
@@ -305,6 +318,9 @@ def upload_cv_upload(person_id, signature):
     print("saving CV to S3: candidate:", person_id, "uploaded file:", secure_filename, f.content_type, size, "bytes")
     file_url = lookups.add_cv(app.config, person_id, data, secure_filename, f.content_type)
 
+    # clear constituency candidate list cache
+    cache.delete_memoized(_cache_candidates_augmented, candidate['constituency_id'])
+
     flask.flash("Thanks! Your CV has been successfully uploaded. You can share this page on social media. We'd love it if you tell any friends who are candidates to upload theirs too!", 'success')
     successful_link = flask.url_for('show_cv', person_id=person_id)
     return flask.redirect(successful_link)
@@ -319,11 +335,10 @@ def email_candidates():
         return flask.redirect("/")
     constituency = flask.session['constituency']
 
-    all_candidates = lookups.lookup_candidates(constituency['id'])
+    all_candidates = _cache_candidates_augmented(constituency['id'])
     if 'errors' in all_candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return error()
-    all_candidates = lookups.augment_if_has_cv(app.config, all_candidates)
     (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
 
     emails_list = ", ".join([c['email'] for c in candidates_no_cv])
@@ -384,11 +399,10 @@ def tweet_candidates():
         return flask.redirect("/")
     constituency = flask.session['constituency']
 
-    all_candidates = lookups.lookup_candidates(constituency['id'])
+    all_candidates = _cache_candidates_augmented(constituency['id'])
     if 'errors' in all_candidates:
         flask.flash("Error fetching list of candidates from YourNextMP.", 'danger')
         return error()
-    all_candidates = lookups.augment_if_has_cv(app.config, all_candidates)
     (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
 
     return flask.render_template("tweet_candidates.html",
