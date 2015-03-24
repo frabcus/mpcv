@@ -246,6 +246,9 @@ def augment_if_has_cv(config, candidates):
 def all_thumbnails(config):
     return all_by_prefix(config, "thumbs/")
 
+def all_cvs(config):
+    return all_by_prefix(config, "cvs/")
+
 # Takes the app config (for S3), returns a list, ordered by reverse time,
 # of all CVs from any candidate, with the following fields:
 #   name - full name of S3 key
@@ -255,9 +258,9 @@ def all_thumbnails(config):
 #   person_id - id of the person the CV is for
 #   has_thumb - True
 #   thumb - thumbnail details
-def all_cvs(config):
+def all_cvs_with_thumbs(config):
+    cvs = all_cvs(config)
     thumbs = {x['person_id']: x for x in all_thumbnails(config)}
-    cvs = all_by_prefix(config, "cvs/")
     cvs_with_thumbs = []
     for x in cvs:
         if x['person_id'] in thumbs:

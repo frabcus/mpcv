@@ -115,7 +115,7 @@ def exception():
 
 @cache.cached(600, key_prefix="all_cvs")
 def _cache_all_cvs():
-    return lookups.all_cvs(app.config)
+    return lookups.all_cvs_with_thumbs(app.config)
 
 @app.route('/')
 def index():
