@@ -258,13 +258,13 @@ def all_thumbnails(config):
 def all_cvs(config):
     thumbs = {x['person_id']: x for x in all_thumbnails(config)}
     cvs = all_by_prefix(config, "cvs/")
+    cvs_with_thumbs = []
     for x in cvs:
         if x['person_id'] in thumbs:
             x['has_thumb'] = True
             x['thumb'] = thumbs[x['person_id']]
-        else:
-            del cvs[x]
-    return cvs
+            cvs_with_thumbs.append(x)
+    return cvs_with_thumbs
 
 def all_by_prefix(config, prefix):
     bucket = _get_s3_bucket(config)
