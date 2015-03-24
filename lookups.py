@@ -338,7 +338,7 @@ def updates_getting(config, email):
 
     return False
 
-def updates_list(config):
+def slow_updates_list(config):
     bucket = _get_s3_bucket(config)
 
     prefix = "updates/"

@@ -19,7 +19,7 @@ main.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
 p = inflect.engine()
 
 # Get list of all volunteers from S3
-subscribers = lookups.updates_list(main.app.config)
+subscribers = lookups.slow_updates_list(main.app.config)
 
 # Loop over them
 for subscriber in subscribers:
