@@ -20,15 +20,15 @@
             <div class="col-sm-12">
 
                     {% if candidates_no_email %}
-                    <h2>First, invite these candidates to share their CV</h2>
+                    <h2>1. Invite these candidates to share their CV</h2>
                     {% else %}
-                    <h2>Invite these candidates to share their CV</h2>
+                    <h2>1. Invite these candidates to share their CV</h2>
                     {% endif %}
 
                         <p>
                         {% for candidate in candidates_no_cv %}
                         <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>
-                        (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>){% if loop.last %}.{% else %},{% endif %}
+                        (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>){% if not loop.last %},{% endif %}
                         {% endfor %}
                         </p>
 
@@ -46,19 +46,19 @@
             <div class="col-sm-12">
 
                 {% if candidates_no_cv %}
-                <h2>Second, find the email of these candidates</h2>
+                <h2>2. Find the email of these candidates</h2>
                 {% else %}
-                <h2>Find the email of these candidates</h2>
+                <h2>1. Find the email of these candidates</h2>
                 {% endif %}
 
                 <p>
                 {% for candidate in candidates_no_email %}
-                    <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>{% if loop.last %}.{% else %},{% endif %}
+                    <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>{% if not loop.last %},{% endif %}
                 {% endfor %}
                 </p>
 
                 <p>
-                    <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-default" target="_blank">Find their emails</a>
+                    <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-default" target="_blank">Add their emails</a>
                 </p>
 
                 <p>
@@ -72,10 +72,12 @@
         {% endif %}
 
         {% if candidates_have_cv %}
-           {% if candidates_no_email  or candidates_no_cv %}
-           <h2>Done that? Have a look at these CVs</h2>
+           {% if candidates_no_email and candidates_no_cv %}
+           <h2>3. Have a look at these CVs so far</h2>
+           {% elif candidates_no_email or candidates_no_cv %}
+           <h2>2. Have a look at these CVs so far</h2>
            {% else %}
-           <h2>Have a look at these CVs</h2>
+           <!-- we got them all! -->
            {% endif %}
 
            <div class="row">
