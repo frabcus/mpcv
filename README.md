@@ -97,10 +97,12 @@ set this up, run:
 heroku buildpack:set https://github.com/ddollar/heroku-buildpack-multi.git
 ```
 
-We use the scheduler add-on to build thumbnails. Install that with:
+We use the scheduler add-on to build thumbnails. Install and configure that
+with:
 
 ```
 heroku addons:add scheduler
+heroku addons:open scheduler
 ```
 
 Then add the following to your cron task:
