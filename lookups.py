@@ -228,15 +228,16 @@ def augment_if_has_cv(config, candidates):
 
 
 # Takes the app config (for S3), returns a list, ordered by reverse time,
-# of all CVs from any candidate, with the following fields:
+# of all CVs which have thumbnails from any candidate, with the following
+# fields:
 #   all the fields of _hash_by_prefix
 #   has_thumb - True
 #   thumb - dictionary of details, including all the fields of _hash_by_prefix
-def all_cvs_list(config):
+def all_cvs_with_thumbnails(config):
     cv_hash = _hash_by_prefix(config, "cvs/")
     thumb_hash = _hash_by_prefix(config, "thumbs/")
 
-    cvs_with_thumbs = []
+    cvs = []
     for person_id, cv in cv_hash.items():
         # strip out the test one
         if person_id == 7777777:
@@ -244,9 +245,28 @@ def all_cvs_list(config):
         if cv['person_id'] in thumb_hash:
             cv['has_thumb'] = True
             cv['thumb'] = thumb_hash[person_id]
-            cvs_with_thumbs.append(cv)
+            cvs.append(cv)
 
-    return cvs_with_thumbs
+    return cvs
+
+# Takes the app config (for S3), returns a list, ordered by reverse time,
+# of all CVs from any candidate which have no thumbnails, with the following fields:
+#   all the fields of _hash_by_prefix
+#   has_thumb - False
+def all_cvs_no_thumbnails(config):
+    cv_hash = _hash_by_prefix(config, "cvs/")
+    thumb_hash = _hash_by_prefix(config, "thumbs/")
+
+    cvs = []
+    for person_id, cv in cv_hash.items():
+        # strip out the test one
+        if person_id == 7777777:
+            continue
+        if cv['person_id'] not in thumb_hash:
+            cv['has_thumb'] = False
+            cvs.append(cv)
+
+    return cvs
 
 
 # Given a prefix, returns a hash from integer person_id to

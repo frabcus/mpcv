@@ -115,7 +115,7 @@ def exception():
 
 #@cache.cached(600, key_prefix="all_cvs")
 def _cache_all_cvs():
-    return lookups.all_cvs_list(app.config)
+    return lookups.all_cvs_with_thumbnails(app.config)
 
 
 #@cache.memoize(3600)
