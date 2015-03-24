@@ -55,6 +55,10 @@ footer ul.pull-right li:last-child {
     margin-bottom: 48px;
 }
 
+#front input {
+    max-width: 24em;
+}
+
 /* /about */
 
 #about {
