@@ -288,7 +288,6 @@ def _hash_by_prefix(config, prefix):
         _cache_time = time.time()
 
     if prefix in _cache:
-        print("cache hit", prefix)
         return _cache[prefix]
 
     bucket = _get_s3_bucket(config)
@@ -313,7 +312,7 @@ def _hash_by_prefix(config, prefix):
         result[person_id]['cv_created'] = key_last_modified
 
     _cache[prefix] = result
-    print("cache miss", prefix)
+    print("cache filled up", prefix)
     return result
 
 
