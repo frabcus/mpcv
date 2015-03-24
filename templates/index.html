@@ -33,7 +33,7 @@
 
         <div class="row">
             {% for cv in recent_cvs %}
-                <div class="col-md-6">
+                <div class="col-md-3 col-xs-6">
                     {% import 'embed_cv.html' as embed_cv %}
                     {{ embed_cv.embed_cv(cv, full_page_link=True) }}
                 </div>
