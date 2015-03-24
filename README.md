@@ -94,7 +94,7 @@ We use a custom Heroku buildpack to install phantom.js and python stuff. To
 set this up, run:
 
 ```
-heroku buildpack set:https://github.com/ddollar/heroku-buildpack-multi.git
+heroku buildpack:set https://github.com/ddollar/heroku-buildpack-multi.git
 ```
 
 We use the scheduler add-on to build thumbnails. Install that with:
