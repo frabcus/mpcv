@@ -256,6 +256,7 @@ def all_cvs_list(config):
 #   last_modified - when it was uploaded
 #   content_type - the mime type of the file
 #   person_id - id of the person the CV is for
+@main.cache.memoize(600)
 def _hash_by_prefix(config, prefix):
     bucket = _get_s3_bucket(config)
 
