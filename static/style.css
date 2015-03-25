@@ -171,12 +171,16 @@ body, html {
   border: 5px solid #fff;
 }
 
+.thumb .thumbimg {
+  border: 8px solid #bbb;
+}
+
 .thumb .thumbimg:hover {
-  border: 5px solid #18BC9C;
+  border: 8px solid #18BC9C;
 }
 
 .thumb {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .thumb iframe {

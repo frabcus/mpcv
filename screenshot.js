@@ -48,7 +48,8 @@ page.open(url, function (status) {
         console.log("Unable to access network");
         phantom.exit();
     } else {
-        page.viewportSize = {width: 400, height: 566};
+        var clip = 12
+        page.viewportSize = {width: 400 + 2*clip, height: 566 + 2*clip};
         page.includeJs("https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js", function() {
             waitFor(function () {
                 return page.evaluate(function() {
@@ -57,6 +58,12 @@ page.open(url, function (status) {
             }, function() {
                 // wait another 10 seconds (until page num and toolbar disappear)
                 setTimeout(function () {
+                    page.clipRect = {
+                      top: clip,
+                      left: clip,
+                      width: 400,
+                      height: 566
+                    };
                     page.render(filename);
                     phantom.exit();
                 }, 10000);
