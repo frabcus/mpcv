@@ -76,6 +76,9 @@ footer ul.pull-right li:last-child {
     color: #bbb;
 }
 
+.candidates .candidate {
+}
+
 .candidates .thumb {
     margin-top: 6px;
 }
