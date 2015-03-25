@@ -13,13 +13,13 @@
             Enter your postcode.
         </p>
 
-        <form action="/set_postcode" method="GET">
+        <form action="/set_postcode" method="GET" class="button-disabling-form">
             <div class="form-group">
               <input id="postcode" name="postcode" placeholder="Postcode" class="input-lg form-control" autofocus>
             </div>
 
             <div class="form-group">
-              <button type="submit" class="btn btn-lg btn-success">View candidates</button>
+              <button type="submit" class="btn btn-lg btn-success" id="submit-postcode" data-loading-text="View candidates">View candidates</button>
             </div>
         </form>
 
