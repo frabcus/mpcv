@@ -3,28 +3,32 @@
 {% block body %}
     <div id="upload_cv">
 
-        <h1>Hello, {{ candidate.name }} <a class="not_me" href="/candidates">That’s not me</a></h1>
+        <h1>Are you {{ candidate.name }}?</h1>
 
         <p class="lead">We'd love it if you would share your CV.</p>
         
-        <p>First, is your email address <strong>{{ candidate.email }}</strong>?</p>
-
         <form action="/upload_cv/{{ candidate.id }}" method="POST">
             <div class="form-group">
-              <button id="confirm_email" type="submit" class="btn btn-success btn-lg">Confirm email</button>
+                <button id="confirm_email" type="submit" class="btn btn-success btn-lg">I am {{ candidate.name }}</button>
+                &nbsp;
+                <a href="/" class="btn btn-danger btn-lg">I am not</a>
             </div>
         </form>
 
-        <p>If it's not, please <a href="https://yournextmp.com/person/{{ candidate.id }}">correct it</a> (on YourNextMP) </p>
+        <p>We will email <strong>{{ candidate.email }}</strong> to confirm 
+        (<a href="https://yournextmp.com/person/{{ candidate.id }}">wrong email</a>).
+        </p>
+
 
 
         <h1 class="what_this">What's this about?</h1>
 
-        <p>This site helps MP candidates share their CV with voters.
+        <p class="lead">We're collecting every MP candidate's CV.</p>
         </p>
 
-        <p>You can help get your own candidates! Visit the <a href="/">home page</a> and enter your postcode.
+        <p>Visit the <a href="/">home page</a> to help out and see the CVs.
         </p>
+
 
     </div>
 {% endblock %}
