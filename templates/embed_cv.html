@@ -1,7 +1,7 @@
 {% macro embed_cv(cv, full_page_link) %}
     <div class="thumb">
     {% if cv.has_thumb %}
-        <a title="View full page" href="/show_cv/{{ cv.person_id }}">
+        <a href="/show_cv/{{ cv.person_id }}">
             <img class="thumbimg" src="{{ cv.thumb.url }}" />
         </a>
     {% else %}
