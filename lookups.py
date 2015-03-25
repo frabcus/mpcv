@@ -179,6 +179,9 @@ def add_cv(config, person_id, contents, filename, content_type):
     key.set_metadata('Content-Type', content_type)
     key.set_acl('public-read')
 
+    # force reloading of all data for now, so CV appears quick
+    main.cache.clear()
+
 
 # Takes the app config (for S3 keys), candidate identifier, a local filename.
 # Saves thumbnail in S3. Raises an exception if it goes wrong, returns nothing.
