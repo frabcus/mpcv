@@ -159,6 +159,14 @@ footer ul.pull-right li:last-child {
     padding-top: 16px;
 }
 
+/* when narrow, keep buttons apart */
+@media (max-width: 768px) { 
+  #upload_cv .btn {
+      margin-top: 6px;
+  }
+}
+
+
 /* /show_cv and / and /all_cvs*/
 
 body, html {
