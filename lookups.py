@@ -300,11 +300,11 @@ def _hash_by_prefix(config, prefix):
                 'name': key.name,
                 'url': key.generate_url(expires_in=0, query_auth=False),
                 'last_modified': key_last_modified,
-                'cv_created': key_last_modified,
+                'created': key_last_modified,
                 'content_type': key.content_type,
                 'person_id': person_id
             }
-        result[person_id]['cv_created'] = key_last_modified
+        result[person_id]['created'] = key_last_modified
 
     print("cache miss _hash_by_prefix", prefix)
     return result
@@ -321,15 +321,17 @@ def split_candidates_by_type(config, all_candidates):
     return candidates_no_cv, candidates_no_email, candidates_have_cv
 
 def split_candidates_by_updates(config, all_candidates, since):
-    candidates_cv_created = [ candidate for candidate in all_candidates if 'cv_created' in candidate and candidate['cv_created'] >= since ]
-    candidates_cv_updated = [ candidate for candidate in all_candidates if 'cv_updated' in candidate and candidate['cv_updated'] >= since and candidate['cv_created'] < since]
+    candidates_cv_created = [ candidate for candidate in all_candidates if candidate['has_cv'] and candidate['cv']['created'] >= since ]
+    candidates_cv_updated = [ candidate for candidate in all_candidates if candidate['has_cv'] and candidate['cv']['last_modified'] >= since and candidate['cv']['last_modified'] < since]
 
     return candidates_cv_created, candidates_cv_updated
 
 
 ###################################################################
-# Signup to mailings
+# Volunteer mailing list
 
+# Subscribe to updates - we store the postcode in a file names
+# after the email address.
 def updates_join(config, email, postcode):
     email = email.lower().replace("/", "_")
     bucket = _get_s3_bucket(config)
@@ -340,6 +342,7 @@ def updates_join(config, email, postcode):
 
     url = key.generate_url(expires_in=0, query_auth=False)
 
+# Is the email already getting updates?
 def updates_getting(config, email):
     email = email.lower().replace("/", "_")
     bucket = _get_s3_bucket(config)
@@ -353,6 +356,8 @@ def updates_getting(config, email):
 
     return False
 
+# Used for sending the mailings out, slow. Last modified of
+# the subscription S3 file is the last sent to date.
 def slow_updates_list(config):
     bucket = _get_s3_bucket(config)
 
