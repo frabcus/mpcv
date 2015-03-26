@@ -28,7 +28,7 @@ class MainTestCase(unittest.TestCase):
         r = self.app.get('/')
         self.assertEqual(r.status_code, 200)
         self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
-        self.assertIn('<form action="/set_postcode" method="GET">', r.get_data(True))
+        self.assertIn('<form action="/set_postcode" method="GET"', r.get_data(True))
         self.assertIn('Debug email enabled', r.get_data(True))
 
     def test_postcode(self):
