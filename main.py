@@ -275,7 +275,10 @@ def show_cv(person_id):
         flask.flash("We don't yet have a CV for that candidate", 'danger')
         return flask.redirect('/candidates')
 
-    return flask.render_template("show_cv.html", candidate=candidate, cv=current_cv)
+    current_thumb = lookups.get_current_thumb(app.config, candidate['id'])
+    og_image = current_thumb['url'] if current_thumb is not None else False
+
+    return flask.render_template("show_cv.html", candidate=candidate, cv=current_cv, og_image=og_image)
 
 
 #####################################################################
