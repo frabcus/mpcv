@@ -279,7 +279,7 @@ def show_cv(person_id):
     current_cv = lookups.get_current_cv(app.config, candidate['id'])
     if current_cv is None:
         flask.flash("We don't yet have a CV for that candidate", 'danger')
-        return flask.redirect('/candidates')
+        return error()
 
     current_thumb = lookups.get_current_thumb(app.config, candidate['id'])
     og_image = current_thumb['url'] if current_thumb is not None else False
