@@ -5,7 +5,7 @@
 
         <meta name="description" content="Before you vote, look at their CVs! This site helps MP candidates share their CV with voters." />
         <meta name="twitter:card" value="summary">
-        <meta property="og:title" content="Democracy Club CV" />
+        <meta property="og:title" content="{{ self.title() }} - Democracy Club CVs" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ request.base_url }}" />
         <meta property="og:image" content="{% if og_image %}{{ og_image }}{% else %}{{ g.most_recent_thumbnail }}{% endif %}" />
