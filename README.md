@@ -30,6 +30,9 @@ MPCV_MAIL_PASSWORD=
 MPCV_S3_BUCKET_NAME=xxxx
 MPCV_S3_ACCESS_KEY_ID=
 MPCV_S3_SECRET_ACCESS_KEY=
+
+# Admin functions accessible with this
+MPCV_ADMIN_KEY=xxxx
 ```
 
 

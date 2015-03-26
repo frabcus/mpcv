@@ -305,6 +305,21 @@ def upload_cv(person_id):
 
     return flask.render_template("upload_cv.html", candidate=candidate)
 
+# Administrator get a confirm link
+@app.route('/upload_cv/<int:person_id>/<admin_key>')
+def upload_cv_admin(person_id, admin_key):
+    if admin_key != app.config['ADMIN_KEY']:
+        flask.flash("Administrator permissions denied", 'danger')
+        return error()
+
+    candidate = lookups.lookup_candidate(person_id)
+    if 'error' in candidate:
+        flask.flash(candidate['error'], 'danger')
+        return error()
+
+    link = identity.generate_upload_url(app.secret_key, person_id)
+    return flask.redirect(link)
+
 
 # GET is to show form to upload CV
 @app.route('/upload_cv/<int:person_id>/c/<signature>', methods=['GET'])
