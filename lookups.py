@@ -7,12 +7,10 @@
 import requests
 import json
 import datetime
-import itertools
 import re
 import collections
-import urllib
 import csv
-import codecs
+import io
 
 import constants
 import main
@@ -83,8 +81,8 @@ def _hashes_of_candidates():
     by_constituency_id = collections.defaultdict(list)
 
     url = "https://yournextmp.com/media/candidates.csv"
-    stream = urllib.request.urlopen(url)
-    rows = csv.DictReader(codecs.iterdecode(stream, 'utf-8'))
+    content = requests.get(url).text
+    rows = csv.DictReader(io.StringIO(content))
     for row in rows:
         candidate_id = int(row['id'])
         constituency_id = int(row['mapit_id'])
