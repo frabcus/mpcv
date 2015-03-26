@@ -299,7 +299,6 @@ def _hash_by_prefix(config, prefix):
         person_id = int(re.match(prefix + "([0-9]+)[^0-9]", key.name).group(1))
         if person_id not in result:
             result[person_id] =  {
-                'name': key.name,
                 'url': key.generate_url(expires_in=0, query_auth=False),
                 'last_modified': key_last_modified,
                 'created': key_last_modified,
