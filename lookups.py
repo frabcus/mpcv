@@ -208,6 +208,15 @@ def get_current_cv(config, person_id):
 
     return cv_hash[person_id]
 
+# Takes a candidate id, and returns a thumbnail. Fields of thumbnail
+# are as in _hash_by_prefix.
+def get_current_thumb(config, person_id):
+    thumb_hash = _hash_by_prefix(config, "thumbs/")
+
+    if person_id not in thumb_hash:
+        return None
+
+    return thumb_hash[person_id]
 
 # Takes an array of candidates of the same form list_candidates returns.
 # Auguments with a variable to say if they have a CV, and when last updated.

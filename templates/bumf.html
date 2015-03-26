@@ -7,9 +7,9 @@
         <meta name="twitter:card" value="summary">
         <meta property="og:title" content="Democracy Club CV" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://cv.democracyclub.org.uk/" />
-        <meta property="og:image" content="http://cv.democracyclub.org.uk/static/cv_snip.png" />
-        <meta property="og:description" content="Before you vote, look at their CVs! This site helps MP candidates share their CV with voters." /> 
+        <meta property="og:url" content="{{ request.base_url }}" />
+        <meta property="og:image" content="{% if og_image %}{{ og_image }}{% else %}http://cv.democracyclub.org.uk/static/cv_snip.png{% endif %}" />
+        <meta property="og:description" content="Before you vote, look at their CVs! This site helps MP candidates share their CV with voters." />
 
         <meta name="google-site-verification" content="BqbdERfW54g1lnSaq8EHLcBOgwbxxwHTiTUO-7tyFko" />
 
