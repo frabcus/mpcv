@@ -185,16 +185,16 @@ def add_cv(config, person_id, contents, filename, content_type):
 
 # Takes the app config (for S3 keys), candidate identifier, a local filename.
 # Saves thumbnail in S3. Raises an exception if it goes wrong, returns nothing.
-def add_thumb(config, person_id, filename):
+def add_thumb(config, person_id, filename, extension):
     person_id = str(int(person_id))
     assert person_id != 0
 
     bucket = _get_s3_bucket(config)
 
     key = boto.s3.key.Key(bucket)
-    key.key = "thumbs/{0}.png".format(str(person_id))
+    key.key = "thumbs/{0}.{1}".format(str(person_id), extension)
     key.set_contents_from_filename(filename)
-    key.set_metadata('Content-Type', "image/png")
+    key.set_metadata('Content-Type', "image/" + extension)
     key.set_acl('public-read')
 
 

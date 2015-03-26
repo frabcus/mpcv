@@ -8,3 +8,4 @@ flask-cache
 flask-compress
 boto>=2.36.0
 inflect
+Pillow
