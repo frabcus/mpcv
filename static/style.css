@@ -259,6 +259,10 @@ img.ratio   {display:block;width:100%;height:auto;padding-bottom:5%;}
 }
 
 #show_cv {
+  background:url(https://ssl.gstatic.com/docs/common/v-spinner_gray.gif) #d1d1d1 center center no-repeat;
+}
+
+#show_cv {
     height: 100%;
     overflow: hidden; /* prevent double scroll bars due to slight differences on some browsers */
     padding-top: 10px;
