@@ -77,7 +77,11 @@ class DateTimeEncoder(json.JSONEncoder):
 @app.route('/cvs.json')
 def cvs_json():
     all_cvs = _cache_all_cvs()
-    return DateTimeEncoder().encode(all_cvs)
+    output = DateTimeEncoder().encode(all_cvs)
+
+    response = flask.make_response(output)
+    response.headers["Content-Type"] = "application/json"
+    return response
 
 #####################################################################
 # Global parameters and checks
