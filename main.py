@@ -5,6 +5,8 @@ import traceback
 import re
 import math
 import logging
+import json
+import datetime
 
 import werkzeug
 import flask
@@ -31,7 +33,7 @@ app.logger.addHandler(stream_handler)
 PAGE_SIZE = 12
 
 #####################################################################
-# Sitemap
+# Sitemap and global API
 
 def sitemap_generator():
     yield 'index', {}
@@ -58,6 +60,24 @@ def sitemap_xml():
     response.headers["Content-Type"] = "application/xml"
 
     return response
+
+class DateTimeEncoder(json.JSONEncoder):
+    def __init__(self):
+        super(DateTimeEncoder, self).__init__(indent=4)
+    def default(self, obj):
+        if isinstance(obj, datetime.datetime):
+            return obj.isoformat()
+        elif isinstance(obj, datetime.date):
+            return obj.isoformat()
+        elif isinstance(obj, datetime.timedelta):
+            return (datetime.datetime.min + obj).time().isoformat()
+        else:
+            return super(DateTimeEncoder, self).default(obj)
+
+@app.route('/cvs.json')
+def cvs_json():
+    all_cvs = _cache_all_cvs()
+    return DateTimeEncoder().encode(all_cvs)
 
 #####################################################################
 # Global parameters and checks
