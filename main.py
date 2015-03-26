@@ -317,8 +317,8 @@ def upload_cv_upload(person_id, signature):
     data = f.read()
     size = len(data)
 
-    print("saving CV to S3: candidate:", person_id, "uploaded file:", secure_filename, f.content_type, size, "bytes")
-    file_url = lookups.add_cv(app.config, person_id, data, secure_filename, f.content_type)
+    print("saving CV to S3: candidate:", person_id, "uploaded file:", secure_filename, size, "bytes")
+    file_url = lookups.add_cv(app.config, person_id, data, secure_filename)
 
     # clear constituency candidate list cache
     cache.delete_memoized(_cache_candidates_augmented, candidate['constituency_id'])

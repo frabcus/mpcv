@@ -165,7 +165,7 @@ def lookup_candidate(person_id):
 # Takes the app config (for S3 keys), candidate identifier, file contents, a
 # (secured) filename and content type. Saves that new CV in S3. Raises
 # an exception if it goes wrong, returns nothing.
-def add_cv(config, person_id, contents, filename, content_type):
+def add_cv(config, person_id, contents, filename):
     person_id = str(int(person_id))
     assert person_id != 0
 
@@ -176,7 +176,6 @@ def add_cv(config, person_id, contents, filename, content_type):
     key = boto.s3.key.Key(bucket)
     key.key = "cvs/" + str(person_id) + "/" + when + filename
     key.set_contents_from_string(contents)
-    key.set_metadata('Content-Type', content_type)
     key.set_acl('public-read')
 
     # force reloading of all data for now, so CV appears quick
@@ -280,7 +279,6 @@ def all_cvs_no_thumbnails(config):
 #   name - full name of S3 key
 #   url - publically accessible address of the file
 #   last_modified - when it was uploaded
-#   content_type - the mime type of the file
 #   person_id - id of the person the CV is for
 # Caches for 10 minutes for speed.
 @main.cache.memoize(600)
@@ -305,7 +303,6 @@ def _hash_by_prefix(config, prefix):
                 'url': key.generate_url(expires_in=0, query_auth=False),
                 'last_modified': key_last_modified,
                 'created': key_last_modified,
-                'content_type': key.content_type,
                 'person_id': person_id
             }
         result[person_id]['created'] = key_last_modified
