@@ -134,7 +134,9 @@ def error():
 
 @app.route('/about')
 def about():
-    return flask.render_template('about.html')
+    return flask.render_template('about.html',
+        og_image = flask.url_for('static', filename='this-is-cv.png', _external=True)
+    )
 
 @app.route('/exception')
 def exception():
