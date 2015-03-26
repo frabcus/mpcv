@@ -293,6 +293,10 @@ def _hash_by_prefix(config, prefix):
     person_ids = []
     result = collections.OrderedDict()
     for key in cvs:
+        # we use .jpg thumbnails now (and don't accept images as CVs)
+        if key.name.endswith(".png"):
+            continue
+
         key_last_modified = boto.utils.parse_ts(key.last_modified)
         person_id = int(re.match(prefix + "([0-9]+)[^0-9]", key.name).group(1))
         if person_id not in result:

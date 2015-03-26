@@ -12,7 +12,6 @@ import PIL.Image
 def gen_thumbs():
     # find all the CVs missing a thumbnail
     cvs_missing_thumbs = lookups.all_cvs_no_thumbnails(main.app.config)
-#    cvs_missing_thumbs = lookups.all_cvs_with_thumbnails(main.app.config)
     for x in cvs_missing_thumbs:
         print("cron missing thumb:", x)
         filename = "tmp/{0}.png".format(x["person_id"])
