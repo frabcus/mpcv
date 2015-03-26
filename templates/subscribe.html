@@ -1,13 +1,13 @@
-{% macro subscribe(show_dismiss) %}
+{% macro subscribe(show_dismiss, from_email, postcode) %}
 <div class="get-updates row"><div class="col-xs-6">
 <div class="panel panel-primary">
     <div class="panel-heading panel-title">
-        Get updates
+        Get updates for {{ postcode }}
     </div>
     <div class="panel-body">
         <form action="/updates_join" method="POST">
             <div class="form-group">
-              <input name="email" type="email" value="{{from_email}}" placeholder="Your email" class="form-control">
+              <input name="email" type="email" value="{{ from_email }}" placeholder="Your email" class="form-control">
             </div>
 
             <div class="form-group">

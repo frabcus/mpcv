@@ -5,7 +5,7 @@
 {% block wide %}
 
     {% if show_subscribe %}
-        {{ subscribe.subscribe(show_dismiss=True) }} 
+        {{ subscribe.subscribe(show_dismiss=True, from_email=from_email, postcode=postcode) }}
     {% endif %}
 
     <div class="candidates">
@@ -60,7 +60,7 @@
                <p>You already joined our updates list.</p>
            {% else %}
                <h2>We can email you when we get CVs</h2>
-                {{ subscribe.subscribe(show_dismiss=False) }} 
+                {{ subscribe.subscribe(show_dismiss=False, from_email=from_email, postcode=postcode) }}
            {% endif %}
         {% endif %}
 
