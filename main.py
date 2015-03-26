@@ -120,6 +120,10 @@ def look_for_postcode():
     flask.session['postcode'] = constituency['postcode']
     flask.session['constituency'] = constituency
 
+@app.before_request
+def set_thumbnail():
+    all_cvs = _cache_all_cvs()
+    flask.g.most_recent_thumbnail = all_cvs[0]['thumb']['url']
 
 
 #####################################################################
