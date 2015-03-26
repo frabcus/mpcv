@@ -10,6 +10,9 @@ import datetime
 import itertools
 import re
 import collections
+import urllib
+import csv
+import codecs
 
 import constants
 import main
@@ -59,52 +62,68 @@ def lookup_postcode(postcode):
     c = data["areas"][str(data["shortcuts"]["WMC"])]
     return { 'id': c['id'], 'name': c['name'], 'postcode': data['postcode'] }
 
-# Takes a constituency identifier and returns a dictionary:
-#   errors - if there was an error
-# Or an array of candidates in the current election:
+
+# Returns a pair of hashes of data from YourNextMP.
+#   by_candidate_id - maps from person id to dictionary about candidate
+#   by_constituency_id - maps from constituency id to array of dictionaries about candidate
+#
+# The fields in the dictionaries about each candidate are:
 #   id - the mySociety person_id of the candidate
 #   name - name of the candidate
 #   email - email address of the candidate (if known)
+#   twitter - Twitter account name of the candidate (if known)
 #   party - political party name of the candidate
+#   constituency_id - identifier of constituency
+#   constituency_name - name of constituency
+@main.cache.memoize(60 * 60 * 12)
+def _hashes_of_candidates():
+    print("warming cache _hashes_of_candidates")
+
+    by_candidate_id = {}
+    by_constituency_id = collections.defaultdict(list)
+
+    url = "https://yournextmp.com/media/candidates.csv"
+    stream = urllib.request.urlopen(url)
+    rows = csv.DictReader(codecs.iterdecode(stream, 'utf-8'))
+    for row in rows:
+        candidate_id = int(row['id'])
+        constituency_id = int(row['mapit_id'])
+
+        candidate = {
+            'id': candidate_id,
+            'name': row['name'],
+            'email': row['email'],
+            'twitter': row['twitter_username'],
+            'party': row['party'],
+            'constituency_id': constituency_id,
+            'constituency_name': row['constituency']
+        }
+
+        assert candidate_id not in by_candidate_id
+        by_candidate_id[candidate_id] = candidate
+
+        by_constituency_id[constituency_id].append(candidate)
+
+    return by_candidate_id, by_constituency_id
+
+
+# Takes a constituency identifier and returns a dictionary:
+#   error - if there was an error
+# Or fields as in _hashes_of_candidates.
 def lookup_candidates(constituency_id):
-    str_id = str(int(constituency_id))
-    if str_id == '8888888':
+    if constituency_id == 8888888:
         return [
             { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Bunny Rabbits Rule' },
             { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Mice Rule More' },
-            { 'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus@fastmail.fm', 'party': 'Monkeys Are Best' }
+            { 'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus@fastmail.fm', 'twitter': None, 'party': 'Monkeys Are Best' }
         ]
 
-    data = requests.get("https://yournextmp.popit.mysociety.org/api/v0.1/posts/{}?embed=membership.person".format(str_id)).json()
-    if "errors" in data:
-        return data
+    _, by_constituency_id = _hashes_of_candidates()
 
-    current_candidate_list = []
-    for office in data['result']['memberships']:
-        if office['start_date'] > constants.election_date or office['end_date'] < constants.election_date:
-            continue
-        assert office['role'] == 'Candidate'
+    if constituency_id not in by_constituency_id:
+        return { 'error': "Constituency {} not found".format(constituency_id)}
 
-        member = office['person_id']
-        if constants.year not in member["standing_in"]:
-            continue
-        if member["standing_in"][constants.year] == None:
-            continue
-
-        twitter = None
-        if 'contact_details' in member:
-            for contact_detail in member['contact_details']:
-                if contact_detail['type'] == 'twitter':
-                    twitter = contact_detail['value']
-                    break
-
-        current_candidate_list.append({
-            'id': int(member['id']),
-            'name': member['name'],
-            'email': member['email'],
-            'twitter': twitter,
-            'party': member['party_memberships'][constants.year]['name']
-        })
+    current_candidate_list = by_constituency_id[constituency_id]
 
     # Sort by surname (as best we can -- "Duncan Smith" won't work)
     # so it is same as on ballot paper. So can get used to it.
@@ -114,48 +133,32 @@ def lookup_candidates(constituency_id):
 
 # Takes a candidate identifier (mySociety person_id) and returns a dictionary:
 #   error - if there's an error
-#   id - the mySociety person_id of the candidate
-#   name - name of the candidate
-#   email - email address of the candidate (if known)
-#   party - political party name of the candidate
+# Or fields as in _hashes_of_candidates.
 def lookup_candidate(person_id):
-    str_id = str(int(person_id))
-    if str_id == '7777777':
+    if person_id == 7777777:
         return {
-            'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'party': 'Bunny Rabbits Rule',
+            'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Bunny Rabbits Rule',
             'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
         }
-    if str_id == '7777778':
+    if person_id == 7777778:
         return {
-            'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'party': 'Mice Rule More',
+            'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Mice Rule More',
             'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
         }
-    if str_id == '7777779':
+    if person_id == 7777779:
         return {
-            'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus@fastmail.fm', 'party': 'Monkeys Are Best',
+            'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus@fastmail.fm', 'twitter': None, 'party': 'Monkeys Are Best',
             'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
         }
 
+    by_candidate_id, _ = _hashes_of_candidates()
 
-    url = "https://yournextmp.popit.mysociety.org/api/v0.1/persons/{}".format(str_id)
-    data = requests.get(url).json()
+    if person_id not in by_candidate_id:
+        return { 'error': "Candidate {} not found".format(person_id) }
 
-    if "errors" in data:
-        return { "error": "Candidate {} not found".format(str_id) }
+    candidate = by_candidate_id[person_id]
 
-    c = data['result']
-
-    constituency_id = None
-    constituency_name = None
-    standing_in = c['standing_in']
-    if constants.year in standing_in and standing_in[constants.year] != None:
-        constituency_id = standing_in[constants.year]['post_id']
-        constituency_name = standing_in[constants.year]['name']
-
-    return {
-        'id': int(c['id']), 'name': c['name'], 'email': c['email'], 'party': c['party_memberships'][constants.year]['name'],
-        'constituency_id': constituency_id, 'constituency_name': constituency_name
-    }
+    return candidate
 
 
 ###################################################################
@@ -290,8 +293,10 @@ def all_cvs_no_thumbnails(config):
 #   last_modified - when it was uploaded
 #   person_id - id of the person the CV is for
 # Caches for 10 minutes for speed.
-@main.cache.memoize(600)
+@main.cache.memoize(60 * 10)
 def _hash_by_prefix(config, prefix):
+    print("warming cache _hash_by_prefix", prefix)
+
     bucket = _get_s3_bucket(config)
 
     cvs = bucket.list(prefix)
@@ -315,7 +320,6 @@ def _hash_by_prefix(config, prefix):
             }
         result[person_id]['created'] = key_last_modified
 
-    print("cache miss _hash_by_prefix", prefix)
     return result
 
 
