@@ -11,6 +11,7 @@ import flask
 import flask_appconfig.env
 import flask_mail
 import flask.ext.cache
+import flask.ext.compress
 
 import identity
 
@@ -18,6 +19,7 @@ app = flask.Flask(__name__)
 flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
 mail = flask_mail.Mail(app)
 cache = flask.ext.cache.Cache(app,config={'CACHE_TYPE': 'simple'})
+flask.ext.compress.Compress(app)
 
 import lookups
 
