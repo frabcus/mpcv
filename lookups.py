@@ -73,7 +73,7 @@ def lookup_postcode(postcode):
 #   party - political party name of the candidate
 #   constituency_id - identifier of constituency
 #   constituency_name - name of constituency
-@main.cache.memoize(60 * 60 * 12)
+@main.cache.memoize(60 * 60)
 def _hashes_of_candidates():
     print("warming cache _hashes_of_candidates")
 
