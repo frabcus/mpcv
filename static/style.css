@@ -249,6 +249,13 @@ img.ratio   {display:block;width:100%;height:auto;padding-bottom:5%;}
     margin-left: 8px;
 }
 
+@media (max-width: 768px) {
+  .show-cv-navbar .btn-success {
+    margin-top: 12px;
+  }
+}
+
+
 .navbar-default.show-cv-navbar:hover .navbar-brand {
   color: white; 
 }
