@@ -30,8 +30,6 @@ stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.INFO)
 app.logger.addHandler(stream_handler)
 
-PAGE_SIZE = 12
-
 #####################################################################
 # Sitemap and global API
 
@@ -40,7 +38,7 @@ def sitemap_generator():
     yield 'about', {}
 
     all_cvs = _cache_all_cvs()
-    max_page = math.ceil(len(all_cvs) / PAGE_SIZE)
+    max_page = math.ceil(len(all_cvs) / constants.page_size)
     for page in range(1, max_page + 1):
         yield 'all_cvs', { 'page': page }
 
@@ -172,9 +170,9 @@ def index():
 @app.route('/all_cvs/page/<int:page>')
 def all_cvs(page):
     all_cvs = _cache_all_cvs()
-    page_cvs = all_cvs[(page-1)*PAGE_SIZE : (page-1)*PAGE_SIZE+PAGE_SIZE]
+    page_cvs = all_cvs[(page-1)*constants.page_size : (page-1)*constants.page_size+constants.page_size]
 
-    max_page = math.ceil(len(all_cvs) / PAGE_SIZE)
+    max_page = math.ceil(len(all_cvs) / constants.page_size)
 
     start = page - 5
     end = page + 5

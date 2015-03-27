@@ -6,6 +6,7 @@ flask-appconfig
 flask-mail
 flask-cache
 flask-compress
+flask-assets
 boto>=2.36.0
 inflect
 Pillow
