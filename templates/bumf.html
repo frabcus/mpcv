@@ -15,13 +15,22 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/static/bootstrap/css/bootswatch.min.css" rel="stylesheet">
-        <link href="/static/style.css" rel="stylesheet">
+        {% assets filters="cssmin", output="gen/packed.css",
+            "bootstrap/bootstrap.min.css",
+            "bootstrap/bootswatch.min.css",
+            "style.css"
+        %}
+            <link href="{{ ASSET_URL }}" rel="stylesheet"></link>
+        {% endassets %}
 
-        <script src="/static/jquery-1.11.2.min.js"></script>
-        <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-        <script src="/static/main.js"></script>
+        {% assets filters="cssmin", output="gen/packed.js",
+            "jquery-1.11.2.min.js",
+            "bootstrap/bootstrap.min.js",
+            "main.js"
+        %}
+           <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+
 
         <link rel="icon" type="image/png" href="/static/dc_logo.png">
 
