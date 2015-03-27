@@ -27,18 +27,18 @@
 
 
 .contentwrap {
-    padding-top: 0px;
+    padding-top: 12px;
 }
 
 @media (min-width: 768px) { 
   .contentwrap {
-      padding-top: 20px;
+      padding-top: 32px;
   }
 }
 
 @media (min-width: 992px) { 
   .sidebarwrap {
-    padding-top: 20px;
+    padding-top: 32px;
   }
 }
 
