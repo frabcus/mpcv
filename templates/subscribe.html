@@ -6,16 +6,17 @@
     </div>
     <div class="panel-body">
         <form action="/updates_join" method="POST">
-            <div class="form-group">
-              <input name="email" type="email" value="{{ from_email }}" placeholder="Your email" class="form-control">
-            </div>
+            <p class="form-group">
+              <label for="subscribe-email" class="control-label">Email:</label>
+              <input id="subscribe-email" name="email" type="email" value="{{ from_email }}" class="form-control">
+            </p>
 
-            <div class="form-group">
+            <p class="form-group">
                 <button type="submit" class="btn btn-primary" name="subscribe">Subscribe</button>
                 {% if show_dismiss %}
                 <button type="submit" class="btn btn-default" name="dismiss">Dismiss</button>
                 {% endif %}
-            </div>
+            </p>
 
             <p class="help-block">
                 We'll email you when there are new CVs in your constituency,
