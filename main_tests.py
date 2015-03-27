@@ -128,6 +128,22 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Sicnarf Gnivri', r.get_data(True))
         self.assertIn("<iframe", r.get_data(True))
 
+    def test_all_cvs(self):
+        r = self.app.get('/all_cvs/page/1')
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('All CVs', r.get_data(True))
+
+    def test_sitemap_xml(self):
+        r = self.app.get('/sitemap.xml')
+        self.assertEqual(r.content_type, "application/xml")
+        self.assertIn('</urlset>', r.get_data(True))
+
+    def test_cvs_json(self):
+        r = self.app.get('/cvs.json')
+        self.assertEqual(r.content_type, "application/json")
+        self.assertIn('thumb', r.get_data(True))
+
+
 if __name__ == '__main__':
     try:
         unittest.main(warnings='ignore')

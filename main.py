@@ -26,6 +26,7 @@ flask.ext.compress.Compress(app)
 assets = flask.ext.assets.Environment(app)
 
 import lookups
+import constants
 
 # Log to stderr for Heroku
 stream_handler = logging.StreamHandler()
