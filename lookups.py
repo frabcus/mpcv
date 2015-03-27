@@ -87,6 +87,11 @@ def _hashes_of_candidates():
         candidate_id = int(row['id'])
         constituency_id = int(row['mapit_id'])
 
+        if row['email'] == '':
+            row['email'] = None
+        if row['twitter_username'] == '':
+            row['twitter_username'] = None
+
         candidate = {
             'id': candidate_id,
             'name': row['name'],
