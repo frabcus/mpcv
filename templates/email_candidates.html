@@ -7,38 +7,38 @@
 
         <form class="form-horizontal button-disabling-form" action="/email_candidates" method="POST">
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="to">To</label>
-                <div class="col-sm-10">
+                <label class="col-sm-3 control-label" for="to">To</label>
+                <div class="col-sm-9">
                     <p class="form-control-static">{{ emails_list }}</p>
                 </div>
             </div>
 
             <div class="form-group">
-              <label for="from_email" class="col-sm-2 control-label">From</label>
-              <div class="col-sm-10">
-                  <input id="from_email" name="from_email" type="email" value="{{from_email}}" placeholder="Your email" class="form-control" {% if not from_email %}autofocus{% endif %}>
+              <label for="from_email" class="col-sm-3 control-label">From email</label>
+              <div class="col-sm-6">
+                  <input id="from_email" name="from_email" type="email" value="{{from_email}}" class="form-control" {% if not from_email %}autofocus{% endif %}>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="postcode" class="col-sm-2 control-label">Postcode</label>
-              <div class="col-sm-10">
+              <label for="postcode" class="col-sm-3 control-label">Postcode</label>
+              <div class="col-sm-9">
                   <p class="form-control-static">{{ postcode }}</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="subject" class="col-sm-2 control-label">Subject</label>
-              <div class="col-sm-10">
+              <label for="subject" class="col-sm-3 control-label">Subject</label>
+              <div class="col-sm-9">
                   <input id="subject" name="subject" value="{{subject}}" class="form-control">
               </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="message">Message</label>
-                <div class="col-sm-10">
+                <label class="col-sm-3 control-label" for="message">Message</label>
+                <div class="col-sm-9">
                     <p class="form-control-static dear-message">Dear {{ names_list }},</p>
-                    <textarea id="message" name="message" class="form-control" rows=12 autofocus>{{ message }}</textarea>
+                    <textarea id="message" name="message" class="form-control" rows=10 autofocus>{{ message }}</textarea>
                     <p class="help-block visible-lg-block visible-md-block hidden-sm hidden-xs">
                         Want some ideas for your letter? See the top tips to the right.
                     </p>
@@ -51,9 +51,9 @@
 
 
             <div class="form-group">
-                <div class="col-sm-2">
+                <div class="col-sm-3">
                 </div>
-                <div class="col-sm-10">
+                <div class="col-sm-9">
                     <button type="submit" class="btn btn-success btn-lg" id="send-emails" data-loading-text="Sending...">Send emails</button>
                 </div>
             </div>
@@ -63,11 +63,9 @@
 {% endblock %}
 {% block sidebar %}
 
-    <p class="alert alert-warning">Top tips!<p>
+    <h1>Writing an effective mail</h1>
 
-    <h2>Writing an effective mail</h2>
-
-     <p>1. Think of an intriguing subject that will encourage them to open it, and make it clear you're local.</p>
+     <p class="lead">1. Think of an intriguing subject that will encourage them to open it, and make it clear you're local.</p>
      <p>2. Introduce yourself, <strong>making it clear you're in their constituency</strong> (<em>{{constituency.name}}</em>).</p>
      <p>3. Tell them you've been looking at candidate's CVs on Democracy Club. Tell them why you think it's important they upload theirs. </p>
      <!-- <p>Tell them that <strong></strong> candidates have answered it already, and that in <em>{{constituency.name}}</em> -->
