@@ -284,7 +284,22 @@ def show_cv(person_id):
     current_thumb = lookups.get_current_thumb(app.config, candidate['id'])
     og_image = current_thumb['url'] if current_thumb is not None else False
 
-    return flask.render_template("show_cv.html", candidate=candidate, cv=current_cv, og_image=og_image)
+    # Go back to where we came from if that was our site
+    # (e.g. to all page, home page or candidates page)
+    # Default to candidates page.
+    more_link = flask.url_for("candidates")
+    refer = flask.request.referrer
+    host_url = flask.request.host_url
+    if refer and host_url:
+        if refer.startswith(host_url):
+            more_link = refer
+
+    return flask.render_template("show_cv.html",
+            candidate=candidate,
+            cv=current_cv,
+            og_image=og_image,
+            more_link=more_link
+        )
 
 
 #####################################################################
