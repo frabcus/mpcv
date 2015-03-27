@@ -368,6 +368,10 @@ def upload_cv_upload(person_id, signature):
     print("saving CV to S3: candidate:", person_id, "uploaded file:", secure_filename, size, "bytes")
     file_url = lookups.add_cv(app.config, person_id, data, secure_filename)
 
+    # force reloading of all data for now, so CV appears in the redirect
+    with app.app_context():
+        cache.clear()
+
     flask.flash("Thanks! Your CV has been successfully uploaded. You can share this page on social media. We'd love it if you tell any friends who are candidates to upload theirs too!", 'success')
     successful_link = flask.url_for('show_cv', person_id=person_id)
     return flask.redirect(successful_link)
