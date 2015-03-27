@@ -7,6 +7,7 @@ flask-mail
 flask-cache
 flask-compress
 flask-assets
+jsmin
 cssmin
 boto>=2.36.0
 inflect
