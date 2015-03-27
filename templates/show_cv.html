@@ -35,7 +35,10 @@
              <span class="visible-lg-block visible-md-block hidden-sm hidden-xs">
                 {{ candidate.name }}'s CV, {{ candidate.constituency_name }}, MP Candidate
              </span>
-             <span class="hidden-lg hidden-md visible-sm-block visible-xs-block">
+             <span class="hidden-lg hidden-md visible-sm-block hidden-xs">
+                {{ candidate.name }}'s CV, {{ candidate.constituency_name }}
+             </span>
+             <span class="hidden-lg hidden-md hidden-sm visible-xs-block">
                 {{ candidate.name }}'s CV
              </span>
           </div>
@@ -53,7 +56,10 @@
              <span class="visible-lg-block visible-md-block hidden-sm hidden-xs">
                 {{ candidate.party }}
              </span>
-             <span class="hidden-lg hidden-md visible-sm-block visible-xs-block">
+             <span class="hidden-lg hidden-md visible-sm-block hidden-xs">
+                MP Candidate, {{ candidate.party }}
+             </span>
+             <span class="hidden-lg hidden-md hidden-sm visible-xs-block">
                 {{ candidate.constituency_name }}, MP Candidate, {{ candidate.party }}
              </span>
           </p>
