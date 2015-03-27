@@ -13,8 +13,20 @@ import hashlib
 def sign_person_id(secret_key, person_id):
     digest = hmac.new(secret_key.encode('ascii'), str(person_id).encode('ascii'), hashlib.sha512).digest()
     signature_bytes = base64.urlsafe_b64encode(digest)
-    signature = signature_bytes.decode("ascii").rstrip("=\n")
-    return signature[0:16]
+    signature = signature_bytes.decode('ascii')[0:16]
+    signature = signature.rstrip("=\n-_")
+
+    return signature
+
+# Check the given signature (e.g. from a URL) matches the one for the
+# person specified. Returns a boolean.
+def check_signature(secret_key, person_id, signature):
+    signed_again = sign_person_id(secret_key, person_id)
+    signature = signature.rstrip("=\n-_")
+
+    print("check_signature", person_id, " person signature:", signed_again, " url signature:", signature)
+
+    return signed_again == signature
 
 # Returns a URL that lets someone upload a CV
 def generate_upload_url(secret_key, person_id):

@@ -344,8 +344,7 @@ def upload_cv_confirmed(person_id, signature):
         flask.flash(candidate['error'], 'danger')
         return error()
 
-    signed_again = identity.sign_person_id(app.secret_key, person_id)
-    if signature != signed_again:
+    if not identity.check_signature(app.secret_key, person_id, signature):
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
         return error()
 
@@ -366,8 +365,7 @@ def upload_cv_upload(person_id, signature):
         flask.flash(candidate['error'], 'danger')
         return error()
 
-    signed_again = identity.sign_person_id(app.secret_key, person_id)
-    if signature != signed_again:
+    if not identity.check_signature(app.secret_key, person_id, signature):
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
         return error()
 
