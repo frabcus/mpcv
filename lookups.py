@@ -102,7 +102,7 @@ def _hashes_of_candidates():
             'constituency_name': row['constituency']
         }
 
-        assert candidate_id not in by_candidate_id
+        assert candidate_id not in by_candidate_id, candidate_id
         by_candidate_id[candidate_id] = candidate
 
         by_constituency_id[constituency_id].append(candidate)
