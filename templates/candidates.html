@@ -21,12 +21,16 @@
             <h2>Invite these candidates to share their CV</h2>
 
             <p class="names_paragraph">
-                {% for candidate in candidates_no_cv %}
-                    <span class="whole_name">
-                        <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>
-                        (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>){% if not loop.last %},{% endif %}
-                    </span>
-                {% endfor %}
+                <div class="row">
+                    {% for candidate in candidates_no_cv %}
+                    <div class="col-xs-12 col-md-6">
+                        <span class="whole_name">
+                            <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>
+                            (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>){% if not loop.last %},{% endif %}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
             </p>
 
             <p>
@@ -68,11 +72,15 @@
             <h2>Find the email of these candidates</h2>
 
             <p class="names_paragraph">
-            {% for candidate in candidates_no_email %}
-                <span class="whole_name">
-                    <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>{% if not loop.last %},{% endif %}
-                </span>
-            {% endfor %}
+                <div class="row">
+                    {% for candidate in candidates_no_email %}
+                        <div class="col-xs-12 col-md-6">
+                            <span class="whole_name">
+                                <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>{% if not loop.last %},{% endif %}
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
             </p>
 
             <p>
