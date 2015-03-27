@@ -1,5 +1,12 @@
 $(function () {
 
+  // Cope with top navigation wrapping
+  // http://stackoverflow.com/a/20197508
+  $(document.body).css('padding-top', $('#topnavbar').height() + 12);
+  $(window).resize(function(){
+      $(document.body).css('padding-top', $('#topnavbar').height() + 12);
+  });
+
   // File upload URL button
   $(".files").change(function() {
     var btn = $(this)
