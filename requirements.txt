@@ -7,6 +7,7 @@ flask-mail
 flask-cache
 flask-compress
 flask-assets
+cssmin
 boto>=2.36.0
 inflect
 Pillow
