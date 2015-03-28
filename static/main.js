@@ -14,11 +14,11 @@ $(function () {
     // This is a bit complicated - have to disable the invisible button,
     // change the text of the span above, and set the visible (bootstrap)
     // disabled attribute on the span button lookalike parent.
+    // (Note that we can't use jquery's button.reset here due to this complexity)
     btn.prop('disabled', true)
     btn.prev().attr("x-text-before", btn.prev().text())
     btn.prev().text("Uploading CV...")
     btn.parent().attr("disabled", "")
-    // (Note that we can't use jquery's button.reset here due to this complexity)
   })
 
   // Reset buttons, on Firefox this is needed when doing back button.
