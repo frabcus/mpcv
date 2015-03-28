@@ -10,7 +10,7 @@
         <meta name="twitter:title" content="{{ self.title() }} - Democracy Club CVs">
         <meta name="twitter:description" content="{% if og_description %}{{og_description}}{% else %}Before you vote, look at their CVs! This site helps MP candidates share their CV with voters.{% endif %}">
         <meta name="twitter:creator" content="@democlubcvs">
-        <meta name="twitter:image" content="{% if og_image %}{{ og_image }}{% else %}{{ g.most_recent_thumbnail }}{% endif %}"> 
+        <meta name="twitter:image:src" content="{% if og_image %}{{ og_image }}{% else %}{{ g.most_recent_thumbnail }}{% endif %}">
 
         <meta property="og:title" content="{{ self.title() }} - Democracy Club CVs" />
         <meta property="og:type" content="website" />
