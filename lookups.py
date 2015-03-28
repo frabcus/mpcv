@@ -117,9 +117,9 @@ def _hashes_of_candidates():
 def lookup_candidates(constituency_id):
     if constituency_id == 8888888:
         return [
-            { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Bunny Rabbits Rule' },
-            { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Mice Rule More' },
-            { 'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus@fastmail.fm', 'twitter': None, 'party': 'Monkeys Are Best' }
+            { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus+sicnarf@fastmail.fm', 'twitter': 'frabcus', 'party': 'Bunny Rabbits Rule' },
+            { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus+notlits@fastmail.fm', 'twitter': 'frabcus', 'party': 'Mice Rule More' },
+            { 'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus+ojom@fastmail.fm', 'twitter': None, 'party': 'Monkeys Are Best' }
         ]
 
     _, by_constituency_id = _hashes_of_candidates()
@@ -141,17 +141,17 @@ def lookup_candidates(constituency_id):
 def lookup_candidate(person_id):
     if person_id == 7777777:
         return {
-            'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Bunny Rabbits Rule',
+            'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus+sicnarf@fastmail.fm', 'twitter': 'frabcus', 'party': 'Bunny Rabbits Rule',
             'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
         }
     if person_id == 7777778:
         return {
-            'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus@fastmail.fm', 'twitter': 'frabcus', 'party': 'Mice Rule More',
+            'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus+notlits@fastmail.fm', 'twitter': 'frabcus', 'party': 'Mice Rule More',
             'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
         }
     if person_id == 7777779:
         return {
-            'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus@fastmail.fm', 'twitter': None, 'party': 'Monkeys Are Best',
+            'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus+ojom@fastmail.fm', 'twitter': None, 'party': 'Monkeys Are Best',
             'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
         }
 

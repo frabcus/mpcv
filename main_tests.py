@@ -51,6 +51,17 @@ class MainTestCase(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertIn('Democracy Club Test Constituency', r.get_data(True))
 
+    def test_clear_all(self):
+        r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('Democracy Club Test Constituency', r.get_data(True))
+
+        r = self.app.get('/clear_all', follow_redirects=True)
+        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
+
+        r = self.app.get('/candidates', follow_redirects=True)
+        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
+
     def test_candidates_redirect(self):
         # When no cookie set, /candidates takes you to front page to choose postcode
         r = self.app.get('/candidates', follow_redirects=True)
@@ -75,7 +86,7 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Are you Sicnarf Gnivri?', r.get_data(True))
         self.assertIn('<form action="/upload_cv/7777777" method="POST">', r.get_data(True))
         self.assertIn('<button id="confirm_email" type="submit" class="btn btn-success btn-lg">I am', r.get_data(True))
-        self.assertIn('frabcus@fastmail.fm', r.get_data(True))
+        self.assertIn('frabcus+sicnarf@fastmail.fm', r.get_data(True))
 
     def test_upload_cv_error(self):
         r = self.app.get('/upload_cv/382828281818', follow_redirects=True)
@@ -106,7 +117,6 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('action="' + confirmation_url + '"', r.get_data(True))
 
         # Upload
-
         f = open('fixtures/Example MP candidate CV.doc', 'rb')
         try:
             rup = self.app.post(confirmation_url, data=dict(
@@ -142,6 +152,56 @@ class MainTestCase(unittest.TestCase):
         r = self.app.get('/cvs.json')
         self.assertEqual(r.content_type, "application/json")
         self.assertIn('thumb', r.get_data(True))
+
+    def test_about(self):
+        r = self.app.get('/about')
+        self.assertIn('cv@democracyclub.org.uk', r.get_data(True))
+
+    def test_show_cv(self):
+        # Set postcode
+        r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
+        self.assertEqual(r.status_code, 200)
+
+        # Email two candidates
+        r = self.app.get('/email_candidates')
+        self.assertIn('Ask candidates to share their CV', r.get_data(True))
+        self.assertIn('frabcus+notlits@fastmail.fm, frabcus+ojom@fastmail.fm', r.get_data(True))
+        self.assertIn('action="/email_candidates"', r.get_data(True))
+
+        with main.mail.record_messages() as outbox:
+            self.app.post('/email_candidates', data={
+                'from_email': 'frabcus+voter@fastmail.fm',
+                'message': 'Please please please send in your CV! Link below ;)',
+                'subject': 'You need to submit a CV to apply for your new job!'
+            }, follow_redirects=True)
+
+            self.assertEqual(len(outbox), 2)
+
+            # Check the mails are correct
+            self.assertEqual(outbox[0].subject, "You need to submit a CV to apply for your new job!")
+            self.assertEqual(outbox[0].recipients, [('Notlits Esuom', 'test@localhost')])
+            self.assertEqual(outbox[0].sender, "Democracy Club CV <cv@democracyclub.org.uk>")
+            self.assertIn('Please please please send in your CV! Link below ;)', outbox[0].body)
+
+            self.assertEqual(outbox[1].subject, "You need to submit a CV to apply for your new job!")
+            self.assertEqual(outbox[1].recipients, [('Ojom Yeknom', 'test@localhost')])
+            self.assertEqual(outbox[1].sender, "Democracy Club CV <cv@democracyclub.org.uk>")
+            self.assertIn('Please please please send in your CV! Link below ;)', outbox[1].body)
+
+            # Get the upload URLs
+            m = re.search("^http://localhost(/.*)$", outbox[0].body, re.M)
+            upload_url_0 = m.group(1)
+            m = re.search("^http://localhost(/.*)$", outbox[1].body, re.M)
+            upload_url_1 = m.group(1)
+
+        # Test out the upload URLs
+        r = self.app.get(upload_url_0)
+        self.assertIn('Notlits Esuom', r.get_data(True))
+        self.assertIn('Choose your CV to share', r.get_data(True))
+
+        r = self.app.get(upload_url_1)
+        self.assertIn('Ojom Yeknom', r.get_data(True))
+        self.assertIn('Choose your CV to share', r.get_data(True))
 
 
 if __name__ == '__main__':
