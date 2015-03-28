@@ -284,6 +284,9 @@ def show_cv(person_id):
 
     current_thumb = lookups.get_current_thumb(app.config, candidate['id'])
     og_image = current_thumb['url'] if current_thumb is not None else False
+    og_description = "Before you vote, look at {}'s CV! This site helps MP candidates share their CV with voters.".format(
+        candidate['name']
+    )
 
     # Go back to where we came from if that was our site
     # (e.g. to all page, home page or candidates page)
@@ -299,6 +302,7 @@ def show_cv(person_id):
             candidate=candidate,
             cv=current_cv,
             og_image=og_image,
+            og_description=og_description,
             more_link=more_link
         )
 

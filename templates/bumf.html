@@ -3,13 +3,20 @@
     <head>
         <title>{% block title %}{% endblock %} - Democracy Club CVs</title>
 
-        <meta name="description" content="{% if og_description %}{{og_description}}{% else %}Before you vote, look at their CVs! This site helps MP candidates share their CV with voters.}}{% endif %}" />
+        <meta name="description" content="{% if og_description %}{{og_description}}{% else %}Before you vote, look at their CVs! This site helps MP candidates share their CV with voters.{% endif %}" />
+
         <meta name="twitter:card" value="summary">
+        <meta name="twitter:site" content="@democlubcvs">
+        <meta name="twitter:title" content="{{ self.title() }} - Democracy Club CVs">
+        <meta name="twitter:description" content="{% if og_description %}{{og_description}}{% else %}Before you vote, look at their CVs! This site helps MP candidates share their CV with voters.{% endif %}">
+        <meta name="twitter:creator" content="@democlubcvs">
+        <meta name="twitter:image" content="{% if og_image %}{{ og_image }}{% else %}{{ g.most_recent_thumbnail }}{% endif %}"> 
+
         <meta property="og:title" content="{{ self.title() }} - Democracy Club CVs" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ request.base_url }}" />
         <meta property="og:image" content="{% if og_image %}{{ og_image }}{% else %}{{ g.most_recent_thumbnail }}{% endif %}" />
-        <meta property="og:description" content="{% if og_description %}{{og_description}}{% else %}Before you vote, look at their CVs! This site helps MP candidates share their CV with voters.}}{% endif %}" />
+        <meta property="og:description" content="{% if og_description %}{{og_description}}{% else %}Before you vote, look at their CVs! This site helps MP candidates share their CV with voters.{% endif %}" />
 
         <meta name="google-site-verification" content="BqbdERfW54g1lnSaq8EHLcBOgwbxxwHTiTUO-7tyFko" />
 
