@@ -214,6 +214,16 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Tweet @frabcus+notlits', r.get_data(True))
         self.assertNotIn('Tweet @frabcus+sicnarf', r.get_data(True))
 
+    def test_updates_join(self):
+        r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
+        self.assertEqual(r.status_code, 200)
+
+        r = self.app.post('/updates_join', data={
+            'email': 'frabcus+voter@fastmail.fm',
+        }, follow_redirects=True)
+
+        self.assertIn('Thanks for subscribing to updates!', r.get_data(True))
+
 
 if __name__ == '__main__':
     try:
