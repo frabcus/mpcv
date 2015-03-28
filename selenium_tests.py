@@ -63,6 +63,7 @@ class UploadingCVTestCase(unittest.TestCase):
         self.wait.until(EC.title_contains("Sicnarf Gnivri's CV"))
 
         self.assertIn('Your CV has been successfully uploaded', self.browser.page_source)
+        self.assertNotIn("alert-danger", self.browser.page_source)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
