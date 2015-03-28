@@ -279,7 +279,7 @@ def show_cv(person_id):
 
     current_cv = lookups.get_current_cv(app.config, candidate['id'])
     if current_cv is None:
-        flask.flash("We don't yet have a CV for that candidate", 'danger')
+        flask.flash("We don't yet have a CV for that candidate.", 'danger')
         return error()
 
     current_thumb = lookups.get_current_thumb(app.config, candidate['id'])
@@ -329,7 +329,7 @@ def upload_cv(person_id):
 @app.route('/upload_cv/<int:person_id>/<admin_key>')
 def upload_cv_admin(person_id, admin_key):
     if admin_key != app.config['ADMIN_KEY']:
-        flask.flash("Administrator permissions denied", 'danger')
+        flask.flash("Administrator permissions denied.", 'danger')
         return error()
 
     candidate = lookups.lookup_candidate(person_id)
@@ -399,7 +399,7 @@ def upload_cv_upload(person_id, signature):
 @app.route('/email_candidates', methods=['GET','POST'])
 def email_candidates():
     if 'postcode' not in flask.session:
-        flask.flash("Enter your postcode to email candidates", 'success')
+        flask.flash("Enter your postcode to email candidates.", 'success')
         return flask.redirect("/")
     constituency = flask.session['constituency']
 
@@ -430,11 +430,11 @@ Yours sincerely,
         subject = flask.request.form.get("subject", "")
         message = flask.request.form.get("message", "").replace("\r\n", "\n")
         if from_email == "" or not re.match("^.*?@.*?\..*?$", from_email):
-            flask.flash("Please enter your email", 'danger')
+            flask.flash("Please enter your email.", 'danger')
         elif subject.strip() == "":
             flask.flash("Please write a subject for your email. Candidates pay more attention if it is unique and local!", 'danger')
         elif message.strip() == original_message.strip():
-            flask.flash("Please enter a message", 'danger')
+            flask.flash("Please enter a message.", 'danger')
         elif re.search("Yours sincerely,$", message.strip()):
             flask.flash("Please sign your message.", 'danger')
         else:
@@ -463,7 +463,7 @@ Yours sincerely,
 @app.route('/tweet_candidates')
 def tweet_candidates():
     if 'postcode' not in flask.session:
-        flask.flash("Enter your postcode to tweet candidates", 'success')
+        flask.flash("Enter your postcode to tweet candidates.", 'success')
         return flask.redirect("/")
     constituency = flask.session['constituency']
 
@@ -490,11 +490,11 @@ def updates_join():
 
     email = flask.request.form.get('email', "")
     if email == "" or not re.match("^.*?@.*?\..*?$", email) or "/" in email:
-        flask.flash("Please enter your email to subscribe to updates", 'danger')
+        flask.flash("Please enter your email to subscribe to updates.", 'danger')
         return flask.redirect("/candidates")
 
     if 'postcode' not in flask.session:
-        flask.flash("Enter your postcode before signing up for updates", 'success')
+        flask.flash("Enter your postcode before signing up for updates.", 'success')
         return flask.redirect("/")
 
     postcode = flask.session['postcode']
