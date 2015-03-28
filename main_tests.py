@@ -157,7 +157,7 @@ class MainTestCase(unittest.TestCase):
         r = self.app.get('/about')
         self.assertIn('cv@democracyclub.org.uk', r.get_data(True))
 
-    def test_show_cv(self):
+    def test_email_candidates(self):
         # Set postcode
         r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
@@ -202,6 +202,17 @@ class MainTestCase(unittest.TestCase):
         r = self.app.get(upload_url_1)
         self.assertIn('Ojom Yeknom', r.get_data(True))
         self.assertIn('Choose your CV to share', r.get_data(True))
+
+    def test_tweet_candidates(self):
+        # Set postcode
+        r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
+        self.assertEqual(r.status_code, 200)
+
+        # Option to tweet one candidates
+        r = self.app.get('/tweet_candidates')
+        self.assertIn('Tweet each candidate in turn', r.get_data(True))
+        self.assertIn('Tweet @frabcus+notlits', r.get_data(True))
+        self.assertNotIn('Tweet @frabcus+sicnarf', r.get_data(True))
 
 
 if __name__ == '__main__':
