@@ -125,7 +125,6 @@ class MainTestCase(unittest.TestCase):
         finally:
             f.close()
         self.assertEqual(rup.status_code, 200)
-        self.assertIn('Democracy Club Test Constituency', rup.get_data(True))
         self.assertIn('Your CV has been successfully uploaded', rup.get_data(True))
         self.assertNotIn('alert-danger', rup.get_data(True))
 

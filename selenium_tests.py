@@ -60,7 +60,7 @@ class UploadingCVTestCase(unittest.TestCase):
 
         doc_full_path = os.path.abspath('fixtures/Example MP candidate CV.doc')
         self.browser.find_element_by_css_selector('.files').send_keys(doc_full_path)
-        self.wait.until(EC.title_contains("Sicnarf Gnivri's CV"))
+        self.wait.until(EC.title_contains("About"))
 
         self.assertIn('Your CV has been successfully uploaded', self.browser.page_source)
         self.assertNotIn("alert-danger", self.browser.page_source)

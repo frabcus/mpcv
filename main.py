@@ -390,9 +390,8 @@ def upload_cv_upload(person_id, signature):
     with app.app_context():
         cache.clear()
 
-    flask.flash("Thanks! Your CV has been successfully uploaded. You can share this page on social media. We'd love it if you tell any friends who are candidates to upload theirs too!", 'success')
-    successful_link = flask.url_for('show_cv', person_id=person_id)
-    return flask.redirect(successful_link)
+    flask.flash("Thanks! Your CV has been successfully uploaded. We'd love it if you tell any friends who are candidates to upload theirs too!", 'success')
+    return flask.redirect("/about")
 
 #####################################################################
 # Ask candidates to upload their CV
