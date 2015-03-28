@@ -23,7 +23,7 @@
             <link href="{{ ASSET_URL }}" rel="stylesheet">
         {% endassets %}
 
-        {% assets filters="cssmin", output="gen/packed.js",
+        {% assets filters="jsmin", output="gen/packed.js",
             "jquery-1.11.2.min.js",
             "bootstrap/bootstrap.min.js",
             "main.js"
