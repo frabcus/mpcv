@@ -55,8 +55,13 @@
 
           ga('create', 'UA-10926972-3', 'auto');
           ga('send', 'pageview');
-
         </script>
+
+        {% if g.emailed_candidates_track %}
+        <script>
+            track_ask_email_event({{ g.emailed_candidates_track|safe }})
+        </script>
+        {% endif %}
 
     </head>
 

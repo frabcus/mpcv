@@ -126,6 +126,12 @@ def set_thumbnail():
     all_cvs = _cache_all_cvs()
     flask.g.most_recent_thumbnail = all_cvs[0]['thumb']['url']
 
+# Tracking events
+@app.before_request
+def track_events_from_cookies():
+    if 'emailed_candidates_track' in flask.session:
+        flask.g.emailed_candidates_track = flask.session['emailed_candidates_track']
+        del flask.session['emailed_candidates_track']
 
 #####################################################################
 # General routes
@@ -447,6 +453,9 @@ Yours sincerely,
                 candidates_no_cv, from_email, postcode,
                 subject, message
             )
+            # track it via Google analytics in next page load
+            flask.session['emailed_candidates_track'] = json.dumps([str(c['id']) for c in candidates_no_cv])
+
             flask.flash("Thanks! Your message has been sent to " + names_list + '.', 'success')
             return flask.redirect("/candidates")
 
