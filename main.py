@@ -309,6 +309,7 @@ def show_cv(person_id):
             cv=current_cv,
             og_image=og_image,
             og_description=og_description,
+            tw_large_card=True,
             more_link=more_link
         )
 

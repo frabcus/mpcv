@@ -11,7 +11,7 @@
 
         <meta name="description" content="{% if og_description %}{{og_description}}{% else %}Before you vote, look at their CVs! This site helps MP candidates share their CV with voters.{% endif %}" />
 
-        <meta name="twitter:card" value="summary_large_image">
+        <meta name="twitter:card" value="{% if tw_large_card %}summary_large_image{% else %}summary{% endif %}">
         <meta name="twitter:site" content="@democlubcvs">
         <meta name="twitter:title" content="{{ self.title() }} - Democracy Club CVs">
         <meta name="twitter:description" content="{% if og_description %}{{og_description}}{% else %}Before you vote, look at their CVs! This site helps MP candidates share their CV with voters.{% endif %}">
