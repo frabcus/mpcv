@@ -49,21 +49,18 @@ $(function () {
     $(".button-disabling-form .btn").button('reset').prop('disabled', false);
   });
 
-  // Custom Tweet button
-  // http://gpiot.com/blog/elegant-twitter-share-button-and-dialog-with-jquery/
-  $('a.tweet').click(function(e){
-    e.preventDefault();
-    var loc = $(this).attr('href');
-    var title = encodeURIComponent($(this).attr('title'));
-    var hashtags = encodeURIComponent($(this).attr('data-hashtags'));
-    var related = encodeURIComponent($(this).attr('data-related'));
-    var via = encodeURIComponent($(this).attr('data-via'));
-
-    window.open('http://twitter.com/share?' + 
-      'url=' + loc + '&text=' + title + '&hashtags=' + hashtags + '&related=' + related + '&via=' + via, 
-      'twitterwindow', 'height=450, width=550, top='+($(window).height()/2 - 225) +', left='+$(window).width()/2 +', ' + 
-                      'toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
-  }); 
+  // Twitter analytics
+  // Event hooks on custom Twitter buttons see: see http://stackoverflow.com/a/16288629/284340
+  twttr.ready(function() {
+    twttr.events.bind(
+      'tweet',
+      function (ev) {
+        var person_id = $(ev.target).attr("x-person-id");
+        ga('send', 'event', 'ask', 'tweet', person_id);
+        console.log("sent GA event: ask tweet ", person_id);
+      }
+    );
+  });
 
 });
 
@@ -71,6 +68,7 @@ $(function () {
 var track_ask_email_event = function(person_ids) {
   for (var i=0; i<person_ids.length; i++) {
     ga('send', 'event', 'ask', 'email', person_ids[i]);
+    console.log("sent GA event: ask email ", person_ids[i]);
   }
 };
 
