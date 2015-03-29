@@ -51,7 +51,7 @@
 
             <div class="row">
                  {% for candidate in candidates_have_cv %}
-                     <div class="col-xs-6 col-md-4 candidate">
+                     <div class="col-xs-6 col-sm-4 col-md-3 candidate">
                          <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
                          {% import 'embed_cv.html' as embed_cv %}
                          {{ embed_cv.embed_cv(candidate.cv, full_page_link=True) }}
