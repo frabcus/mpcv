@@ -58,6 +58,10 @@ page.open(url, function (status) {
             }, function() {
                 // wait another 10 seconds (until page num and toolbar disappear)
                 setTimeout(function () {
+                    if (page.content.indexOf("No preview available") > -1) {
+                        phantom.exit(3);
+                    }
+
                     page.clipRect = {
                       top: clip,
                       left: clip,
