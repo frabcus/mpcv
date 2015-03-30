@@ -17,7 +17,7 @@ def gen_thumbs():
         filename = "tmp/{0}.png".format(x["person_id"])
 
         # generate thumbnail with phantom
-        subprocess.call(["phantomjs", "screenshot.js", x["url"], filename])
+        subprocess.check_call(["phantomjs", "screenshot.js", x["url"], filename])
         # make a JPEG, they're smaller
         img = PIL.Image.open(filename)
         img.save(filename + ".jpg", option='optimize')
