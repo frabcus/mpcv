@@ -330,7 +330,9 @@ def upload_cv(person_id):
         identity.send_upload_cv_confirmation(app, mail, candidate['id'], candidate['email'], candidate['name'])
         return flask.render_template("check_email.html", candidate=candidate)
 
-    return flask.render_template("upload_cv.html", candidate=candidate)
+    return flask.render_template("upload_cv.html", candidate=candidate,
+        og_image = flask.url_for('static', filename='what-is-cv.png', _external=True)
+    )
 
 # Administrator get a confirm link
 @app.route('/upload_cv/<int:person_id>/<admin_key>')
