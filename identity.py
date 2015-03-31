@@ -85,8 +85,7 @@ def send_upload_cv_confirmation(app, mail, person_id, to_email, to_name):
 
 
 CONSTITUENT_MAIL_MESSAGE = textwrap.dedent("""\
-    This is a message from a voter in your constituency asking you to
-    share your CV. Follow this link to do so:
+    This is a message asking you to share your CV. Follow this link to do so:
     {link}
 
     -------------------------------------------------------------------
@@ -99,7 +98,7 @@ CONSTITUENT_MAIL_MESSAGE = textwrap.dedent("""\
 
     To share your CV please go to:
     {link}
-    A Word document or a PDF is perfect!
+    Or reply and attach it. A Word document or a PDF is perfect!
 """)
 
 def send_email_candidates(app, mail, candidates, from_email, subject, message):

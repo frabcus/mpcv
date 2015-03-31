@@ -169,7 +169,7 @@ def _cache_candidates_augmented(constituency_id):
 
 
 #####################################################################
-# Postcode entry
+# Main pages
 
 @app.route('/')
 def index():

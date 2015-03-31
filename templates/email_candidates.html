@@ -1,9 +1,11 @@
 {% extends "layout.html" %}
-{% block title %} Email candidates {% endblock %}
+{% block title %} Email {{ constituency.name }} candidates {% endblock %}
 {% block body %}
     <div id="email_candidates">
 
-        <h1>Ask candidates to share their CV</h1>
+        <h1>Email {{ constituency.name}} candidates</h1>
+
+        <p class="lead">Ask them to share their CV. <a href="/" class="not_me">I vote somewhere else</a>. </p>
 
         <form class="form-horizontal button-disabling-form" action="/email_candidates/{{ constituency.id }}" method="POST">
             <div class="form-group">
