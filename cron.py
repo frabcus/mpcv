@@ -28,7 +28,7 @@ def gen_thumbs():
             lookups.add_thumb(main.app.config, x["person_id"], filename + ".jpg", extension="jpg")
             os.remove(filename)
             os.remove(filename + ".jpg")
-        except:
+        except subprocess.CalledProcessError:
             print("Failed to make thumb for person ", str(x["person_id"]))
             print(traceback.format_exc())
             msg = flask_mail.Message(body=traceback.format_exc(),
