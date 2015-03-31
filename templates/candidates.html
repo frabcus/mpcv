@@ -4,7 +4,7 @@
 
 {% block wide %}
 
-    {% if show_subscribe %}
+    {% if show_subscribe and not email_got and postcode %}
         {{ subscribe.subscribe(show_dismiss=True, from_email=from_email, postcode=postcode) }}
     {% endif %}
 
@@ -59,13 +59,17 @@
                 {% endfor %}
             </div>
         {% else %}
-           {% if email_got %}
-               <h2>We'll email you when one arrives</h2>
-               <p>You already joined our updates list.</p>
-           {% else %}
+           <h2>We'll email you when one arrives</h2>
+           <p>You already joined our updates list.</p>
+        {% endif %}
+
+        {% if not email_got and postcode %}
+            {% if not candidates_have_cv %}
                <h2>We can email you when we get CVs</h2>
-                {{ subscribe.subscribe(show_dismiss=False, from_email=from_email, postcode=postcode) }}
-           {% endif %}
+            {% else %}
+               <h2>We can email you when we get more CVs</h2>
+            {% endif %}
+            {{ subscribe.subscribe(show_dismiss=False, from_email=from_email, postcode=postcode) }}
         {% endif %}
 
         {% if candidates_no_email %}

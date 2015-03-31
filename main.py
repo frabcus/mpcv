@@ -265,10 +265,10 @@ def candidates(constituency_id = None):
     force_show = False
     if 'show_subscribe' in flask.request.args:
         force_show = True
+    # when to show subscribe form prominently at top
+    show_subscribe = not dismiss and (from_email or force_show)
 
-    show_subscribe = not email_got and ((from_email and not dismiss) or force_show)
-
-    postcode = flask.session['postcode']
+    postcode = flask.session.get('postcode', None)
 
     return flask.render_template("candidates.html", constituency=constituency,
             candidates_no_cv=candidates_no_cv,
