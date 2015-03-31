@@ -164,7 +164,8 @@ class MainTestCase(unittest.TestCase):
 
         # Email two candidates
         r = self.app.get('/email_candidates/8888888')
-        self.assertIn('Ask candidates to share their CV', r.get_data(True))
+        self.assertIn('Email Democracy Club Test Constituency', r.get_data(True))
+        self.assertIn('Ask them to share their CV', r.get_data(True))
         self.assertIn('frabcus+notlits@fastmail.fm, frabcus+ojom@fastmail.fm', r.get_data(True))
         self.assertIn('action="/email_candidates/8888888"', r.get_data(True))
 
@@ -210,7 +211,7 @@ class MainTestCase(unittest.TestCase):
 
         # Option to tweet one candidates
         r = self.app.get('/tweet_candidates/8888888')
-        self.assertIn('Tweet each candidate in turn', r.get_data(True))
+        self.assertIn('Tweet to Democracy Club Test Constituency', r.get_data(True))
         self.assertIn('Tweet @frabcus+notlits', r.get_data(True))
         self.assertNotIn('Tweet @frabcus+sicnarf', r.get_data(True))
 
