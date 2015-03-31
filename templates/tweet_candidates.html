@@ -12,7 +12,7 @@
             {% if candidate.twitter %}
                <h2>{{ candidate.name }} <span class="party">{{ candidate.party }}</span></h2>
                 <p>
-                    <a x-person-id="{{ candidate.id }}" class="btn btn-info btn-lg tweet" href="https://twitter.com/intent/tweet?url=http://cv.democracyclub.org.uk/upload_cv/{{ candidate.id }}&hashtags=ge2015,mpcv&via=democlub&text={{ '.@' + candidate.twitter + ' I\'d love to see your CV before I vote, could you upload it here?'|urlencode}}&related={{ candidate.twitter }}">
+                    <a x-person-id="{{ candidate.id }}" class="btn btn-info btn-lg tweet" href="https://twitter.com/intent/tweet?url=http://cv.democracyclub.org.uk/upload_cv/{{ candidate.id }}&text={{ '.@' + candidate.twitter + ' I\'d love to see your CV before I vote, could you upload it here?'|urlencode}}&related={{ candidate.twitter }}">
                         Tweet @{{ candidate.twitter }}
                     </a>
                 </p>
