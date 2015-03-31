@@ -201,10 +201,6 @@ def all_cvs(page):
             numbers = range(start, end + 1)
     )
 
-# The lookup_postcode before request does the actual setting
-@app.route('/set_postcode')
-def set_postcode():
-    return flask.redirect("/candidates")
 
 #####################################################################
 # Clear data
@@ -227,18 +223,27 @@ def clear_all():
 # List candidates and view their CVs
 
 @app.route('/candidates')
-def candidates():
-    if 'postcode' not in flask.session or 'constituency' not in flask.session:
+@app.route('/email_candidates')
+@app.route('/tweet_candidates')
+def candidates_your_constituency():
+    if 'constituency' not in flask.session:
         return flask.redirect("/")
 
-    postcode = flask.session['postcode']
     constituency = flask.session['constituency']
+    return flask.redirect(flask.url_for("candidates", constituency_id = constituency['id']))
 
-    all_candidates = _cache_candidates_augmented(constituency['id'])
+@app.route('/candidates/<int:constituency_id>')
+def candidates(constituency_id = None):
+    all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
         flask.flash("Error looking up candidates in YourNextMP.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
+
+    constituency = {
+        'id': constituency_id,
+        'name': all_candidates[0]['constituency_name']
+    }
 
     show_twitter_button = False
     for candidate in candidates_no_cv:
@@ -262,6 +267,8 @@ def candidates():
         force_show = True
 
     show_subscribe = not email_got and ((from_email and not dismiss) or force_show)
+
+    postcode = flask.session['postcode']
 
     return flask.render_template("candidates.html", constituency=constituency,
             candidates_no_cv=candidates_no_cv,
@@ -297,7 +304,7 @@ def show_cv(person_id):
     # Go back to where we came from if that was our site
     # (e.g. to all page, home page or candidates page)
     # Default to candidates page.
-    more_link = flask.url_for("candidates")
+    more_link = flask.url_for("candidates", constituency_id=candidate['constituency_id'])
     refer = flask.request.referrer
     host_url = flask.request.host_url
     if refer and host_url:
@@ -405,18 +412,18 @@ def upload_cv_upload(person_id, signature):
 #####################################################################
 # Ask candidates to upload their CV
 
-@app.route('/email_candidates', methods=['GET','POST'])
-def email_candidates():
-    if 'postcode' not in flask.session:
-        flask.flash("Enter your postcode to email candidates.", 'success')
-        return flask.redirect("/")
-    constituency = flask.session['constituency']
-
-    all_candidates = _cache_candidates_augmented(constituency['id'])
+@app.route('/email_candidates/<int:constituency_id>', methods=['GET','POST'])
+def email_candidates(constituency_id):
+    all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
         flask.flash("Error looking up candidates in YourNextMP.", 'danger')
         return error()
     (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
+
+    constituency = {
+        'id': constituency_id,
+        'name': all_candidates[0]['constituency_name']
+    }
 
     emails_list = ", ".join([c['email'] for c in candidates_no_cv])
     names_list = ", ".join([c['name'] for c in candidates_no_cv])
@@ -431,7 +438,6 @@ Yours sincerely,
     if 'email' in flask.session:
         from_email = flask.session['email']
 
-    postcode = flask.session['postcode']
     message = original_message
     subject = ""
     if flask.request.method == 'POST':
@@ -453,7 +459,7 @@ Yours sincerely,
             flask.session['dismiss'] = False
             # send the mail
             identity.send_email_candidates(app, mail,
-                candidates_no_cv, from_email, postcode,
+                candidates_no_cv, from_email,
                 subject, message
             )
             # track it via Google analytics in next page load
@@ -466,24 +472,23 @@ Yours sincerely,
         constituency=constituency,
         emails_list=emails_list,
         names_list=names_list,
-        postcode=postcode,
         from_email=from_email,
         subject=subject,
         message=message
     )
 
-@app.route('/tweet_candidates')
-def tweet_candidates():
-    if 'postcode' not in flask.session:
-        flask.flash("Enter your postcode to tweet candidates.", 'success')
-        return flask.redirect("/")
-    constituency = flask.session['constituency']
-
-    all_candidates = _cache_candidates_augmented(constituency['id'])
+@app.route('/tweet_candidates/<int:constituency_id>')
+def tweet_candidates(constituency_id):
+    all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
         flask.flash("Error looking up candidates in YourNextMP.", 'danger')
         return error()
     (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
+
+    constituency = {
+        'id': constituency_id,
+        'name': all_candidates[0]['constituency_name']
+    }
 
     return flask.render_template("tweet_candidates.html",
         constituency=constituency,

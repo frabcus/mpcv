@@ -95,15 +95,14 @@ CONSTITUENT_MAIL_MESSAGE = textwrap.dedent("""\
 
     -------------------------------------------------------------------
 
-    NOTE: You can write to this voter at {from_email}. Their postcode
-    is {postcode}.
+    NOTE: You can write to this voter at {from_email}.
 
     To share your CV please go to:
     {link}
     A Word document or a PDF is perfect!
 """)
 
-def send_email_candidates(app, mail, candidates, from_email, postcode, subject, message):
+def send_email_candidates(app, mail, candidates, from_email, subject, message):
     for candidate in candidates:
 
         person_id = candidate['id']
@@ -118,7 +117,7 @@ def send_email_candidates(app, mail, candidates, from_email, postcode, subject, 
         full_message = "Dear " + to_name + ", \n\n" + message.strip()
 
         body = CONSTITUENT_MAIL_MESSAGE.format(name=to_name, link=link,
-            from_email=from_email, postcode=postcode, message=full_message
+            from_email=from_email, message=full_message
         )
         msg = flask_mail.Message(body=body,
                 subject=subject.strip(),

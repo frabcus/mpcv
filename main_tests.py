@@ -28,11 +28,11 @@ class MainTestCase(unittest.TestCase):
         r = self.app.get('/')
         self.assertEqual(r.status_code, 200)
         self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
-        self.assertIn('<form action="/set_postcode" method="GET"', r.get_data(True))
+        self.assertIn('<form action="/candidates" method="GET"', r.get_data(True))
         self.assertIn('Debug email enabled', r.get_data(True))
 
     def test_postcode(self):
-        r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
+        r = self.app.get('/candidates?postcode=ZZ99ZZ', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
         self.assertIn('Democracy Club Test Constituency', r.get_data(True))
         self.assertIn('Sicnarf Gnivri', r.get_data(True))
@@ -40,19 +40,19 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Notlits Esuom', r.get_data(True))
         self.assertIn('href="/upload_cv/7777778"', r.get_data(True))
 
-        # make sure constituency remembered, and front page redirects back to constituency page
+        # make sure constituency remembered
         r = self.app.get('/', follow_redirects=True)
         self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
         self.assertIn('My constituency', r.get_data(True))
 
         # "I live somewhere else" clears the memory of constituency
-        self.assertIn('<a href="/candidates">My constituency</a>', r.get_data(True))
+        self.assertIn('<a href="/candidates/8888888">My constituency</a>', r.get_data(True))
         r = self.app.get('/candidates', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
         self.assertIn('Democracy Club Test Constituency', r.get_data(True))
 
     def test_clear_all(self):
-        r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
+        r = self.app.get('/candidates?postcode=ZZ99ZZ', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
         self.assertIn('Democracy Club Test Constituency', r.get_data(True))
 
@@ -69,13 +69,13 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
 
     def test_bad_postcode(self):
-        r = self.app.get('/set_postcode?postcode=moo', follow_redirects=True)
+        r = self.app.get('/candidates?postcode=moo', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
         self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
         self.assertIn("Postcode &#39;MOO&#39; is not valid.", r.get_data(True))
 
     def test_no_postcode(self):
-        r = self.app.get('/set_postcode?postcode=', follow_redirects=True)
+        r = self.app.get('/candidates?postcode=', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
         self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
         self.assertIn("Postcode is not valid.", r.get_data(True))
@@ -159,17 +159,17 @@ class MainTestCase(unittest.TestCase):
 
     def test_email_candidates(self):
         # Set postcode
-        r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
+        r = self.app.get('/candidates?postcode=ZZ99ZZ', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
 
         # Email two candidates
-        r = self.app.get('/email_candidates')
+        r = self.app.get('/email_candidates/8888888')
         self.assertIn('Ask candidates to share their CV', r.get_data(True))
         self.assertIn('frabcus+notlits@fastmail.fm, frabcus+ojom@fastmail.fm', r.get_data(True))
-        self.assertIn('action="/email_candidates"', r.get_data(True))
+        self.assertIn('action="/email_candidates/8888888"', r.get_data(True))
 
         with main.mail.record_messages() as outbox:
-            self.app.post('/email_candidates', data={
+            self.app.post('/email_candidates/8888888', data={
                 'from_email': 'frabcus+voter@fastmail.fm',
                 'message': 'Please please please send in your CV! Link below ;)',
                 'subject': 'You need to submit a CV to apply for your new job!'
@@ -205,17 +205,17 @@ class MainTestCase(unittest.TestCase):
 
     def test_tweet_candidates(self):
         # Set postcode
-        r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
+        r = self.app.get('/candidates?postcode=ZZ99ZZ', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
 
         # Option to tweet one candidates
-        r = self.app.get('/tweet_candidates')
+        r = self.app.get('/tweet_candidates/8888888')
         self.assertIn('Tweet each candidate in turn', r.get_data(True))
         self.assertIn('Tweet @frabcus+notlits', r.get_data(True))
         self.assertNotIn('Tweet @frabcus+sicnarf', r.get_data(True))
 
     def test_updates_join(self):
-        r = self.app.get('/set_postcode?postcode=ZZ99ZZ', follow_redirects=True)
+        r = self.app.get('/candidates?postcode=ZZ99ZZ', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
 
         r = self.app.post('/updates_join', data={
