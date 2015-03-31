@@ -20,8 +20,8 @@
 
         <meta property="og:title" content="{{ self.title() }} - Democracy Club CVs" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ request.base_url }}" />
-        <meta property="og:image" content="{% if og_image %}{{ og_image }}{% else %}{{ g.most_recent_thumbnail }}{% endif %}" />
+        <meta property="og:url" content="{{ request.base_url }}#og" />
+        <meta property="og:image" content="{% if og_image %}{{ og_image }}{% else %}{{ g.most_recent_thumbnail }}{% endif %}#og" />
         <meta property="og:description" content="{% if og_description %}{{og_description}}{% else %}Before you vote, look at their CVs! This site helps MP candidates share their CV with voters.{% endif %}" />
 
         <meta name="google-site-verification" content="BqbdERfW54g1lnSaq8EHLcBOgwbxxwHTiTUO-7tyFko" />
