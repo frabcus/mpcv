@@ -268,6 +268,15 @@ def candidates(constituency_id = None):
     # when to show subscribe form prominently at top
     show_subscribe = not dismiss and (from_email or force_show)
 
+    current_thumb = lookups.get_current_thumb(app.config, candidate['id'])
+    og_image = None
+    if len(candidates_have_cv) > 0:
+        if candidates_have_cv[0]['cv']['has_thumb']:
+            og_image = candidates_have_cv[0]['cv']['thumb']['url']
+    og_description = "Before you vote, look at CVs like these in {}! This site helps MP candidates share their CV with voters.".format(
+        constituency['name']
+    )
+
     postcode = flask.session.get('postcode', None)
 
     return flask.render_template("candidates.html", constituency=constituency,
@@ -278,7 +287,9 @@ def candidates(constituency_id = None):
             postcode=postcode,
             show_subscribe=show_subscribe,
             show_twitter_button=show_twitter_button,
-            email_got=email_got
+            email_got=email_got,
+            og_image=og_image,
+            og_description=og_description
     )
 
 
