@@ -330,6 +330,8 @@ def _hash_by_prefix(config, prefix):
 def split_candidates_by_type(config, all_candidates):
     candidates_no_email = [ candidate for candidate in all_candidates if candidate['email'] is None]
     candidates_have_cv = [ candidate for candidate in all_candidates if candidate['email'] is not None and candidate['has_cv']]
+    # sort chronologically by time CV was first uploaded
+    candidates_have_cv.sort(key=lambda x: x['cv']['created'])
     candidates_no_cv = [ candidate for candidate in all_candidates if candidate['email'] is not None and not candidate['has_cv']]
 
     return candidates_no_cv, candidates_no_email, candidates_have_cv
@@ -337,6 +339,10 @@ def split_candidates_by_type(config, all_candidates):
 def split_candidates_by_updates(config, all_candidates, since):
     candidates_cv_created = [ candidate for candidate in all_candidates if candidate['has_cv'] and candidate['cv']['created'] >= since ]
     candidates_cv_updated = [ candidate for candidate in all_candidates if candidate['has_cv'] and candidate['cv']['last_modified'] >= since and candidate['cv']['last_modified'] < since]
+
+    # sort chronologically by time CV was first uploaded
+    candidates_cv_created.sort(key=lambda x: x['cv']['created'])
+    candidates_cv_updated.sort(key=lambda x: x['cv']['created'])
 
     return candidates_cv_created, candidates_cv_updated
 
