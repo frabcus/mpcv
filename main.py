@@ -142,7 +142,7 @@ def error():
 @app.route('/about')
 def about():
     return flask.render_template('about.html',
-        og_image = flask.url_for('static', filename='this-is-cv.png', _external=True)
+        og_image = flask.url_for('static', filename='what-is-cv.png', _external=True)
     )
 
 @app.route('/exception')
@@ -268,11 +268,13 @@ def candidates(constituency_id = None):
     # when to show subscribe form prominently at top
     show_subscribe = not dismiss and (from_email or force_show)
 
-    current_thumb = lookups.get_current_thumb(app.config, candidate['id'])
+    # thumbnail defaults to first person in constituency to have submitted CV!
     og_image = None
     if len(candidates_have_cv) > 0:
         if candidates_have_cv[0]['cv']['has_thumb']:
             og_image = candidates_have_cv[0]['cv']['thumb']['url']
+    else:
+        og_image = flask.url_for('static', filename='what-is-cv.png', _external=True)
     og_description = "Before you vote, look at CVs like these in {}! This site helps MP candidates share their CV with voters.".format(
         constituency['name']
     )
