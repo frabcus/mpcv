@@ -1,11 +1,13 @@
 {% extends "layout.html" %}
-{% block title %} Email candidates {% endblock %}
+{% block title %} Email {{ constituency.name }} candidates {% endblock %}
 {% block body %}
     <div id="email_candidates">
 
-        <h1>Ask candidates to share their CV</h1>
+        <h1>Email {{ constituency.name}} candidates</h1>
 
-        <form class="form-horizontal button-disabling-form" action="/email_candidates" method="POST">
+        <p class="lead">Ask them to share their CV. <a href="/" class="not_me">I vote somewhere else</a>. </p>
+
+        <form class="form-horizontal button-disabling-form" action="/email_candidates/{{ constituency.id }}" method="POST">
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="to">To</label>
                 <div class="col-sm-9">
@@ -17,13 +19,6 @@
               <label for="from_email" class="col-sm-3 control-label">From email</label>
               <div class="col-sm-6">
                   <input id="from_email" name="from_email" type="email" value="{{from_email}}" class="form-control" {% if not from_email %}autofocus{% endif %}>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="postcode" class="col-sm-3 control-label">Postcode</label>
-              <div class="col-sm-9">
-                  <p class="form-control-static">{{ postcode }}</p>
               </div>
             </div>
 

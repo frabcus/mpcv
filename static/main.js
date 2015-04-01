@@ -51,16 +51,18 @@ $(function () {
 
   // Twitter analytics
   // Event hooks on custom Twitter buttons see: see http://stackoverflow.com/a/16288629/284340
-  twttr.ready(function() {
-    twttr.events.bind(
-      'tweet',
-      function (ev) {
-        var person_id = $(ev.target).attr("x-person-id");
-        ga('send', 'event', 'ask', 'tweet', person_id);
-        console.log("sent GA event: ask tweet ", person_id);
-      }
-    );
-  });
+  if (typeof twttr !== 'undefined') {
+    twttr.ready(function() {
+      twttr.events.bind(
+        'tweet',
+        function (ev) {
+          var person_id = $(ev.target).attr("x-person-id");
+          ga('send', 'event', 'ask', 'tweet', person_id);
+          console.log("sent GA event: ask tweet ", person_id);
+        }
+      );
+    });
+  }
 
 });
 

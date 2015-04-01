@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
-{% block title %} Tweet candidates {% endblock %}
+{% block title %} Tweet {{ constituency.name }} candidates {% endblock %}
 {% block wide %}
 
     <div id="tweet_candidates">
 
-        <h1>Tweet each candidate in turn</h1>
+        <h1>Tweet to {{ constituency.name }} candidates</h1>
 
-        <p class="lead">You can customise your messages, if you like.</p>
+        <p class="lead">One at a time. You can customise each message, if you like.</p>
 
         {% for candidate in candidates_no_cv %}
             {% if candidate.twitter %}
@@ -20,7 +20,7 @@
         {% endfor %}
 
         <p>
-            <a href="/candidates?show_subscribe=1" class="done-button btn btn-lg btn-success">Done all</a>
+        <a href="/candidates/{{ constituency.id }}?show_subscribe=1" class="done-button btn btn-lg btn-success">Done all</a>
         </p>
 
    </div>
