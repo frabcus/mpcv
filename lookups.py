@@ -113,7 +113,7 @@ def _hashes_of_candidates():
 
 # Takes a constituency identifier and returns a dictionary:
 #   error - if there was an error
-# Or fields as in _hashes_of_candidates.
+# Or an array of dictionaries with fields as in _hashes_of_candidates.
 def lookup_candidates(constituency_id):
     if constituency_id == 8888888:
         return [
