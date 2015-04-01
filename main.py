@@ -41,10 +41,6 @@ def sitemap_generator():
     yield 'about', {}
 
     all_cvs = _cache_all_cvs()
-    max_page = math.ceil(len(all_cvs) / constants.page_size)
-    for page in range(1, max_page + 1):
-        yield 'all_cvs', { 'page': page }
-
     for cv in all_cvs:
         yield 'show_cv', { 'person_id': cv['person_id'] }
 
@@ -177,28 +173,24 @@ def index():
     return flask.render_template('index.html', recent_cvs=recent_cvs)
 
 @app.route('/all_cvs/page/<int:page>')
-def all_cvs(page):
+def old_all_cvs(page):
+    return flask.redirect(flask.url_for("all_cvs", order="recent", size="large"))
+
+@app.route('/all_cvs/<view>/<size>')
+def all_cvs(view, size):
+    if size not in ['small', 'large']:
+        return flask.redirect(flask.url_for("all_cvs", view=view, size="large"))
+    if view not in ['recent']:
+        return flask.redirect(flask.url_for("all_cvs", view="recent", size=size))
+
     all_cvs = _cache_all_cvs()
-    page_cvs = all_cvs[(page-1)*constants.page_size : (page-1)*constants.page_size+constants.page_size]
 
-    max_page = math.ceil(len(all_cvs) / constants.page_size)
-
-    start = page - 5
-    end = page + 5
-    if start < 1:
-        end += (1 - start)
-        start += (1 - start)
-    if end > max_page:
-        start -= (end - max_page)
-        end -= (end - max_page)
-    if start < 1:
-        start = 1
+    # all_cvs = sorted(all_cvs, key=)
 
     return flask.render_template('all_cvs.html',
-            page = page,
-            page_cvs = page_cvs,
-            max_page = max_page,
-            numbers = range(start, end + 1)
+            cvs = all_cvs,
+            size = size,
+            view = view
     )
 
 
