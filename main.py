@@ -174,7 +174,7 @@ def index():
 
 @app.route('/all_cvs/page/<int:page>')
 def old_all_cvs(page):
-    return flask.redirect(flask.url_for("all_cvs", order="recent", size="large"))
+    return flask.redirect(flask.url_for("all_cvs", view="recent", size="large"))
 
 @app.route('/all_cvs/<view>/<size>')
 def all_cvs(view, size):
