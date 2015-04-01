@@ -40,6 +40,10 @@ def sitemap_generator():
     yield 'index', {}
     yield 'about', {}
 
+    for size in ['small', 'large']:
+        for view in ['recent']:
+            yield 'all_cvs', { 'size': size, 'view': view }
+
     all_cvs = _cache_all_cvs()
     for cv in all_cvs:
         yield 'show_cv', { 'person_id': cv['person_id'] }
