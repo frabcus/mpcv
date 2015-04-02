@@ -40,7 +40,7 @@ def sitemap_generator():
     yield 'index', {}
     yield 'about', {}
 
-    for size in ['small', 'large']:
+    for size in ['small', 'medium', 'large']:
         for view in ['recent']:
             yield 'all_cvs', { 'size': size, 'view': view }
 
@@ -185,7 +185,7 @@ def old_all_cvs(page):
 
 @app.route('/all_cvs/<view>/<size>')
 def all_cvs(view, size):
-    if size not in ['small', 'large']:
+    if size not in ['small', 'medium', 'large']:
         return flask.redirect(flask.url_for("all_cvs", view=view, size="large"))
     if view not in ['recent', 'alphabet']:
         return flask.redirect(flask.url_for("all_cvs", view="recent", size=size))

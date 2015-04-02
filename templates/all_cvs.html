@@ -7,28 +7,31 @@
 
         <div class="pull-right btn-toolbar" role="toolbar">
             <div class="btn-group" role="group">
-                <a href="{{ url_for("all_cvs", view="recent", size=size) }}"
-                class="{% if view == 'recent' %}active disabled {% endif %}btn btn-default" title="Recent CVs">
-                  <span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span>
-                </a>
-                <a href="{{ url_for("all_cvs", view="alphabet", size=size) }}"
-                class="{% if view == 'alphabet' %}active disabled {% endif %}btn btn-default" title="Alphabetical by constituency">
-                  <span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true"></span>
-                </a>
-
-            </div>
-
-            <div class="btn-group" role="group">
-                <a href="{{ url_for("all_cvs", view=view, size="large") }}"
-                class="{% if size == 'large' %}active disabled {% endif %}btn btn-default" title="Large thumbnails">
-                  <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
-                </a>
-
                 <a href="{{ url_for("all_cvs", view=view, size="small") }}"
-                class="{% if size == 'small' %}active disabled {% endif %}btn btn-default" title="Small thumbnails">
+                class="{% if size == 'small' %}active {% endif %}btn btn-default" title="Small thumbnails">
                   <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                 </a>
 
+                <a href="{{ url_for("all_cvs", view=view, size="medium") }}"
+                class="{% if size == 'medium' %}active {% endif %}btn btn-default" title="Medium thumbnails">
+                  <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+                </a>
+
+                <a href="{{ url_for("all_cvs", view=view, size="large") }}"
+                class="{% if size == 'large' %}active {% endif %}btn btn-default" title="Large thumbnails">
+                  <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div class="btn-group" role="group">
+                <a href="{{ url_for("all_cvs", view="recent", size=size) }}"
+                class="{% if view == 'recent' %}active {% endif %}btn btn-default" title="Recent CVs">
+                  <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                </a>
+                <a href="{{ url_for("all_cvs", view="alphabet", size=size) }}"
+                class="{% if view == 'alphabet' %}active {% endif %}btn btn-default" title="Alphabetical by constituency">
+                  <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
+                </a>
             </div>
         </div>
 
@@ -39,6 +42,8 @@
             <div class="row">
                 {% for cv in cvs %}
                     {% if size == 'large' %}
+                    <div class="col-md-6 col-sm-12">
+                    {% elif size == 'medium' %}
                     <div class="col-md-3 col-sm-4 col-xs-6">
                     {% elif size == 'small' %}
                     <div class="col-lg-1 col-sm-2 col-xs-3">
@@ -54,22 +59,22 @@
             <h1>Constituencies</h1>
 
             {% for candidates in constituencies %}
-                    <h2><a href="/candidates/{{candidates[0].constituency_id}}">{{ candidates[0].constituency_name }}</a></h2>
-                    <div class="row">
-                    {% for candidate in candidates %}
-                        <div class="col-xs-12 col-md-6 col-lg-5">
-                            <span class="whole_name">
-                                {% if candidate.has_cv %}<a href="/show_cv/{{candidate.id}}">{% endif %}
-                                <span class="name">{{ candidate.name}}</span> 
-                                {% if candidate.has_cv %}</a>{% endif %}
-                                <span class="party">{{ candidate.party}}</span>
-                            </span>
-                        </div>
-                    {% endfor %}
+                <h2><a href="/candidates/{{candidates[0].constituency_id}}">{{ candidates[0].constituency_name }}</a></h2>
+                <div class="row">
+                {% for candidate in candidates %}
+                    <div class="col-xs-12 col-md-6 col-lg-5">
+                        <span class="whole_name">
+                            {% if candidate.has_cv %}<a href="/show_cv/{{candidate.id}}">{% endif %}
+                            <span class="name">{{ candidate.name}}</span> 
+                            {% if candidate.has_cv %}</a>{% endif %}
+                            <span class="party">{{ candidate.party}}</span>
+                        </span>
                     </div>
+                {% endfor %}
+                </div>
             {% endfor %}
-        {% endif%}
 
+        {% endif%}
 
     </div>
 
