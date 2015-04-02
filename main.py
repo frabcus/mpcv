@@ -157,6 +157,9 @@ def exception():
 def _cache_all_cvs():
     return lookups.all_cvs_with_thumbnails(app.config)
 
+@cache.memoize(60 * 10)
+def _cache_all_constituencies():
+    return lookups.all_constituencies(app.config)
 
 @cache.memoize(60 * 10)
 def _cache_candidates_augmented(constituency_id):
@@ -184,18 +187,24 @@ def old_all_cvs(page):
 def all_cvs(view, size):
     if size not in ['small', 'large']:
         return flask.redirect(flask.url_for("all_cvs", view=view, size="large"))
-    if view not in ['recent']:
+    if view not in ['recent', 'alphabet']:
         return flask.redirect(flask.url_for("all_cvs", view="recent", size=size))
 
-    all_cvs = _cache_all_cvs()
+    if view == 'recent':
+        all_cvs = _cache_all_cvs()
+        return flask.render_template('all_cvs.html',
+                cvs = all_cvs,
+                size = size,
+                view = view
+        )
+    elif view == 'alphabet':
+        all_constituencies = _cache_all_constituencies()
+        return flask.render_template('all_cvs.html',
+                constituencies = all_constituencies,
+                size = size,
+                view = view
+        )
 
-    # all_cvs = sorted(all_cvs, key=)
-
-    return flask.render_template('all_cvs.html',
-            cvs = all_cvs,
-            size = size,
-            view = view
-    )
 
 
 #####################################################################

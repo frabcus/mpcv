@@ -171,6 +171,22 @@ def lookup_candidate(person_id):
     return candidate
 
 
+# Returns an array of every constituency alphabetically by name.
+# Each constituency is an array of candidates, with fields
+# from _hashes_of_candidates and from augment_if_has_cv.
+def all_constituencies(config):
+
+    _, by_constituency_id = _hashes_of_candidates()
+
+    result = []
+    for constituency_id, candidates in by_constituency_id.items():
+        candidates = augment_if_has_cv(config, candidates)
+        result.append(candidates)
+
+    result = sorted(result, key=lambda x: x[0]['constituency_name'])
+
+    return result
+
 ###################################################################
 # Storing CVs
 
