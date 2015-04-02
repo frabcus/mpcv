@@ -1,43 +1,48 @@
 {% extends "layout.html" %}
-{% block title %} All CVs {% endblock %}
+{% block title %} 
+    {% if cvs %}
+        Recent
+    {% elif constituencies %}
+        Constituencies
+    {% endif %}
+{% endblock %}
 
 {% block wide %}
     
     <div id="all_cvs">
 
+        <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="{% if view == 'recent' %}active {% endif %}">
+                <a href="{{ url_for("all_cvs", view="recent", size=size) }}">Recent</a>
+            </li>
+            <li role="presentation" class="{% if view == 'alphabet' %}active {% endif %}">
+                <a href="{{ url_for("all_cvs", view="alphabet", size=size) }}">Constituency</a>
+            </li>
+        </ul>
+
+        {% if cvs %}
         <div class="pull-right btn-toolbar" role="toolbar">
             <div class="btn-group" role="group">
                 <a href="{{ url_for("all_cvs", view=view, size="small") }}"
-                class="{% if size == 'small' %}active {% endif %}btn btn-default" title="Small thumbnails">
+                class="{% if size == 'small' %}active {% endif %}btn btn-success" title="Small thumbnails">
                   <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                 </a>
 
                 <a href="{{ url_for("all_cvs", view=view, size="medium") }}"
-                class="{% if size == 'medium' %}active {% endif %}btn btn-default" title="Medium thumbnails">
+                class="{% if size == 'medium' %}active {% endif %}btn btn-success" title="Medium thumbnails">
                   <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
                 </a>
 
                 <a href="{{ url_for("all_cvs", view=view, size="large") }}"
-                class="{% if size == 'large' %}active {% endif %}btn btn-default" title="Large thumbnails">
+                class="{% if size == 'large' %}active {% endif %}btn btn-success" title="Large thumbnails">
                   <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
                 </a>
             </div>
-
-            <div class="btn-group" role="group">
-                <a href="{{ url_for("all_cvs", view="recent", size=size) }}"
-                class="{% if view == 'recent' %}active {% endif %}btn btn-default" title="Recent CVs">
-                  <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                </a>
-                <a href="{{ url_for("all_cvs", view="alphabet", size=size) }}"
-                class="{% if view == 'alphabet' %}active {% endif %}btn btn-default" title="Alphabetical by constituency">
-                  <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
-                </a>
-            </div>
         </div>
-
+        {% endif%}
 
         {% if cvs %}
-            <h1>Recent CVs</h1>
+            <h1>Recent</h1>
 
             <div class="row">
                 {% for cv in cvs %}

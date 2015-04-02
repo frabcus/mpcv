@@ -56,6 +56,20 @@ footer ul.pull-right li:last-child {
     margin-right: 4px;
 }
 
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+    color: #ffffff;
+    background-color: #18BC9C;
+}
+
+#all_cvs .btn-toolbar {
+    margin-right: 32px;
+    margin-bottom: 48px;
+    margin-top: -1px;
+}
+
+
 /* / */
 
 #front .lead {
@@ -178,7 +192,7 @@ footer ul.pull-right li:last-child {
 }
 
 
-/* /show_cv and / and /all_cvs*/
+/* /show_cv and / and /all_cvs */
 
 body, html {
   height:100%;
