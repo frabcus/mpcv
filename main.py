@@ -41,12 +41,16 @@ def sitemap_generator():
     yield 'about', {}
 
     for size in ['small', 'medium', 'large']:
-        for view in ['recent']:
+        for view in ['recent', 'alphabet']:
             yield 'all_cvs', { 'size': size, 'view': view }
 
     all_cvs = _cache_all_cvs()
     for cv in all_cvs:
         yield 'show_cv', { 'person_id': cv['person_id'] }
+
+    all_constituencies = _cache_all_constituencies()
+    for candidates in all_constituencies:
+        yield 'candidates', { 'constituency_id': candidates[0]['constituency_id'] }
 
 @app.route('/sitemap.xml')
 def sitemap_xml():
