@@ -81,8 +81,9 @@ def _hashes_of_candidates():
     by_constituency_id = collections.defaultdict(list)
 
     url = "https://yournextmp.com/media/candidates.csv"
-    content = requests.get(url).text
-    rows = csv.DictReader(io.StringIO(content))
+    r = requests.get(url)
+    r.encoding = 'utf-8'
+    rows = csv.DictReader(io.StringIO(r.text))
     for row in rows:
         candidate_id = int(row['id'])
         constituency_id = int(row['mapit_id'])
