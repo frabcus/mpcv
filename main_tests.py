@@ -138,10 +138,10 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Sicnarf Gnivri', r.get_data(True))
         self.assertIn("<iframe", r.get_data(True))
 
-    def test_all_cvs(self):
-        r = self.app.get('/all_cvs/recent/large')
+    def test_browse(self):
+        r = self.app.get('/browse/recent/large')
         self.assertEqual(r.status_code, 200)
-        self.assertIn('All CVs', r.get_data(True))
+        self.assertIn('Browse', r.get_data(True))
 
     def test_sitemap_xml(self):
         r = self.app.get('/sitemap.xml')

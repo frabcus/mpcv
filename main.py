@@ -42,7 +42,7 @@ def sitemap_generator():
 
     for size in ['small', 'medium', 'large']:
         for view in ['recent', 'alphabet']:
-            yield 'all_cvs', { 'size': size, 'view': view }
+            yield 'browse', { 'size': size, 'view': view }
 
     all_cvs = _cache_all_cvs()
     for cv in all_cvs:
@@ -185,25 +185,28 @@ def index():
 
 @app.route('/all_cvs/page/<int:page>')
 def old_all_cvs(page):
-    return flask.redirect(flask.url_for("all_cvs", view="recent", size="large"))
-
+    return flask.redirect(flask.url_for("browse", view="recent", size="large"))
 @app.route('/all_cvs/<view>/<size>')
-def all_cvs(view, size):
+def old_all_cvs_2(view, size):
+    return flask.redirect(flask.url_for("browse", view=view, size=size))
+
+@app.route('/browse/<view>/<size>')
+def browse(view, size):
     if size not in ['small', 'medium', 'large']:
-        return flask.redirect(flask.url_for("all_cvs", view=view, size="large"))
+        return flask.redirect(flask.url_for("browse", view=view, size="large"))
     if view not in ['recent', 'alphabet']:
-        return flask.redirect(flask.url_for("all_cvs", view="recent", size=size))
+        return flask.redirect(flask.url_for("browse", view="recent", size=size))
 
     if view == 'recent':
         all_cvs = _cache_all_cvs()
-        return flask.render_template('all_cvs.html',
+        return flask.render_template('browse.html',
                 cvs = all_cvs,
                 size = size,
                 view = view
         )
     elif view == 'alphabet':
         all_constituencies = _cache_all_constituencies()
-        return flask.render_template('all_cvs.html',
+        return flask.render_template('browse.html',
                 constituencies = all_constituencies,
                 size = size,
                 view = view

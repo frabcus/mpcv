@@ -63,10 +63,13 @@ footer ul.pull-right li:last-child {
     background-color: #18BC9C;
 }
 
-#all_cvs .btn-toolbar {
-    margin-right: 32px;
-    margin-bottom: 48px;
-    margin-top: -1px;
+#browse .btn-toolbar {
+    margin-bottom: 24px;
+    margin-top: -24px;
+}
+
+#browse .btn-toolbar + * {
+    clear: both;
 }
 
 
@@ -192,7 +195,7 @@ footer ul.pull-right li:last-child {
 }
 
 
-/* /show_cv and / and /all_cvs */
+/* /show_cv and / and /browse */
 
 body, html {
   height:100%;
@@ -208,11 +211,33 @@ body, html {
 }
 
 .thumb .thumbimg {
-  border: 8px solid #bbb;
+  border: 6px solid #bbb;
+}
+.thumb .thumbimg:hover {
+  border: 6px solid #18BC9C;
 }
 
-.thumb .thumbimg:hover {
-  border: 8px solid #18BC9C;
+.browse-small .thumb .thumbimg {
+  border: 4px solid #bbb;
+}
+.browse-small .thumb .thumbimg:hover {
+  border: 4px solid #18BC9C;
+}
+
+@media (min-width: 768px) {
+  .thumb .thumbimg {
+    border: 8px solid #bbb;
+  }
+  .thumb .thumbimg:hover {
+    border: 8px solid #18BC9C;
+  }
+
+  .browse-small .thumb .thumbimg {
+    border: 5px solid #bbb;
+  }
+  .browse-small .thumb .thumbimg:hover {
+    border: 5px solid #18BC9C;
+  }
 }
 
 .thumb {
@@ -239,22 +264,22 @@ img.ratio   {display:block;width:100%;height:auto;padding-bottom:5%;}
     margin-bottom: 32px;
 }
 
-#all_cvs_link {
+#browse_link {
     margin-top: 10px;
 }
 
-#all_cvs_link a, #ynmp_link a {
+#browse_link a, #ynmp_link a {
     font-size: 20px;
 }
 #ynmp_link {
     margin-top: 32px;
 }
 
-#all_cvs h1 {
+#browse h1 {
     margin-bottom: 48px;
 }
 
-#all_cvs nav {
+#browse nav {
     margin-top: 16px;
 }
 
