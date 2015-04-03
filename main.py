@@ -446,7 +446,7 @@ def email_candidates(constituency_id):
     if 'error' in all_candidates:
         flask.flash("Error looking up candidates in YourNextMP.", 'danger')
         return error()
-    (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
+    (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
     constituency = {
         'id': constituency_id,
@@ -511,7 +511,7 @@ def tweet_candidates(constituency_id):
     if 'error' in all_candidates:
         flask.flash("Error looking up candidates in YourNextMP.", 'danger')
         return error()
-    (candidates_no_cv, _, _) = lookups.split_candidates_by_type(app.config, all_candidates)
+    (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
     constituency = {
         'id': constituency_id,
@@ -520,7 +520,8 @@ def tweet_candidates(constituency_id):
 
     return flask.render_template("tweet_candidates.html",
         constituency=constituency,
-        candidates_no_cv=candidates_no_cv
+        candidates_no_cv=candidates_no_cv,
+        have_cvs_count=len(candidates_have_cv)
     )
 
 

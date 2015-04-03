@@ -12,7 +12,13 @@
             {% if candidate.twitter %}
                <h2>{{ candidate.name }} <span class="party">{{ candidate.party }}</span></h2>
                 <p>
-                    <a x-person-id="{{ candidate.id }}" class="btn btn-info btn-lg tweet" href="https://twitter.com/intent/tweet?url=http://cv.democracyclub.org.uk/upload_cv/{{ candidate.id }}&text={{ '.@' + candidate.twitter + ' I\'d love to see your CV before I vote, could you upload it here?'|urlencode}}&related={{ candidate.twitter }}">
+                    {% if have_cvs_count > 1 %}
+                    <a x-person-id="{{ candidate.id }}" class="btn btn-info btn-lg tweet" href="https://twitter.com/intent/tweet?url=http://cv.democracyclub.org.uk/upload_cv/{{ candidate.id }}&text={{ '.@' ~ candidate.twitter ~ ' ' ~ have_cvs_count ~ ' other candidates in ' ~ constituency.name ~ ' have submitted their CVs, could you too?'|urlencode}}&related={{ candidate.twitter }}">
+                    {% elif have_cvs_count > 0 %}
+                    <a x-person-id="{{ candidate.id }}" class="btn btn-info btn-lg tweet" href="https://twitter.com/intent/tweet?url=http://cv.democracyclub.org.uk/upload_cv/{{ candidate.id }}&text={{ '.@' ~ candidate.twitter ~ ' another candidate in ' ~ constituency.name ~ ' has submitted their CV, could you too?'|urlencode}}&related={{ candidate.twitter }}">
+                    {% else %}
+                    <a x-person-id="{{ candidate.id }}" class="btn btn-info btn-lg tweet" href="https://twitter.com/intent/tweet?url=http://cv.democracyclub.org.uk/upload_cv/{{ candidate.id }}&text={{ '.@' ~ candidate.twitter ~ ' I\'d love to see your CV before I vote, could you upload it here?'|urlencode}}&related={{ candidate.twitter }}">
+                    {% endif %}
                         Tweet @{{ candidate.twitter }}
                     </a>
                 </p>
