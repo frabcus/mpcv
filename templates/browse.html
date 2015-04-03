@@ -14,8 +14,8 @@
 
             <div class="col-sm-6 col-xs-12">
                 <ul class="nav nav-pills">
-                    <li role="presentation" class="{% if view == 'alphabet' %}active {% endif %}">
-                        <a href="{{ url_for("browse", view="alphabet", size=size) }}">Constituency</a>
+                    <li role="presentation" class="{% if view == 'constituency' %}active {% endif %}">
+                        <a href="{{ url_for("browse", view="constituency", size=size) }}">Constituency</a>
                     </li>
                     <li role="presentation" class="{% if view == 'recent' %}active {% endif %}">
                         <a href="{{ url_for("browse", view="recent", size=size) }}">Recent</a>

@@ -41,7 +41,7 @@ def sitemap_generator():
     yield 'about', {}
 
     for size in ['small', 'medium', 'large']:
-        for view in ['recent', 'alphabet']:
+        for view in ['recent', 'constituency']:
             yield 'browse', { 'size': size, 'view': view }
 
     all_cvs = _cache_all_cvs()
@@ -189,12 +189,15 @@ def old_all_cvs(page):
 @app.route('/all_cvs/<view>/<size>')
 def old_all_cvs_2(view, size):
     return flask.redirect(flask.url_for("browse", view=view, size=size))
+@app.route('/browse/alphabet/<size>')
+def old_all_cvs_3(size):
+    return flask.redirect(flask.url_for("browse", view="constituency", size=size))
 
 @app.route('/browse/<view>/<size>')
 def browse(view, size):
     if size not in ['small', 'medium', 'large']:
         return flask.redirect(flask.url_for("browse", view=view, size="large"))
-    if view not in ['recent', 'alphabet']:
+    if view not in ['recent', 'constituency']:
         return flask.redirect(flask.url_for("browse", view="recent", size=size))
 
     if view == 'recent':
@@ -204,7 +207,7 @@ def browse(view, size):
                 size = size,
                 view = view
         )
-    elif view == 'alphabet':
+    elif view == 'constituency':
         all_constituencies = _cache_all_constituencies()
         return flask.render_template('browse.html',
                 constituencies = all_constituencies,
