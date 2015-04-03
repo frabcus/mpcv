@@ -459,13 +459,9 @@ def email_candidates(constituency_id):
 
     original_message = """I'm a resident of your constituency.
 
-I have been looking at candidates' CVs on the
-Democracy Club website to help me decide who to
-vote for.
+I have been looking at candidates' CVs on the Democracy Club website to help me decide who to vote for.
 
-I'd be grateful if you could add your CV too. Please
-click on the link at the bottom of this email to
-upload your CV now.
+I'd be grateful if you could add your CV too. Please click on the link at the bottom of this email to upload your CV now.
 
 Thank you very much.
 
@@ -476,13 +472,9 @@ Yours sincerely,
     if len(candidates_have_cv) > 1:
         original_message = """I'm a resident of your constituency.
 
-{count} other candidates have shared their CV with
-voters using the Democracy Club website. This helps
-me decide who to vote for.
+{count} other candidates have shared their CV with voters using the Democracy Club website. This helps me decide who to vote for.
 
-I'd be grateful if you could add your CV too. Please
-click on the link at the bottom of this email to
-upload your CV now.
+I'd be grateful if you could add your CV too. Please click on the link at the bottom of this email to upload your CV now.
 
 Thank you very much.
 
