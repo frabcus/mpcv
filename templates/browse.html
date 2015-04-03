@@ -7,20 +7,27 @@
     
     <div id="browse" class="browse-{{ size }}">
 
-        <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="{% if view == 'alphabet' %}active {% endif %}">
-                <a href="{{ url_for("browse", view="alphabet", size=size) }}">Constituency</a>
-            </li>
-            <li role="presentation" class="{% if view == 'recent' %}active {% endif %}">
-                <a href="{{ url_for("browse", view="recent", size=size) }}">Recent</a>
-            </li>
-        </ul>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <h1>Browse CVs</h1>
+            </div>
 
-        <h1>Browse CVs</h1>
+            <div class="col-sm-6 col-xs-12">
+                <ul class="nav nav-pills">
+                    <li role="presentation" class="{% if view == 'alphabet' %}active {% endif %}">
+                        <a href="{{ url_for("browse", view="alphabet", size=size) }}">Constituency</a>
+                    </li>
+                    <li role="presentation" class="{% if view == 'recent' %}active {% endif %}">
+                        <a href="{{ url_for("browse", view="recent", size=size) }}">Recent</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
 
         {% if cvs %}
             {% if cvs %}
-            <div class="pull-right btn-toolbar" role="toolbar">
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group" role="group">
                     <a href="{{ url_for("browse", view=view, size="small") }}"
                     class="{% if size == 'small' %}active {% endif %}btn btn-sm btn-success" title="Small thumbnails">
