@@ -456,12 +456,24 @@ def email_candidates(constituency_id):
     emails_list = ", ".join([c['email'] for c in candidates_no_cv])
     names_list = ", ".join([c['name'] for c in candidates_no_cv])
 
-    original_message = """
 
+    original_message = """I'm a resident of your constituency.
+
+I have been looking at candidates' CVs on the
+Democracy Club website to help me decide who to
+vote for.
+
+I'd be grateful if you could add your CV too. Please
+click on the link at the bottom of this email to
+upload your CV now.
+
+Thank you very much.
 
 Yours sincerely,
 
 """
+
+
     from_email = ""
     if 'email' in flask.session:
         from_email = flask.session['email']
@@ -477,9 +489,9 @@ Yours sincerely,
         elif subject.strip() == "":
             flask.flash("Please write a subject for your email. Candidates pay more attention if it is unique and local!", 'danger')
         elif message.strip() == original_message.strip():
-            flask.flash("Please enter a message.", 'danger')
+            flask.flash("Please edit the message - say something unique!", 'danger')
         elif re.search("Yours sincerely,$", message.strip()):
-            flask.flash("Please sign your message.", 'danger')
+            flask.flash("Please sign your message. Put your address in, to show you really could vote for them!", 'danger')
         else:
             # this is their default email now
             flask.session['email'] = from_email
