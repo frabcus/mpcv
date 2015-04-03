@@ -25,8 +25,8 @@ subscribers = lookups.slow_updates_list(main.app.config)
 
 # Loop over them
 for subscriber in subscribers:
-    if subscriber['email'] != 'francis+skate@flourish.org':
-        continue
+    #if subscriber['email'] != 'frabcus+skate@fastmail.fm':
+    #    continue
 
     # Only mail to ones we haven't mailed recently
     back_to = datetime.datetime.now() - datetime.timedelta(days=1)
