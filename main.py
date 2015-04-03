@@ -491,7 +491,7 @@ Yours sincerely,
             flask.session['emailed_candidates_track'] = json.dumps([str(c['id']) for c in candidates_no_cv])
 
             flask.flash("Thanks! Your message has been sent to " + names_list + '.', 'success')
-            return flask.redirect("/candidates")
+            return flask.redirect("/candidates/" + str(constituency_id))
 
     return flask.render_template("email_candidates.html",
         constituency=constituency,
