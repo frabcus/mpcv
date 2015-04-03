@@ -165,7 +165,7 @@ class MainTestCase(unittest.TestCase):
         # Email two candidates
         r = self.app.get('/email_candidates/8888888')
         self.assertIn('Email Democracy Club Test Constituency', r.get_data(True))
-        self.assertIn('Writing an effective email', r.get_data(True))
+        self.assertIn('Writing an effective mail', r.get_data(True))
         self.assertIn('frabcus+notlits@fastmail.fm, frabcus+ojom@fastmail.fm', r.get_data(True))
         self.assertIn('action="/email_candidates/8888888"', r.get_data(True))
 

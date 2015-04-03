@@ -473,6 +473,24 @@ Yours sincerely,
 
 """
 
+    if len(candidates_have_cv) > 1:
+        original_message = """I'm a resident of your constituency.
+
+{count} other candidates have shared their CV with
+voters using the Democracy Club website. This helps
+me decide who to vote for.
+
+I'd be grateful if you could add your CV too. Please
+click on the link at the bottom of this email to
+upload your CV now.
+
+Thank you very much.
+
+Yours sincerely,
+
+""".format(count=len(candidates_have_cv))
+
+
 
     from_email = ""
     if 'email' in flask.session:
