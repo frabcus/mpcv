@@ -16,11 +16,15 @@
             &nbsp;
         </p>
 
+        {% if candidate.email %}
         <form action="/upload_cv/{{ candidate.id }}" method="POST">
             <div class="form-group">
                 <button id="confirm_email" type="submit" class="btn btn-default btn-lg">I am {{ candidate.name }} - here's my CV!</button>
             </div>
         </form>
+        {% else %}
+            <a href="https://yournextmp.com/person/{{candidate.id}}" class="btn btn-default btn-lg">Find {{ candidate.name }}'s email address</a>
+        {% endif %}
 
 
         <h1 class="what_this">What's this about?</h1>
