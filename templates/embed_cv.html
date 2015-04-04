@@ -1,4 +1,4 @@
-{% macro embed_cv(cv, full_page_link) %}
+{% macro embed_cv(cv) %}
     <div class="thumb">
     {% if cv.has_thumb %}
         <a href="/show_cv/{{ cv.person_id }}">
@@ -11,12 +11,16 @@
                 <iframe class="cvframe" src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
-        {% if full_page_link %}
-            <div class="link_full_page"><a href="/show_cv/{{ cv.person_id }}">View full page</a></div>
-        {% endif %}
+        <div class="link_full_page"><a href="/show_cv/{{ cv.person_id }}">View full page</a></div>
     {% endif %}
     <!-- CV uploaded: {{ cv.last_modified }} -->
-</div>
+    </div>
 {% endmacro %}
 
-
+{% macro embed_non_cv(image_url, href_url) %}
+    <div class="thumb">
+        <a href="{{ href_url }}">
+            <img class="thumbimg" src="{{ image_url }}" />
+        </a>
+    </div>
+{% endmacro %}

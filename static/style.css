@@ -109,9 +109,8 @@ footer ul.pull-right li:last-child {
 
 /* /candidates */
 
-.candidates h2 {
-    margin-top: 48px;
-    margin-bottom: 20px;
+.candidates h1 {
+    margin-bottom: 48px;
 }
 
 .party {

@@ -9,56 +9,31 @@
     {% endif %}
 
     <div class="candidates">
-        {% if not candidates_have_cv %}
-            <h1> We've no CVs yet for {{ constituency.name }} </h1>
-        {% elif candidates_no_cv or candidates_no_email %}
-            <h1> We're missing some CVs for {{ constituency.name }} </h1>
-        {% else %}
-            <h1> {{ constituency.name }} Candidates </h1>
-        {% endif %}
+        <h1> {{ constituency.name }} candidates </h1>
 
-        {% if candidates_no_cv %}
-            <h2>Invite these candidates to share their CV</h2>
-
-            <p class="names_paragraph">
-                <div class="row">
-                    {% for candidate in candidates_no_cv %}
-                    <div class="col-xs-12 col-md-6">
-                        <span class="whole_name">
-                            <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>
-                            (<a href="/upload_cv/{{ candidate.id }}" class="this_is_me">this is me</a>)
-                        </span>
-                    </div>
-                    {% endfor %}
-                </div>
-            </p>
-
-            <p>
-            <a href="/email_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-success">Ask them by email</a>
-                {% if show_twitter_button %}
-                &nbsp;
-                <a href="/tweet_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-info">Ask them by Twitter</a>
-                {% endif %}
-            </p>
-        {% endif %}
-
-        {% if candidates_have_cv %}
-            {% if candidates_no_email or candidates_no_cv %}
-            <h2>Have a look at these CVs so far</h2>
-            {% else %}
-            <!-- we got them all! -->
-            {% endif %}
-
-            <div class="row">
-                 {% for candidate in candidates_have_cv %}
-                     <div class="col-xs-6 col-sm-4 col-md-3 candidate">
-                         <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
-                         {% import 'embed_cv.html' as embed_cv %}
-                         {{ embed_cv.embed_cv(candidate.cv, full_page_link=True) }}
-                     </div>            
-                {% endfor %}
-            </div>
-        {% endif %}
+        <div class="row">
+             {% for candidate in candidates_have_cv %}
+                 <div class="col-xs-6 col-sm-4 col-md-3 candidate">
+                     <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
+                     {% import 'embed_cv.html' as embed_cv %}
+                     {{ embed_cv.embed_cv(candidate.cv) }}
+                 </div>            
+             {% endfor %}
+             {% for candidate in candidates_no_cv %}
+                 <div class="col-xs-6 col-sm-4 col-md-3 candidate">
+                     <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
+                     {% import 'embed_cv.html' as embed_cv %}
+                     {{ embed_cv.embed_non_cv("/static/not-submitted-their-cv.png", "/upload_cv/" ~ candidate.id) }}
+                 </div>            
+             {% endfor %}
+             {% for candidate in candidates_no_email %}
+                 <div class="col-xs-6 col-sm-4 col-md-3 candidate">
+                     <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
+                     {% import 'embed_cv.html' as embed_cv %}
+                     {{ embed_cv.embed_non_cv("/static/not-submitted-their-cv.png", "/upload_cv/" ~ candidate.id) }}
+                 </div>            
+             {% endfor %}
+        </div>
 
         {% if not email_got and postcode %}
             {% if not candidates_have_cv %}
@@ -69,29 +44,23 @@
             {{ subscribe.subscribe(show_dismiss=False, from_email=from_email, postcode=postcode) }}
         {% endif %}
 
-        {% if candidates_no_email %}
-            <h2>Find the email of these candidates</h2>
-
-            <p class="names_paragraph">
-                <div class="row">
-                    {% for candidate in candidates_no_email %}
-                        <div class="col-xs-12 col-md-6">
-                            <span class="whole_name">
-                                <span class="name">{{ candidate.name}}</span> <span class="party">{{ candidate.party}}</span>
-                            </span>
-                        </div>
-                    {% endfor %}
-                </div>
-            </p>
-
+        {% if candidates_no_cv or candidates_no_email %}
+            <h1>Good news! You can help get more CVs!</h1>
             <p>
-                <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="btn btn-lg btn-success" target="_blank">Add their emails</a>
-            </p>
-
-            <p>
-                (You'll then need to log into <a href="https://yournextmp.com/">YourNextMP</a>)
+                {% if candidates_no_cv %}
+                    <a href="/email_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-success">Email missing</a>
+                    {% if show_twitter_button %}
+                    &nbsp;
+                    <a href="/tweet_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-info">Tweet missing</a>
+                    {% endif %}
+                    &nbsp;
+                {% endif %}
+                {% if candidates_no_email %}
+                        <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="contact-ask btn btn-lg btn-default" target="_blank">Find emails</a>
+                {% endif %}
             </p>
         {% endif %}
+
     </div>
 
 {% endblock %}
