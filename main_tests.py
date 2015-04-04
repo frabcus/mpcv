@@ -83,10 +83,9 @@ class MainTestCase(unittest.TestCase):
     def test_upload_cv_index(self):
         r = self.app.get('/upload_cv/7777777')
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Are you Sicnarf Gnivri?', r.get_data(True))
+        self.assertIn('I am Sicnarf Gnivri', r.get_data(True))
         self.assertIn('<form action="/upload_cv/7777777" method="POST">', r.get_data(True))
-        self.assertIn('<button id="confirm_email" type="submit" class="btn btn-success btn-lg">I am', r.get_data(True))
-        self.assertIn('frabcus+sicnarf@fastmail.fm', r.get_data(True))
+        self.assertIn('<button id="confirm_email" type="submit" class="btn btn-default btn-lg">I am', r.get_data(True))
 
     def test_upload_cv_error(self):
         r = self.app.get('/upload_cv/382828281818', follow_redirects=True)
@@ -211,7 +210,7 @@ class MainTestCase(unittest.TestCase):
 
         # Option to tweet one candidates
         r = self.app.get('/tweet_candidates/8888888')
-        self.assertIn('Tweet to Democracy Club Test Constituency', r.get_data(True))
+        self.assertIn('Tweet Democracy Club Test Constituency candidates', r.get_data(True))
         self.assertIn('Tweet @frabcus+notlits', r.get_data(True))
         self.assertNotIn('Tweet @frabcus+sicnarf', r.get_data(True))
 
