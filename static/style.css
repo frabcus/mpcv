@@ -109,8 +109,9 @@ footer ul.pull-right li:last-child {
 
 /* /candidates */
 
-.candidates h1 {
-    margin-bottom: 48px;
+.cvblock {
+    margin-top: 48px;
+    margin-bottom: 36px;
 }
 
 .party {
@@ -137,8 +138,12 @@ footer ul.pull-right li:last-child {
     white-space: nowrap;
 }
 
-.candidates .contact-ask {
+.contact-ask {
     margin-top: 6px;
+}
+
+.askblock {
+    margin-top: 24px;
 }
 
 /* /upload_cv */

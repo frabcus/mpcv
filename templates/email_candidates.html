@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
-{% block title %} Email {{ constituency.name }} candidates {% endblock %}
+{% block title %} Email {{ constituency.name }} candidates without CVs{% endblock %}
 {% block wide %}
     <div id="email_candidates">
 
-        <h1>Email {{ constituency.name}} candidates</h1>
+        <h1>Email {{ constituency.name}} candidates without CVs</h1>
 
         <form class="form-horizontal button-disabling-form" action="/email_candidates/{{ constituency.id }}" method="POST">
             <div class="row">

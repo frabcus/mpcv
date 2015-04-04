@@ -11,7 +11,7 @@
     <div class="candidates">
         <h1> {{ constituency.name }} candidates </h1>
 
-        <div class="row">
+        <div class="row cvblock">
              {% for candidate in candidates_have_cv %}
                  <div class="col-xs-6 col-sm-4 col-md-3 candidate">
                      <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
@@ -37,17 +37,17 @@
 
         {% if candidates_no_cv or candidates_no_email %}
             <h1>Good news! You can help get more CVs!</h1>
-            <p>
+            <p class="askblock">
                 {% if candidates_no_cv %}
-                    <a href="/email_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-success">Email missing</a>
+                    <a href="/email_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-success">Email candidates without CVs</a>
                     {% if show_twitter_button %}
                     &nbsp;
-                    <a href="/tweet_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-info">Tweet missing</a>
+                    <a href="/tweet_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-info">Tweet them</a>
                     {% endif %}
                     &nbsp;
                 {% endif %}
                 {% if candidates_no_email %}
-                        <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="contact-ask btn btn-lg btn-default" target="_blank">Find emails</a>
+                        <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="contact-ask btn btn-lg btn-default" target="_blank">Find missing emails</a>
                 {% endif %}
             </p>
         {% endif %}

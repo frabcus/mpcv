@@ -1,24 +1,26 @@
 {% extends "layout.html" %}
 {% block title %} {{ candidate.name }}, share your CV! {% endblock %}
-{% block body %}
+{% block wide %}
     <div id="upload_cv">
 
-        <h1>Are you {{ candidate.name }}?</h1>
+        <h1>Help get missing CVs in {{ candidate.constituency_name }}</h1>
 
-        <p class="lead">We'd love it if you would share your CV.</p>
+        <p class="lead">{{ candidate.name }} and others haven't yet submitted their CV.</p>
         
-        <form action="/upload_cv/{{ candidate.id }}" method="POST">
-            <div class="form-group">
-                <button id="confirm_email" type="submit" class="btn btn-success btn-lg">I am {{ candidate.name }}</button>
-                &nbsp;
-                <a href="/" class="btn btn-danger btn-lg">I am not</a>
-            </div>
-        </form>
-
-        <p>We will email <strong>{{ candidate.email }}</strong> to confirm 
-        (<a href="https://yournextmp.com/person/{{ candidate.id }}">wrong email</a>).
+        <p class="askblock">
+            <a href="/email_candidates/{{ candidate.constituency_id }}" class="contact-ask btn btn-lg btn-success">Email candidates without CVs</a>
+            {% if candidate.twitter %}
+            &nbsp;
+            <a href="/tweet_candidates/{{ candidate.constituency_id }}" class="contact-ask btn btn-lg btn-info">Tweet them</a>
+            {% endif %}
+            &nbsp;
         </p>
 
+        <form action="/upload_cv/{{ candidate.id }}" method="POST">
+            <div class="form-group">
+                <button id="confirm_email" type="submit" class="btn btn-default btn-lg">I am {{ candidate.name }} - here's my CV!</button>
+            </div>
+        </form>
 
 
         <h1 class="what_this">What's this about?</h1>
