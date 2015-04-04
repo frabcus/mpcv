@@ -5,13 +5,9 @@
             <img class="thumbimg" src="{{ cv.thumb.url }}" />
         </a>
     {% else %}
-        <div class="frame_outer_wrapper">
-            <div class="frame_inner_wrapper">
-                <img class="ratio" src="/static/transparent.gif"/>
-                <iframe class="cvframe" src="http://docs.google.com/viewer?url={{ cv.url | urlencode}}&amp;embedded=true" frameborder="0" allowfullscreen></iframe>
-            </div>
-        </div>
-        <div class="link_full_page"><a href="/show_cv/{{ cv.person_id }}">View full page</a></div>
+        <a href="/show_cv/{{ cv.person_id }}">
+            <img class="thumbimg" src="/static/blank-cv.png" />
+        </a>
     {% endif %}
     <!-- CV uploaded: {{ cv.last_modified }} -->
     </div>
