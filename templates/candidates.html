@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% import 'subscribe.html' as subscribe %}
-{% block title %} {{ constituency.name }} Candidates {% endblock %}
+{% block title %} {{ constituency.name }} candidates {% endblock %}
 
 {% block wide %}
 
@@ -35,15 +35,6 @@
              {% endfor %}
         </div>
 
-        {% if not email_got and postcode %}
-            {% if not candidates_have_cv %}
-               <h2>We can email you when we get CVs</h2>
-            {% else %}
-               <h2>We can email you when we get more CVs</h2>
-            {% endif %}
-            {{ subscribe.subscribe(show_dismiss=False, from_email=from_email, postcode=postcode) }}
-        {% endif %}
-
         {% if candidates_no_cv or candidates_no_email %}
             <h1>Good news! You can help get more CVs!</h1>
             <p>
@@ -60,6 +51,15 @@
                 {% endif %}
             </p>
         {% endif %}
+
+<!--        {% if not email_got and postcode %}
+            {% if not candidates_have_cv %}
+               <h1>We can email you when we get CVs</h1>
+            {% else %}
+               <h1>We can email you when we get more CVs</h1>
+            {% endif %}
+            {{ subscribe.subscribe(show_dismiss=False, from_email=from_email, postcode=postcode) }}
+            {% endif %} -->
 
     </div>
 
