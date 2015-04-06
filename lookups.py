@@ -209,17 +209,15 @@ def add_cv(config, person_id, contents, filename):
     key.set_acl('public-read')
 
 
-# Takes the app config (for S3 keys), candidate identifier, a local filename.
-# Saves thumbnail in S3. Raises an exception if it goes wrong, returns nothing.
-def add_thumb(config, person_id, filename, extension):
-    person_id = str(int(person_id))
-    assert person_id != 0
-
+# Takes the app config (for S3 keys), candidate identifier, a local filename, a
+# filename in the bucket and the extension to use in mime type. Saves thumbnail
+# in S3. Raises an exception if it goes wrong, returns nothing.
+def add_thumb(config, local_filename, remote_filename, extension):
     bucket = _get_s3_bucket(config)
 
     key = boto.s3.key.Key(bucket)
-    key.key = "thumbs/{0}.{1}".format(str(person_id), extension)
-    key.set_contents_from_filename(filename)
+    key.key = remote_filename
+    key.set_contents_from_filename(local_filename)
     key.set_metadata('Content-Type', "image/" + extension)
     key.set_acl('public-read')
 
@@ -291,10 +289,11 @@ def all_cvs_with_thumbnails(config):
     return cvs
 
 # Takes the app config (for S3), returns a list, ordered by reverse time,
-# of all CVs from any candidate which have no thumbnails, with the following fields:
+# of all CVs from any candidate which don't have an up to date thumbnails, with
+# the following fields:
 #   all the fields of _hash_by_prefix
 #   has_thumb - False
-def all_cvs_no_thumbnails(config):
+def all_cvs_bad_thumbnails(config):
     cv_hash = _hash_by_prefix(config, "cvs/")
     thumb_hash = _hash_by_prefix(config, "thumbs/")
 
@@ -303,9 +302,18 @@ def all_cvs_no_thumbnails(config):
         # strip out the test one
         if person_id == 7777777:
             continue
-        if cv['person_id'] not in thumb_hash:
+        # no thumb at all
+        if person_id not in thumb_hash:
             cv['has_thumb'] = False
             cvs.append(cv)
+            continue
+        # latest thumb doesn't match name of CV file using
+        cv_name = cv['name']
+        thumb_name = thumb_hash[person_id]['name']
+        if cv_name.replace("cvs/", "thumbs/") + ".jpg" != thumb_name:
+            cv['has_thumb'] = False
+            cvs.append(cv)
+            continue
 
     return cvs
 
@@ -337,6 +345,7 @@ def _hash_by_prefix(config, prefix):
         person_id = int(re.match(prefix + "([0-9]+)[^0-9]", key.name).group(1))
         if person_id not in result:
             result[person_id] =  {
+                'name': key.name,
                 'url': key.generate_url(expires_in=0, query_auth=False),
                 'last_modified': key_last_modified,
                 'created': key_last_modified,

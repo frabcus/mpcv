@@ -3,6 +3,7 @@
 import os
 import subprocess
 import traceback
+import sys
 
 import flask_mail
 import PIL.Image
@@ -11,9 +12,10 @@ import lookups
 import main
 
 def gen_thumbs():
-    # find all the CVs missing a thumbnail
-    cvs_missing_thumbs = lookups.all_cvs_no_thumbnails(main.app.config)
-    for x in cvs_missing_thumbs:
+    # find all the CVs with out of date thumbnail
+    cvs_bad_thumbs = lookups.all_cvs_bad_thumbnails(main.app.config)
+    print("missing total:", len(cvs_bad_thumbs))
+    for x in cvs_bad_thumbs:
         print("cron missing thumb:", x)
         filename = "tmp/{0}.png".format(x["person_id"])
 
@@ -24,7 +26,7 @@ def gen_thumbs():
             img = PIL.Image.open(filename)
             img.save(filename + ".jpg", option='optimize')
             # add the thumbnail to S3
-            lookups.add_thumb(main.app.config, x["person_id"], filename + ".jpg", extension="jpg")
+            lookups.add_thumb(main.app.config, filename + ".jpg", x['name'].replace("cvs/", "thumbs/") + ".jpg", extension="jpg")
             os.remove(filename)
             os.remove(filename + ".jpg")
         except subprocess.CalledProcessError:
