@@ -27,11 +27,10 @@ class UploadingCVTestCase(unittest.TestCase):
         self.browser.find_element_by_id('postcode').send_keys('zz99zz')
         self.browser.find_element_by_id('postcode').submit()
 
-        self.assertIn('Democracy Club Test Constituency', self.browser.page_source)
-        self.assertIn('Have a look at these CVs so far', self.browser.page_source)
+        self.assertIn('Democracy Club Test Constituency candidates', self.browser.page_source)
         self.assertIn('Sicnarf Gnivri', self.browser.page_source)
         self.assertIn('href="/show_cv/7777777"', self.browser.page_source)
-        self.assertIn('Invite these candidates to share their CV', self.browser.page_source)
+        self.assertIn('You can help get more CVs!', self.browser.page_source)
         self.assertIn('Notlits Esuom', self.browser.page_source)
         self.assertIn('href="/upload_cv/7777778"', self.browser.page_source)
 
@@ -46,9 +45,7 @@ class UploadingCVTestCase(unittest.TestCase):
 
     def testUploadCV(self):
         self.browser.get(address + "upload_cv/7777777")
-
         self.assertIn('I am Sicnarf Gnivri', self.browser.page_source)
-        self.assertIn('We will email', self.browser.page_source)
 
         self.browser.find_element_by_id('confirm_email').click()
         self.assertIn('Check your email!', self.browser.page_source)

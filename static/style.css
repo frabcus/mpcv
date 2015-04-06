@@ -109,9 +109,9 @@ footer ul.pull-right li:last-child {
 
 /* /candidates */
 
-.candidates h2 {
+.cvblock {
     margin-top: 48px;
-    margin-bottom: 20px;
+    margin-bottom: 36px;
 }
 
 .party {
@@ -138,8 +138,12 @@ footer ul.pull-right li:last-child {
     white-space: nowrap;
 }
 
-.candidates .contact-ask {
+.contact-ask {
     margin-top: 6px;
+}
+
+.askblock {
+    margin-top: 24px;
 }
 
 /* /upload_cv */
@@ -262,12 +266,6 @@ body, html {
 .thumb iframe {
   height: 200%;
 }
-
-.frame_outer_wrapper   {width:100%;height:100%;background:#CCC;}
-.frame_inner_wrapper        {position:relative;}
-.frame_inner_wrapper .ratio {display:block;width:100%;height:auto;}
-.frame_inner_wrapper iframe {position:absolute;top:0;left:0;width:100%; height:100%;}
-img.ratio   {display:block;width:100%;height:auto;padding-bottom:5%;}
 
 .link_full_page {
     margin-bottom: 16px;
