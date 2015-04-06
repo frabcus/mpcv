@@ -30,7 +30,6 @@ class UploadingCVTestCase(unittest.TestCase):
         self.assertIn('Democracy Club Test Constituency candidates', self.browser.page_source)
         self.assertIn('Sicnarf Gnivri', self.browser.page_source)
         self.assertIn('href="/show_cv/7777777"', self.browser.page_source)
-        self.assertIn('You can help get more CVs!', self.browser.page_source)
         self.assertIn('Notlits Esuom', self.browser.page_source)
         self.assertIn('href="/upload_cv/7777778"', self.browser.page_source)
 
