@@ -35,23 +35,6 @@
              {% endfor %}
         </div>
 
-        {% if candidates_no_cv or candidates_no_email %}
-            <h1>Good news! You can help get more CVs!</h1>
-            <p class="askblock">
-                {% if candidates_no_cv %}
-                    <a href="/email_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-success">Email candidates without CVs</a>
-                    {% if show_twitter_button %}
-                    &nbsp;
-                    <a href="/tweet_candidates/{{ constituency.id }}" class="contact-ask btn btn-lg btn-info">Tweet them</a>
-                    {% endif %}
-                    &nbsp;
-                {% endif %}
-                {% if candidates_no_email %}
-                        <a href="https://yournextmp.com/constituency/{{ constituency.id }}/" class="contact-ask btn btn-lg btn-default" target="_blank">Find missing emails</a>
-                {% endif %}
-            </p>
-        {% endif %}
-
 <!--        {% if not email_got and postcode %}
             {{ subscribe.subscribe(show_dismiss=False, from_email=from_email, postcode=postcode) }}
             {% endif %} -->

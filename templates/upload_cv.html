@@ -7,15 +7,18 @@
 
         <p class="lead">{{ candidate.name }} and others haven't yet submitted their CV.</p>
         
-        <p class="askblock">
-            <a href="/email_candidates/{{ candidate.constituency_id }}" class="contact-ask btn btn-lg btn-success">Email candidates without CVs</a>
-            {% if candidate.twitter %}
-            &nbsp;
-            <a href="/tweet_candidates/{{ candidate.constituency_id }}" class="contact-ask btn btn-lg btn-info">Tweet them</a>
-            {% endif %}
-            &nbsp;
+        <p>
+            <a href="/email_candidates/{{ candidate.constituency_id }}" class="btn btn-lg btn-success">Email my candidates to request their CVs</a>
         </p>
 
+        {% if candidate.twitter %}
+        <p>
+        <a href="/tweet_candidates/{{ candidate.constituency_id }}" class="btn btn-lg btn-info"> Tweet my candidates to request their CVs</a>
+        {% endif %}
+        &nbsp;
+        </p>
+
+        <p>
         {% if candidate.email %}
         <form action="/upload_cv/{{ candidate.id }}" method="POST">
             <div class="form-group">
@@ -25,7 +28,7 @@
         {% else %}
             <a href="https://yournextmp.com/person/{{candidate.id}}" class="btn btn-default btn-lg">Find {{ candidate.name }}'s email address</a>
         {% endif %}
-
+        </p>
 
         <h1 class="what_this">What's this about?</h1>
 
