@@ -24,7 +24,6 @@ def gen_thumbs():
             img = PIL.Image.open(filename)
             img.save(filename + ".jpg", option='optimize')
             # add the thumbnail to S3
-            lookups.add_thumb(main.app.config, x["person_id"], filename, extension="png")
             lookups.add_thumb(main.app.config, x["person_id"], filename + ".jpg", extension="jpg")
             os.remove(filename)
             os.remove(filename + ".jpg")
