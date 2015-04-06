@@ -14,7 +14,6 @@ import main
 def gen_thumbs():
     # find all the CVs with out of date thumbnail
     cvs_bad_thumbs = lookups.all_cvs_bad_thumbnails(main.app.config)
-    print("missing total:", len(cvs_bad_thumbs))
     for x in cvs_bad_thumbs:
         print("cron missing thumb:", x)
         filename = "tmp/{0}.png".format(x["person_id"])
