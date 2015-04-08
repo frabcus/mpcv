@@ -81,10 +81,10 @@ class MainTestCase(unittest.TestCase):
         self.assertIn("Postcode is not valid.", r.get_data(True))
 
     def test_upload_cv_index(self):
-        r = self.app.get('/upload_cv/7777777')
+        r = self.app.get('/upload_cv/7777778')
         self.assertEqual(r.status_code, 200)
-        self.assertIn('I am Sicnarf Gnivri', r.get_data(True))
-        self.assertIn('<form action="/upload_cv/7777777" method="POST">', r.get_data(True))
+        self.assertIn('I am Notlits Esuom', r.get_data(True))
+        self.assertIn('<form action="/upload_cv/7777778" method="POST">', r.get_data(True))
         self.assertIn('<button id="confirm_email" type="submit" class="btn btn-default btn-lg">I am', r.get_data(True))
 
     def test_upload_cv_error(self):
@@ -112,7 +112,7 @@ class MainTestCase(unittest.TestCase):
         # View the page where the upload form is
         r = self.app.get(confirmation_url)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Choose your CV to share', r.get_data(True))
+        self.assertIn('Choose a new CV', r.get_data(True))
         self.assertIn('action="' + confirmation_url + '"', r.get_data(True))
 
         # Upload

@@ -360,12 +360,12 @@ def upload_cv(person_id):
         flask.flash(candidate['error'], 'danger')
         return error()
 
-    if lookups.get_current_cv(app.config, person_id):
-        return flask.redirect(flask.url_for('show_cv', person_id=person_id))
-
     if flask.request.method == 'POST':
         identity.send_upload_cv_confirmation(app, mail, candidate['id'], candidate['email'], candidate['name'])
         return flask.render_template("check_email.html", candidate=candidate)
+
+    if lookups.get_current_cv(app.config, person_id):
+        return flask.redirect(flask.url_for('show_cv', person_id=person_id))
 
     return flask.render_template("upload_cv.html", candidate=candidate,
         og_image = flask.url_for('static', filename='what-is-cv.png', _external=True)
