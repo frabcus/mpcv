@@ -13,21 +13,21 @@
 
         <div class="row cvblock">
              {% for candidate in candidates_have_cv %}
-                 <div class="col-xs-6 col-sm-4 col-md-3 candidate">
+                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3 candidate">
                      <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
                      {% import 'embed_cv.html' as embed_cv %}
                      {{ embed_cv.embed_cv(candidate.cv) }}
                  </div>            
              {% endfor %}
              {% for candidate in candidates_no_cv %}
-                 <div class="col-xs-6 col-sm-4 col-md-3 candidate">
+                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3 candidate">
                      <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
                      {% import 'embed_cv.html' as embed_cv %}
                      {{ embed_cv.embed_non_cv("/static/not-submitted-their-cv.png", "/upload_cv/" ~ candidate.id) }}
                  </div>            
              {% endfor %}
              {% for candidate in candidates_no_email %}
-                 <div class="col-xs-6 col-sm-4 col-md-3 candidate">
+                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3 candidate">
                      <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
                      {% import 'embed_cv.html' as embed_cv %}
                      {{ embed_cv.embed_non_cv("/static/not-submitted-their-cv.png", "/upload_cv/" ~ candidate.id) }}
