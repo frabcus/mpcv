@@ -399,6 +399,8 @@ def upload_cv_confirmed(person_id, signature):
         flask.flash("Sorry! That web link isn't right. Can you check you copied it properly from your email?", 'warning')
         return error()
 
+    current_cv = lookups.get_current_cv(app.config, candidate['id'])
+
     if candidate['email'] is not None:
         # this is their default email now
         flask.session['email'] = candidate['email']
@@ -406,7 +408,7 @@ def upload_cv_confirmed(person_id, signature):
     upload_link = flask.url_for('upload_cv_upload', person_id=person_id, signature=signature)
 
     return flask.render_template("upload_cv_confirmed.html", candidate=candidate,
-         upload_link=upload_link)
+         upload_link=upload_link, current_cv=current_cv)
 
 # POST is actual receiving of CV
 @app.route('/upload_cv/<int:person_id>/c/<signature>', methods=['POST'])

@@ -5,7 +5,11 @@
 
         <h1>Hello, {{ candidate.name }} <a class="not_me" href="/clear_all">That’s not me</a></h1>
 
+        {% if current_cv %}
+        <p class="lead">Choose a new CV to replace your <a href="/show_cv/{{candidate.id}}">current</a> one.</p>
+        {% else %}
         <p class="lead">Choose your CV to share.</p>
+        {% endif %}
 
         <form id="form" method="POST" enctype="multipart/form-data" action="{{ upload_link}}">
           <a class="btn-file btn btn-lg btn-success">
