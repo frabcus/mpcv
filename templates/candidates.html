@@ -9,6 +9,16 @@
         {{ subscribe.subscribe(show_dismiss=True, from_email=from_email, postcode=postcode) }}
     {% endif %}
 
+<!--    <div class="pull-right">
+        <a href="/email_candidates/{{ constituency.id }}" class="btn btn-md btn-success">Email candidates</a>
+
+        {% if show_twitter_button %}
+        <a href="/tweet_candidates/{{ constituency.id }}" class="btn btn-md btn-info"> Tweet candidates</a>
+        {% endif %}
+        &nbsp;
+    </div> -->
+
+
     <div class="candidates">
         {% if g.constituency and g.constituency['id'] == constituency.id %}
             <h1>Your CVs for {{ constituency.name }} </h1>
