@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% import 'subscribe.html' as subscribe %}
+{% import 'embed_cv.html' as embed_cv %}
 {% block title %} {{ constituency.name }} candidates {% endblock %}
 
 {% block wide %}
@@ -13,32 +14,15 @@
 
         <div class="row cvblock">
              {% for candidate in candidates_have_cv %}
-                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3 candidate">
-                     <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
-                     {% import 'embed_cv.html' as embed_cv %}
-                     {{ embed_cv.embed_cv(candidate.cv) }}
-                 </div>            
+                {{ embed_cv.full_cv_block(candidate) }}
              {% endfor %}
              {% for candidate in candidates_no_cv %}
-                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3 candidate">
-                     <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
-                     {% import 'embed_cv.html' as embed_cv %}
-                     {{ embed_cv.embed_non_cv("/static/not-submitted-their-cv.png", "/upload_cv/" ~ candidate.id) }}
-                 </div>            
+                {{ embed_cv.full_cv_block(candidate) }}
              {% endfor %}
              {% for candidate in candidates_no_email %}
-                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3 candidate">
-                     <span class="name">{{ candidate.name }}</span> <br> <span class="party">{{ candidate.party}}</span>
-                     {% import 'embed_cv.html' as embed_cv %}
-                     {{ embed_cv.embed_non_cv("/static/not-submitted-their-cv.png", "/upload_cv/" ~ candidate.id) }}
-                 </div>            
+                {{ embed_cv.full_cv_block(candidate) }}
              {% endfor %}
         </div>
-
-<!--        {% if not email_got and postcode %}
-            {{ subscribe.subscribe(show_dismiss=False, from_email=from_email, postcode=postcode) }}
-            {% endif %} -->
-
     </div>
 
 {% endblock %}
