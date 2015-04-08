@@ -14,13 +14,13 @@
 
         <div class="row cvblock">
              {% for candidate in candidates_have_cv %}
-                {{ embed_cv.full_cv_block(candidate) }}
+                {{ embed_cv.full_cv_block(candidate, 'medium') }}
              {% endfor %}
              {% for candidate in candidates_no_cv %}
-                {{ embed_cv.full_cv_block(candidate) }}
+                {{ embed_cv.full_cv_block(candidate, 'medium') }}
              {% endfor %}
              {% for candidate in candidates_no_email %}
-                {{ embed_cv.full_cv_block(candidate) }}
+                {{ embed_cv.full_cv_block(candidate, 'medium') }}
              {% endfor %}
         </div>
     </div>

@@ -119,26 +119,16 @@ footer ul.pull-right li:last-child {
     color: #bbb;
 }
 
-.candidates {
-}
-
-.candidates .candidate {
-}
-
-.candidates .thumb {
+.candidate .thumb {
     margin-top: 6px;
 }
 
-.candidates .name {
+.candidate .name {
     font-size: 20px;
 }
 
 .candidates .get-updates {
     margin-top: 24px;
-}
-
-.candidates .whole_name {
-    white-space: nowrap;
 }
 
 /* /upload_cv */
