@@ -3,20 +3,23 @@
 .navbar-brand > img {
     position: relative;
     top: -20px;
-    padding-right: 19px;
     float: left;
 } 
 
+.navbar-brand .brand-name {
+    padding-left: 19px;
+}
+
 @media (max-width: 384px) {
-  .navbar-brand {
-      padding-right: 0;
+  .navbar-brand .brand-name {
+      padding-left: 10px;
   }
-  .navbar-brand img {
-      padding-right: 10px;
-      width: 30px;
-      height: 30px;
-      top: -6px;
-      box-sizing: content-box;
+  .navbar-brand > img {
+      padding: 0px;
+      margin: 0px;
+      width: 40px;
+      height: 40px;
+      top: -10px;
   }
 }
 
