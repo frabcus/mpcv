@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% import 'subscribe.html' as subscribe %}
 {% import 'embed_cv.html' as embed_cv %}
-{% block title %} {{ constituency.name }} candidates {% endblock %}
+{% block title %} CVs for {{ constituency.name }} MP candidates {% endblock %}
 
 {% block wide %}
 
@@ -10,7 +10,11 @@
     {% endif %}
 
     <div class="candidates">
-        <h1> {{ constituency.name }} candidates </h1>
+        {% if g.constituency and g.constituency['id'] == constituency.id %}
+            <h1>Your CVs for {{ constituency.name }} </h1>
+        {% else %}
+            <h1>CVs for {{ constituency.name }}</h1>
+        {% endif %}
 
         <div class="row cvblock">
              {% for candidate in candidates_have_cv %}
