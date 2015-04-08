@@ -434,7 +434,8 @@ def upload_cv_upload(person_id, signature):
     with app.app_context():
         cache.clear()
 
-    flask.flash("Thanks! Your CV has been successfully uploaded. We'd love it if you tell any friends who are candidates to upload theirs too!", 'success')
+    flask.flash("Thanks! Your CV has been successfully uploaded. It will take about half an hour to appear on the site.", 'success')
+    flask.flash("Friends who are also candidates? Please tell them to upload their CV too!", 'info')
     return flask.redirect("/about")
 
 #####################################################################
