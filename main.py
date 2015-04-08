@@ -320,8 +320,7 @@ def show_cv(person_id):
 
     current_cv = lookups.get_current_cv(app.config, candidate['id'])
     if current_cv is None:
-        flask.flash("We don't yet have a CV for that candidate.", 'danger')
-        return error()
+        return flask.redirect(flask.url_for('upload_cv', person_id=person_id))
 
     current_thumb = lookups.get_current_thumb(app.config, candidate['id'])
     og_image = current_thumb['url'] if current_thumb is not None else False
@@ -360,6 +359,9 @@ def upload_cv(person_id):
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
         return error()
+
+    if lookups.get_current_cv(app.config, person_id):
+        return flask.redirect(flask.url_for('show_cv', person_id=person_id))
 
     if flask.request.method == 'POST':
         identity.send_upload_cv_confirmation(app, mail, candidate['id'], candidate['email'], candidate['name'])
