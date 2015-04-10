@@ -137,8 +137,18 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Sicnarf Gnivri', r.get_data(True))
         self.assertIn("<iframe", r.get_data(True))
 
-    def test_browse(self):
-        r = self.app.get('/browse/recent/large')
+    def test_browse_recent(self):
+        r = self.app.get('/browse/recent/medium')
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('Browse', r.get_data(True))
+
+    def test_browse_party(self):
+        r = self.app.get('/browse/party/small')
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('Browse', r.get_data(True))
+
+    def test_browse_constituency(self):
+        r = self.app.get('/browse/constituency/medium')
         self.assertEqual(r.status_code, 200)
         self.assertIn('Browse', r.get_data(True))
 

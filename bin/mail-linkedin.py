@@ -17,7 +17,7 @@ main.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
 mailed_hash = lookups._hash_by_prefix(main.app.config, "mailed/linkedin/")
 
 with main.app.app_context():
-    for constituency in lookups.all_constituencies(main.app.config):
+    for constituency in lookups.all_constituencies(main.app.config)[0:100]:
         for candidate in constituency:
             if candidate['id'] in mailed_hash:
                 print("already mailed", candidate)
@@ -76,6 +76,4 @@ a Word or PDF document, and go here:
             key = boto.s3.key.Key(bucket)
             key.key = "mailed/linkedin/" + str(candidate['id']) + ".sent"
             key.set_contents_from_string("sent")
-
-            sys.exit(1)
 

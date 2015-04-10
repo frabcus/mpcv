@@ -269,11 +269,8 @@ body, html {
     margin-top: 10px;
 }
 
-#browse_link a, #ynmp_link a {
+#browse_link a {
     font-size: 20px;
-}
-#ynmp_link {
-    margin-top: 32px;
 }
 
 #browse h1 {
@@ -282,6 +279,10 @@ body, html {
 
 #browse nav {
     margin-top: 16px;
+}
+
+#browse h2 {
+    margin-bottom: 30px;
 }
 
 

@@ -7,6 +7,7 @@ import math
 import logging
 import json
 import datetime
+import itertools
 
 import werkzeug
 import flask
@@ -41,7 +42,7 @@ def sitemap_generator():
     yield 'about', {}
 
     for size in ['small', 'medium', 'large']:
-        for view in ['recent', 'constituency']:
+        for view in ['recent', 'constituency', 'party']:
             yield 'browse', { 'size': size, 'view': view }
 
     all_cvs = _cache_all_cvs()
@@ -197,13 +198,13 @@ def old_all_cvs_3(size):
 def browse(view, size):
     if size not in ['small', 'medium', 'large']:
         return flask.redirect(flask.url_for("browse", view=view, size="large"))
-    if view not in ['recent', 'constituency']:
+    if view not in ['recent', 'constituency', 'party']:
         return flask.redirect(flask.url_for("browse", view="recent", size=size))
 
     if view == 'recent':
         all_cvs = _cache_all_cvs()
         return flask.render_template('browse.html',
-                cvs = all_cvs,
+                cv_groups = [{ 'heading': None, 'cvs': all_cvs }],
                 size = size,
                 view = view
         )
@@ -211,6 +212,19 @@ def browse(view, size):
         all_constituencies = _cache_all_constituencies()
         return flask.render_template('browse.html',
                 constituencies = all_constituencies,
+                size = size,
+                view = view
+        )
+    if view == 'party':
+        all_cvs = _cache_all_cvs()
+        # sort parties alphabetically
+        all_cvs = sorted(all_cvs, key=lambda k: k['candidate']['party'])
+        cv_groups = []
+        for party, cvs in itertools.groupby(all_cvs, key=lambda k: k['candidate']['party']):
+            # sort within each party in forewards data order of uploading CV
+            cv_groups.append({'heading': party, 'cvs': sorted(list(cvs), key=lambda k: k['last_modified'])})
+        return flask.render_template('browse.html',
+                cv_groups = cv_groups,
                 size = size,
                 view = view
         )

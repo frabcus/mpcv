@@ -15,7 +15,10 @@
             <div class="col-sm-6 col-xs-12">
                 <ul class="nav nav-pills">
                     <li role="presentation" class="{% if view == 'constituency' %}active {% endif %}">
-                        <a href="{{ url_for("browse", view="constituency", size=size) }}">Constituency</a>
+                        <a href="{{ url_for("browse", view="constituency", size=size) }}">By Constituency</a>
+                    </li>
+                    <li role="presentation" class="{% if view == 'party' %}active {% endif %}">
+                        <a href="{{ url_for("browse", view="party", size=size) }}">By Party</a>
                     </li>
                     <li role="presentation" class="{% if view == 'recent' %}active {% endif %}">
                         <a href="{{ url_for("browse", view="recent", size=size) }}">Recent</a>
@@ -25,8 +28,7 @@
         </div>
 
 
-        {% if cvs %}
-            {% if cvs %}
+        {% if cv_groups %}
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group" role="group">
                     <a href="{{ url_for("browse", view=view, size="small") }}"
@@ -45,10 +47,13 @@
                     </a>
                 </div>
             </div>
-            {% endif%}
 
-            <div class="row">
-                {% for cv in cvs %}
+            {% for group in cv_groups %}
+                {% if group.heading %}
+                <h2>{{ group.heading }}</h2>
+                {% endif %}
+                <div class="row group_cvs">
+                {% for cv in group.cvs %}
                     {% if size == 'large' %}
                     <div class="col-md-6 col-sm-12">
                     {% elif size == 'medium' %}
@@ -60,7 +65,8 @@
                         {{ embed_cv.embed_cv(cv) }} 
                     </div>
                 {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
         {% endif%}
 
         {% if constituencies %}
