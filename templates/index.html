@@ -5,21 +5,18 @@
 
     <div id="front">
 
-        <h1>Before you vote, help get their CVs!</h1>
+        <h1>Ask your MP candidates for their CV!</h1>
 
-        <p class="lead">We're collecting every MP candidate's CV.</p>
+        <p class="lead">(Then see the ones we've got so far)</p>
         
         <p class="lead">
             Enter your postcode.
         </p>
 
-        <form action="/candidates" method="GET" class="button-disabling-form">
-            <div class="form-group">
+        <form action="/email_candidates" method="GET" class="button-disabling-form">
+            <div class="form-inline">
               <input id="postcode" name="postcode" placeholder="Postcode" class="input-lg form-control" autofocus>
-            </div>
-
-            <div class="form-group">
-              <button type="submit" class="btn btn-lg btn-success" id="submit-postcode" data-loading-text="View candidates">View candidates</button>
+              <button type="submit" class="btn btn-lg btn-success" id="submit-postcode" data-loading-text="Go">Go</button>
             </div>
         </form>
 

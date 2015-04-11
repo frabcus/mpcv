@@ -259,7 +259,7 @@ def candidates_your_constituency():
         return flask.redirect("/")
 
     constituency = flask.session['constituency']
-    return flask.redirect(flask.url_for("candidates", constituency_id = constituency['id']))
+    return flask.redirect(flask.url_for(flask.request.url_rule.rule.replace("/", ""), constituency_id = constituency['id']))
 
 @app.route('/candidates/<int:constituency_id>')
 def candidates(constituency_id = None):
@@ -466,6 +466,9 @@ def email_candidates(constituency_id):
         flask.flash("Error looking up candidates in YourNextMP.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
+
+    if len(candidates_no_cv) == 0:
+        return flask.redirect(flask.url_for("candidates", constituency_id=constituency_id))
 
     constituency = {
         'id': constituency_id,
