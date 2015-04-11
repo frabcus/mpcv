@@ -287,7 +287,9 @@ def all_cvs_with_thumbnails(config):
             cv['has_thumb'] = True
             cv['thumb'] = thumb_hash[person_id]
             cv['candidate'] = lookup_candidate(cv['person_id'])
-            cvs.append(cv)
+            # can have CVs for people who aren't candidates (e.g. withdrew)
+            if 'error' not in cv['candidate']:
+                cvs.append(cv)
 
     return cvs
 
