@@ -3,31 +3,44 @@
 {% block wide %}
     <div id="upload_cv">
 
-        <h1>Help get missing CVs in {{ candidate.constituency_name }}</h1>
-
-        <p class="lead">{{ candidate.name }} and others haven't yet submitted their CV.</p>
-        
-        <p>
-            <a href="/email_candidates/{{ candidate.constituency_id }}" class="btn btn-lg btn-success">Email my candidates to request their CVs</a>
-        </p>
-
-        {% if candidate.twitter %}
-        <p>
-        <a href="/tweet_candidates/{{ candidate.constituency_id }}" class="btn btn-lg btn-info"> Tweet my candidates to request their CVs</a>
-        {% endif %}
-        &nbsp;
-        </p>
-
-        <p>
-        {% if candidate.email %}
-        <form action="/upload_cv/{{ candidate.id }}" method="POST">
-            <div class="form-group">
-                <button id="confirm_email" type="submit" class="btn btn-default btn-lg">I am {{ candidate.name }} - here's my CV!</button>
-            </div>
-        </form>
+        {% if already_got %}
+            <h1>{{candidate.name}} already has a CV!</h1>
+            <p class="lead">View it, or if you're the candidate update it.</p>
+            <p>
+            <a href="/show_cv/{{candidate.id}}" class="btn btn-lg btn-success">View {{candidate.name}}'s CV</a>
+            </p>
         {% else %}
-            <a href="https://yournextmp.com/person/{{candidate.id}}" class="btn btn-default btn-lg">Find {{ candidate.name }}'s email address</a>
+            <h1>{{ candidate.name }} hasn't submitted a CV!</h1>
+            <p class="lead">Ask them, and others in {{ candidate.constituency_name }}, to submit one now.</p>
+            
+            <p>
+                <a href="/email_candidates/{{ candidate.constituency_id }}" class="btn btn-lg btn-success">Email my candidates to request their CVs</a>
+            </p>
+
+            {% if candidate.twitter %}
+                <p>
+                <a href="/tweet_candidates/{{ candidate.constituency_id }}" class="btn btn-lg btn-info"> Tweet my candidates to request their CVs</a>
+                {% endif %}
+                &nbsp;
+            </p>
         {% endif %}
+
+        <p>
+            {% if candidate.email %}
+            <form action="/upload_cv/{{ candidate.id }}" method="POST">
+                <div class="form-group">
+                    <button id="confirm_email" type="submit" class="btn btn-default btn-lg">I am {{ candidate.name }} - 
+                        {% if already_got %}
+                        change my CV!
+                        {% else %}
+                        here's my CV!
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+            {% else %}
+                <a href="https://yournextmp.com/person/{{candidate.id}}" class="btn btn-default btn-lg">Find {{ candidate.name }}'s email address</a>
+            {% endif %}
         </p>
 
         <h1 class="what_this">What's this about?</h1>
@@ -37,7 +50,6 @@
 
         <p>Visit the <a href="/">home page</a> to help out and see the CVs.
         </p>
-
 
     </div>
 {% endblock %}
