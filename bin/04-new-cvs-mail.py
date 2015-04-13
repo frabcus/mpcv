@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-dry_run = True
+dry_run = False
 
 import sys
 import os
@@ -36,7 +36,8 @@ for subscriber in subscribers:
 
     # Subject: 100 CVs now in, let's get more!
     body = """"""
-    assert subscriber['no_cv_count'] > 0
+
+    #assert subscriber['no_cv_count'] > 0
 
 #    body += "UPDATED: " + repr(subscriber['candidates_cv_updated'])
 
