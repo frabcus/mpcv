@@ -524,8 +524,13 @@ Yours sincerely,
         from_email = flask.session['email']
 
     # if came from front page, and they emailed before, don't force it
-    if from_email and flask.request.args.get("from_front_page"):
+    from_front_page = flask.request.args.get("from_front_page")
+    if from_email and from_front_page:
         return flask.redirect(flask.url_for("candidates", constituency_id=constituency_id))
+
+    tempt_text = False
+    if len(candidates_have_cv) > 0 and from_front_page:
+        tempt_text = True
 
     message = original_message
     subject = ""
@@ -564,7 +569,8 @@ Yours sincerely,
         from_email=from_email,
         subject=subject,
         message=message,
-        show_twitter_button=show_twitter_button
+        show_twitter_button=show_twitter_button,
+        tempt_text=tempt_text
     )
 
 @app.route('/tweet_candidates/<int:constituency_id>')
