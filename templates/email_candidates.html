@@ -33,7 +33,9 @@
                 </div>
 
                 <div class="col-md-4">
+                    {% if show_twitter_button %}
                     <a href="/tweet_candidates/{{ constituency.id }}" class="tweet-instead btn btn-lg btn-info"> Tweet them instead </a>
+                    {% endif %}
                 </div>
             </div>
 

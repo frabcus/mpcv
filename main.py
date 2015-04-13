@@ -249,7 +249,7 @@ def clear_all():
     return flask.redirect("/")
 
 #####################################################################
-# List candidates and view their CVs
+# List candidates
 
 @app.route('/candidates')
 @app.route('/email_candidates')
@@ -260,6 +260,12 @@ def candidates_your_constituency():
 
     constituency = flask.session['constituency']
     return flask.redirect(flask.url_for(flask.request.url_rule.rule.replace("/", ""), constituency_id = constituency['id']))
+
+def _can_tweet(candidates_no_cv):
+    for candidate in candidates_no_cv:
+        if 'twitter' in candidate and candidate['twitter'] is not None:
+           return True
+    return False
 
 @app.route('/candidates/<int:constituency_id>')
 def candidates(constituency_id = None):
@@ -273,12 +279,7 @@ def candidates(constituency_id = None):
         'id': constituency_id,
         'name': all_candidates[0]['constituency_name']
     }
-
-    show_twitter_button = False
-    for candidate in candidates_no_cv:
-        if 'twitter' in candidate and candidate['twitter'] is not None:
-            show_twitter_button = True
-            break
+    show_twitter_button = _can_tweet(candidates_no_cv)
 
     # should we show subscribe button?
     from_email = ""
@@ -322,6 +323,10 @@ def candidates(constituency_id = None):
             og_image=og_image,
             og_description=og_description
     )
+
+
+#####################################################################
+# Viewing individual CVs
 
 
 # GET is to show form to upload CV
@@ -456,6 +461,7 @@ def upload_cv_upload(person_id, signature):
     flask.flash("Friends who are also candidates? Please tell them to upload their CV too!", 'info')
     return flask.redirect("/about")
 
+
 #####################################################################
 # Ask candidates to upload their CV
 
@@ -478,6 +484,7 @@ def email_candidates(constituency_id):
     emails_list = ", ".join([c['email'] for c in candidates_no_cv])
     names_list = ", ".join([c['name'] for c in candidates_no_cv])
 
+    show_twitter_button = _can_tweet(candidates_no_cv)
 
     original_message = """I'm a resident of your constituency.
 
@@ -546,7 +553,8 @@ Yours sincerely,
         names_list=names_list,
         from_email=from_email,
         subject=subject,
-        message=message
+        message=message,
+        show_twitter_button=show_twitter_button
     )
 
 @app.route('/tweet_candidates/<int:constituency_id>')
