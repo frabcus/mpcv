@@ -249,7 +249,7 @@ def clear_all():
     return flask.redirect("/")
 
 #####################################################################
-# List candidates and view their CVs
+# List candidates
 
 @app.route('/candidates')
 @app.route('/email_candidates')
@@ -258,8 +258,22 @@ def candidates_your_constituency():
     if 'constituency' not in flask.session:
         return flask.redirect("/")
 
+    from_front_page = flask.request.args.get("from-front-page", None)
+
     constituency = flask.session['constituency']
-    return flask.redirect(flask.url_for("candidates", constituency_id = constituency['id']))
+    return flask.redirect(
+        flask.url_for(
+            flask.request.url_rule.rule.replace("/", ""),
+            constituency_id = constituency['id'],
+            from_front_page = from_front_page
+        )
+    )
+
+def _can_tweet(candidates_no_cv):
+    for candidate in candidates_no_cv:
+        if 'twitter' in candidate and candidate['twitter'] is not None:
+           return True
+    return False
 
 @app.route('/candidates/<int:constituency_id>')
 def candidates(constituency_id = None):
@@ -273,12 +287,7 @@ def candidates(constituency_id = None):
         'id': constituency_id,
         'name': all_candidates[0]['constituency_name']
     }
-
-    show_twitter_button = False
-    for candidate in candidates_no_cv:
-        if 'twitter' in candidate and candidate['twitter'] is not None:
-            show_twitter_button = True
-            break
+    show_twitter_button = _can_tweet(candidates_no_cv)
 
     # should we show subscribe button?
     from_email = ""
@@ -322,6 +331,10 @@ def candidates(constituency_id = None):
             og_image=og_image,
             og_description=og_description
     )
+
+
+#####################################################################
+# Viewing individual CVs
 
 
 # GET is to show form to upload CV
@@ -378,11 +391,13 @@ def upload_cv(person_id):
         identity.send_upload_cv_confirmation(app, mail, candidate['id'], candidate['email'], candidate['name'])
         return flask.render_template("check_email.html", candidate=candidate)
 
+    already_got = False
     if lookups.get_current_cv(app.config, person_id):
-        return flask.redirect(flask.url_for('show_cv', person_id=person_id))
+        already_got = True
 
     return flask.render_template("upload_cv.html", candidate=candidate,
-        og_image = flask.url_for('static', filename='what-is-cv.png', _external=True)
+        og_image = flask.url_for('static', filename='what-is-cv.png', _external=True),
+        already_got = already_got
     )
 
 # Administrator get a confirm link
@@ -456,6 +471,7 @@ def upload_cv_upload(person_id, signature):
     flask.flash("Friends who are also candidates? Please tell them to upload their CV too!", 'info')
     return flask.redirect("/about")
 
+
 #####################################################################
 # Ask candidates to upload their CV
 
@@ -467,6 +483,9 @@ def email_candidates(constituency_id):
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
+    if len(candidates_no_cv) == 0:
+        return flask.redirect(flask.url_for("candidates", constituency_id=constituency_id))
+
     constituency = {
         'id': constituency_id,
         'name': all_candidates[0]['constituency_name']
@@ -475,6 +494,7 @@ def email_candidates(constituency_id):
     emails_list = ", ".join([c['email'] for c in candidates_no_cv])
     names_list = ", ".join([c['name'] for c in candidates_no_cv])
 
+    show_twitter_button = _can_tweet(candidates_no_cv)
 
     original_message = """I'm a resident of your constituency.
 
@@ -501,11 +521,18 @@ Yours sincerely,
 
 """.format(count=len(candidates_have_cv))
 
-
-
     from_email = ""
     if 'email' in flask.session:
         from_email = flask.session['email']
+
+    # if came from front page, and they emailed before, don't force it
+    from_front_page = flask.request.args.get("from_front_page")
+    if from_email and from_front_page:
+        return flask.redirect(flask.url_for("candidates", constituency_id=constituency_id))
+
+    tempt_text = False
+    if len(candidates_have_cv) > 0 and from_front_page:
+        tempt_text = True
 
     message = original_message
     subject = ""
@@ -543,7 +570,9 @@ Yours sincerely,
         names_list=names_list,
         from_email=from_email,
         subject=subject,
-        message=message
+        message=message,
+        show_twitter_button=show_twitter_button,
+        tempt_text=tempt_text
     )
 
 @app.route('/tweet_candidates/<int:constituency_id>')

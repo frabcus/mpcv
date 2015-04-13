@@ -27,11 +27,8 @@ class UploadingCVTestCase(unittest.TestCase):
         self.browser.find_element_by_id('postcode').send_keys('zz99zz')
         self.browser.find_element_by_id('postcode').submit()
 
-        self.assertIn('Democracy Club Test Constituency candidates', self.browser.page_source)
-        self.assertIn('Sicnarf Gnivri', self.browser.page_source)
-        self.assertIn('href="/show_cv/7777777"', self.browser.page_source)
-        self.assertIn('Notlits Esuom', self.browser.page_source)
-        self.assertIn('href="/upload_cv/7777778"', self.browser.page_source)
+        self.assertIn('Email Democracy Club Test Constituency candidates', self.browser.page_source)
+        self.assertIn('frabcus+notlits@fastmail.fm, frabcus+ojom@fastmail.fm', self.browser.page_source)
 
         # make sure constituency remembered, and front page redirects back to constituency page
         self.browser.get(address)
@@ -52,7 +49,7 @@ class UploadingCVTestCase(unittest.TestCase):
         with open('last_confirm_url.txt', 'r') as o:
             url = o.read()
         self.browser.get(url)
-        self.assertIn('Choose your CV to share', self.browser.page_source)
+        self.assertIn('Choose a new CV to replace', self.browser.page_source)
 
         doc_full_path = os.path.abspath('fixtures/Example MP candidate CV.doc')
         self.browser.find_element_by_css_selector('.files').send_keys(doc_full_path)
