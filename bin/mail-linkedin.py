@@ -17,7 +17,7 @@ main.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
 mailed_hash = lookups._hash_by_prefix(main.app.config, "mailed/linkedin/")
 
 with main.app.app_context():
-    for constituency in lookups.all_constituencies(main.app.config)[0:100]:
+    for constituency in lookups.all_constituencies(main.app.config):
         for candidate in constituency:
             if candidate['id'] in mailed_hash:
                 print("already mailed", candidate)
