@@ -3,12 +3,12 @@
 {% block wide %}
     <div id="email_candidates">
 
-        <h1>Email {{ constituency.name}} candidates without CVs</h1>
-
         <form class="form-horizontal button-disabling-form" action="/email_candidates/{{ constituency.id }}" method="POST">
             <div class="row">
                 <div class="col-md-7">
                     <div class="form-group">
+                        <h1>Email {{ constituency.name}} candidates without CVs</h1>
+
                         <label class="col-sm-3 control-label" for="to">To</label>
                         <div class="col-sm-9">
                             <p class="form-control-static">{{ emails_list }}</p>
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <a href="/tweet_candidates/{{ constituency.id }}" class="btn btn-md btn-info"> Tweet candidates instead </a>
+                    <a href="/tweet_candidates/{{ constituency.id }}" class="tweet-instead btn btn-lg btn-info"> Tweet them instead </a>
                 </div>
             </div>
 

@@ -349,6 +349,10 @@ body, html {
     margin-left: 15px;
 }
 
+.tweet-instead {
+    margin-top: 21px;
+}
+
 /* /tweet_candidates */
 
 .done-button {
