@@ -258,8 +258,16 @@ def candidates_your_constituency():
     if 'constituency' not in flask.session:
         return flask.redirect("/")
 
+    from_front_page = flask.request.args.get("from-front-page", None)
+
     constituency = flask.session['constituency']
-    return flask.redirect(flask.url_for(flask.request.url_rule.rule.replace("/", ""), constituency_id = constituency['id']))
+    return flask.redirect(
+        flask.url_for(
+            flask.request.url_rule.rule.replace("/", ""),
+            constituency_id = constituency['id'],
+            from_front_page = from_front_page
+        )
+    )
 
 def _can_tweet(candidates_no_cv):
     for candidate in candidates_no_cv:
@@ -511,11 +519,13 @@ Yours sincerely,
 
 """.format(count=len(candidates_have_cv))
 
-
-
     from_email = ""
     if 'email' in flask.session:
         from_email = flask.session['email']
+
+    # if came from front page, and they emailed before, don't force it
+    if from_email and flask.request.args.get("from_front_page"):
+        return flask.redirect(flask.url_for("candidates", constituency_id=constituency_id))
 
     message = original_message
     subject = ""
