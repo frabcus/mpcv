@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %} Email {{ constituency.name }} candidates without CVs{% endblock %}
+{% block title %} Email {{ constituency.name }} candidates who haven't submitted CVs{% endblock %}
 {% block wide %}
     <div id="email_candidates">
 
@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-7">
                     <div class="form-group">
-                        <h1>Email {{ constituency.name}} candidates without CVs</h1>
+                        <h1>Email candidates who haven't submitted CVs in {{ constituency.name }}</h1>
 
                         <label class="col-sm-3 control-label" for="to">To</label>
                         <div class="col-sm-9">
