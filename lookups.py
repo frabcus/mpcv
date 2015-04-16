@@ -125,7 +125,7 @@ def _fetch_candidates(config):
         key.key = key_name
         key.set_contents_from_string(text)
     else:
-        # something went wrong; load from bucket
+        print("couldn't read from YourNextMP; loading candidates from S3")
         key = bucket.get_key(key_name)
         text = key.get_contents_as_string().decode('utf-8')
 
