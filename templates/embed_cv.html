@@ -33,7 +33,7 @@
          {% if candidate.cv %}
              {{ embed_cv(candidate.cv) }}
          {% else %}
-             {{ embed_non_cv("/static/not-submitted-with-button.png", "/upload_cv/" ~ candidate.id) }}
+             {{ embed_non_cv("/static/not-submitted-with-button.png", "/email_candidates/" ~ candidate.constituency_id) }}
          {% endif %}
      </div>            
 {% endmacro %}

@@ -353,6 +353,14 @@ body, html {
     margin-top: 21px;
 }
 
+#customise-link {
+    font-size: 20px;
+}
+#customise-paragraph {
+    margin-top: 20px;
+}
+
+
 /* /tweet_candidates */
 
 .done-button {

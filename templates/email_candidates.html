@@ -3,15 +3,18 @@
 {% block wide %}
     <div id="email_candidates">
 
+        <h1>Ask them to submit their CVs</h1>
+
         <form class="form-horizontal button-disabling-form" action="/email_candidates/{{ constituency.id }}" method="POST">
             <div class="row">
                 <div class="col-md-7">
                     <div class="form-group">
-                        <h1>Email candidates who haven't submitted CVs in {{ constituency.name }}</h1>
-
+                            
                         <label class="col-sm-3 control-label" for="to">To</label>
                         <div class="col-sm-9">
-                            <p class="form-control-static">{{ emails_list }}</p>
+                            <p class="form-control-static">{{ names_list }}
+                            (they haven't submitted their CV yet)
+                            </p>
                         </div>
                     </div>
 
@@ -22,36 +25,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group">
-                      <label for="subject" class="col-sm-3 control-label">Subject</label>
-                      <div class="col-sm-9">
-                          <input id="subject" name="subject" value="{{subject}}" {% if from_email and not subject %}autofocus{% endif %} class="form-control">
-                      </div>
-                    </div>
-                </div>
-                <div class="col-md-1">
-                </div>
-
-                <div class="col-md-4">
-                    {% if show_twitter_button %}
-                    <a href="/tweet_candidates/{{ constituency.id }}" class="tweet-instead btn btn-lg btn-info"> Tweet them instead </a>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="form-group">
-
-                        <label class="col-sm-3 control-label" for="message">Message</label>
-                        <div class="col-sm-9">
-                            <p class="form-control-static dear-message">Dear {{ names_list }},</p>
-                            <textarea id="message" name="message" class="form-control" rows=14 autofocus>{{ message }}</textarea>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
+                    <div class="row">
                         <div class="col-sm-3">
                         </div>
                         <div class="col-sm-9">
@@ -68,7 +42,40 @@
                 </div>
 
                 <div class="col-md-4">
+                    {% if show_twitter_button %}
+                    <a href="/tweet_candidates/{{ constituency.id }}" class="tweet-instead btn btn-lg btn-info"> Tweet them instead </a>
+                    <a href="/tweet_candidates/{{ constituency.id }}" class="tweet-instead btn btn-lg btn-default"> I am a candidate </a>
+                    {% endif %}
                 </div>
+            </div>
+
+            <p id="customise-paragraph">
+                <a id="customise-link" data-toggle="collapse" href="#customise">Customise message first</a>
+            </p>
+
+            <div class="row collapse" id="customise">
+                <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="subject" class="col-sm-3 control-label">Subject</label>
+                      <div class="col-sm-9">
+                          <input id="subject" name="subject" value="{{subject}}" {% if from_email and not subject %}autofocus{% endif %} class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="col-sm-3 control-label" for="message">Message</label>
+                        <div class="col-sm-9">
+                            <textarea id="message" name="message" class="form-control" rows=12 autofocus>{{ message }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                </div>
+
+                <div class="col-md-4">
+                </div>
+
             </div>
 
         </form>
