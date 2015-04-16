@@ -168,7 +168,7 @@ def _cache_all_constituencies():
 
 @cache.memoize(60 * 10)
 def _cache_candidates_augmented(constituency_id):
-    all_candidates = lookups.lookup_candidates(constituency_id)
+    all_candidates = lookups.lookup_candidates(app.config, constituency_id)
     if 'error' in all_candidates:
         return all_candidates
     all_candidates = lookups.augment_if_has_cv(app.config, all_candidates)
@@ -340,7 +340,7 @@ def candidates(constituency_id = None):
 # GET is to show form to upload CV
 @app.route('/show_cv/<int:person_id>')
 def show_cv(person_id):
-    candidate = lookups.lookup_candidate(person_id)
+    candidate = lookups.lookup_candidate(app.config, person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
         return error()
@@ -382,7 +382,7 @@ def show_cv(person_id):
 # POST when they click the button to send the confirm email
 @app.route('/upload_cv/<int:person_id>', methods=['GET','POST'])
 def upload_cv(person_id):
-    candidate = lookups.lookup_candidate(person_id)
+    candidate = lookups.lookup_candidate(app.config, person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
         return error()
@@ -407,7 +407,7 @@ def upload_cv_admin(person_id, admin_key):
         flask.flash("Administrator permissions denied.", 'danger')
         return error()
 
-    candidate = lookups.lookup_candidate(person_id)
+    candidate = lookups.lookup_candidate(app.config, person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
         return error()
@@ -419,7 +419,7 @@ def upload_cv_admin(person_id, admin_key):
 # GET is to show form to upload CV
 @app.route('/upload_cv/<int:person_id>/c/<signature>', methods=['GET'])
 def upload_cv_confirmed(person_id, signature):
-    candidate = lookups.lookup_candidate(person_id)
+    candidate = lookups.lookup_candidate(app.config, person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
         return error()
@@ -442,7 +442,7 @@ def upload_cv_confirmed(person_id, signature):
 # POST is actual receiving of CV
 @app.route('/upload_cv/<int:person_id>/c/<signature>', methods=['POST'])
 def upload_cv_upload(person_id, signature):
-    candidate = lookups.lookup_candidate(person_id)
+    candidate = lookups.lookup_candidate(app.config, person_id)
     if 'error' in candidate:
         flask.flash(candidate['error'], 'danger')
         return error()
