@@ -27,8 +27,10 @@ class UploadingCVTestCase(unittest.TestCase):
         self.browser.find_element_by_id('postcode').send_keys('zz99zz')
         self.browser.find_element_by_id('postcode').submit()
 
-        self.assertIn('Email Democracy Club Test Constituency candidates', self.browser.page_source)
-        self.assertIn('frabcus+notlits@fastmail.fm, frabcus+ojom@fastmail.fm', self.browser.page_source)
+        self.assertIn('Democracy Club Test Constituency', self.browser.page_source)
+        self.assertIn('Sicnarf Gnivri', self.browser.page_source)
+        self.assertIn('Notlits Esuom', self.browser.page_source)
+        self.assertIn('Ojom Yeknom', self.browser.page_source)
 
         # make sure constituency remembered, and front page redirects back to constituency page
         self.browser.get(address)
