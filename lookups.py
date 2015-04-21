@@ -115,7 +115,7 @@ def _fetch_candidates(config):
     key_name = "cache/candidates.csv"
 
     url = "https://yournextmp.com/media/candidates.csv"
-    r = requests.get(url)
+    r = requests.get(url, verify=False)
 
     if r.status_code == 200:
         r.encoding = 'utf-8'
