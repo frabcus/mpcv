@@ -114,8 +114,8 @@ def _fetch_candidates(config):
     bucket = _get_s3_bucket(config)
     key_name = "cache/candidates.csv"
 
-    url = "https://yournextmp.com/media/candidates.csv"
-    r = requests.get(url, verify=False)
+    url = "https://edit.yournextmp.com/media/candidates.csv"
+    r = requests.get(url)
 
     if r.status_code == 200:
         r.encoding = 'utf-8'
