@@ -2,6 +2,7 @@ run
 runtests
 runselenium
 runcron
+runlive
 fiddle
 covhtml
 screenshots
