@@ -29,9 +29,8 @@ with main.app.app_context():
 
             body = '''Hi!
 
-450 candidates have shared their CV with voters.
-
-Millions of voters are looking at the CVs via YourNextMP.
+Hunders of thousands of voters are looking at candidate
+CVs on YourNextMP!
 
 To make sure they see your CV, follow this link
 and upload it.
@@ -39,12 +38,12 @@ and upload it.
 {link}
 
 If you're having trouble, reply to this email with an
-attachment.
+attachment!
 
 Many thanks,
 
 Francis
-Volunteer
+Volunteer, Democracy Club CVs
 http://cv.democracyclub.org.uk/
 '''.format(link=link, linkedin_url=candidate['linkedin_url'], name=candidate['name'])
 
@@ -53,12 +52,12 @@ http://cv.democracyclub.org.uk/
             #candidate['email'] = 'frabcus@fastmail.fm'
 
             msg = flask_mail.Message(body=body,
-                    subject="Millions of voters looking at CVs",
+                    subject="Your voters would like to see your CV!",
                     sender=("Democracy Club CVs", "cv@democracyclub.org.uk"),
                     recipients=[
                         (candidate['name'], candidate['email'])
                     ]
                   )
 
-            #main.mail.send(msg)
+            main.mail.send(msg)
 
