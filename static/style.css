@@ -247,6 +247,12 @@ body, html {
   }
 }
 
+.heading_count {
+    margin-left: 0.1em;
+    color: #bbb;
+    font-size: 20px;
+}
+
 .thumb {
   margin-bottom: 28px;
 }

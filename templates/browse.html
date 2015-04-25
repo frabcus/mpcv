@@ -50,7 +50,10 @@
 
             {% for group in cv_groups %}
                 {% if group.heading %}
-                <h2>{{ group.heading }}</h2>
+                <h2>
+                    {{ group.heading }}
+                    <span class="heading_count">{{ group.cvs | length }}</span>
+                </h2>
                 {% endif %}
                 <div class="row group_cvs">
                 {% for cv in group.cvs %}

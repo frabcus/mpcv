@@ -223,6 +223,7 @@ def browse(view, size):
         for party, cvs in itertools.groupby(all_cvs, key=lambda k: k['candidate']['party']):
             # sort within each party in forewards data order of uploading CV
             cv_groups.append({'heading': party, 'cvs': sorted(list(cvs), key=lambda k: k['last_modified'])})
+        cv_groups = sorted(cv_groups, key=lambda k: -len(k['cvs']))
         return flask.render_template('browse.html',
                 cv_groups = cv_groups,
                 size = size,
