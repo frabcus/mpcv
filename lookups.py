@@ -47,8 +47,14 @@ def _get_s3_bucket(config):
 #   id - the mySociety identifier of the constituency
 #   name - the text name of the constituency
 def lookup_postcode(postcode):
+    postcode = re.sub('[^A-Z0-9]', '', postcode.upper())
+
+    if re.search(r"^[A-Z][A-Z]?[0-9][0-9]?[A-Z]?$", postcode):
+        return { "error": "Please use your complete postcode, e.g. NE1 4ST. Partial ones aren't accurate enough to work out your constituency." }
+    headers = {"user-agent": "Democracy Club CVs/1.0"}
+
     try:
-        data = requests.get("http://mapit.mysociety.org/postcode/" + postcode).json()
+        data = requests.get("http://mapit.mysociety.org/postcode/" + postcode, headers=headers).json()
     except ValueError:
         return { "error": "Postcode is not valid." }
     if "error" in data:

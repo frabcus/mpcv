@@ -113,14 +113,11 @@ def look_for_postcode():
     if 'postcode' not in flask.request.args:
         return
 
-    postcode = flask.request.args.get('postcode').strip()
+    postcode = flask.request.args.get('postcode')
     constituency = lookups.lookup_postcode(postcode)
 
     if 'error' in constituency:
-        if re.search(r"^[A-Z][A-Z]?[0-9][0-9]?[A-Z]?$", postcode, re.IGNORECASE):
-            flask.flash("Please use your complete postcode, e.g. NE1 4ST. Partial ones aren't accurate enough to work out your constituency.", 'danger')
-        else:
-            flask.flash(constituency['error'], 'danger')
+        flask.flash(constituency['error'], 'danger')
         return flask.redirect(flask.url_for('index'))
 
     flask.session['postcode'] = constituency['postcode']
