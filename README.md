@@ -129,4 +129,16 @@ To change someone's CV as an administrator, go to this URL:
 
 Where `<admin_key>` is the value of the config variable `MPCV\_ADMIN\_KEY`.
 
+Our policy is to let candidates for a live election change their CV, and for
+ex-candidates to ask for a CV to be removed. This is a useful PDF to upload
+in the latter case:
+
+```
+dummycvs/removed_after_election_by_candidate.pdf
+```
+
+We do however keep archival copies (in S3) of the old CVs. We would
+let people use these for research (for example of historical elections), or
+release them where it is in the public interest to do so.
+
 
