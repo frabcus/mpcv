@@ -42,7 +42,7 @@ MPCV_ASSETS_DEBUG=true
 Development
 ===========
 
-To test in development do:
+To run in development do:
 
 ```sh
 ./main.py
@@ -116,4 +116,17 @@ Then add the following to your cron task:
 ```
 python cron.py
 ```
+
+
+Administration
+==============
+
+To change someone's CV as an administrator, go to this URL:
+
+```
+/upload_cv/<int:person_id>/<admin_key>
+```
+
+Where `<admin_key>` is the value of the config variable `MPCV\_ADMIN\_KEY`.
+
 
