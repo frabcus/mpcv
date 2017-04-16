@@ -518,7 +518,7 @@ I'd be grateful if you could add your CV too. Please click on the link at the bo
 
 Thank you very much.
 
-Yours sincerely,
+Yours faithfully,
 
 """.format(count=len(candidates_have_cv))
 
