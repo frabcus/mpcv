@@ -185,16 +185,6 @@ def index():
     recent_cvs = _cache_all_cvs()[0:4]
     return flask.render_template('index.html', recent_cvs=recent_cvs)
 
-@app.route('/all_cvs/page/<int:page>')
-def old_all_cvs(page):
-    return flask.redirect(flask.url_for("browse", view="recent", size="large"))
-@app.route('/all_cvs/<view>/<size>')
-def old_all_cvs_2(view, size):
-    return flask.redirect(flask.url_for("browse", view=view, size=size))
-@app.route('/browse/alphabet/<size>')
-def old_all_cvs_3(size):
-    return flask.redirect(flask.url_for("browse", view="constituency", size=size))
-
 @app.route('/browse/<view>/<size>')
 def browse(view, size):
     if size not in ['small', 'medium', 'large']:
