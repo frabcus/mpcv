@@ -41,26 +41,39 @@ def _get_s3_bucket(config):
 ###################################################################
 # Democracy APIs
 
-# Takes a postcode returns a dict of:
+# Takes an election and a postcode returns a dict of:
 #   error - with a user friendly message, if the lookup failed
 #   id - the mySociety identifier of the constituency
 #   name - the text name of the constituency
-def lookup_postcode(postcode):
-    headers = {"user-agent": "Democracy Club CVs/1.0"}
+def lookup_postcode(election_id, postcode):
+    canon_postcode = postcode.upper().strip().replace(" ", "")
+    if canon_postcode in ('ZZ99ZZ'):
+        return { 'id': 8888888, 'name': "Democracy Club Test Constituency", 'postcode': 'ZZ9 9ZZ' }
 
+    headers = {"user-agent": "Democracy Club CVs/1.0"}
     try:
-        data = requests.get("http://mapit.mysociety.org/postcode/" + postcode, headers=headers).json()
+        data = requests.get("https://elections.democracyclub.org.uk/api/elections/", params={'postcode':canon_postcode}, headers=headers).json()
     except ValueError:
         return { "error": "Postcode is not valid." }
+
     if "error" in data:
         return data
-    if data["postcode"] == "ZZ9 9ZZ":
-        return { 'id': 8888888, 'name': "Democracy Club Test Constituency", 'postcode': 'ZZ9 9ZZ' }
-    if "shortcuts" not in data:
+    if "results" not in data:
         return { "error": "Postcode not properly recognised" }
-    c = data["areas"][str(data["shortcuts"]["WMC"])]
-    return { 'id': c['id'], 'name': c['name'], 'postcode': data['postcode'] }
 
+    for election in data["results"]:
+        if election["group"] == election_id:
+            if election["division"]["division_type"] != "WMC":
+                return { "error": "Internal error: Unexpectedly not Westminster election" }
+            constituency_id = election["division"]["official_identifier"]
+            constituency_id = constituency_id.replace("gss:", "WMC:")
+            return {
+                'id': constituency_id,
+                'name': election["division"]["name"],
+                'postcode': canon_postcode
+            }
+
+    return { "error": "Internal error: Election not found" }
 
 # Returns a pair of hashes of data from YourNextMP.
 #   by_candidate_id - maps from person id to dictionary about candidate
@@ -85,7 +98,7 @@ def _hashes_of_candidates(config):
     rows = _fetch_candidates(config)
     for row in rows:
         candidate_id = int(row['id'])
-        constituency_id = int(row['mapit_id'])
+        constituency_id = int(row['post_id'])
 
         if row['email'] == '':
             row['email'] = None
@@ -98,9 +111,9 @@ def _hashes_of_candidates(config):
             'email': row['email'],
             'twitter': row['twitter_username'],
             'linkedin_url': row['linkedin_url'],
-            'party': row['party'],
+            'party': row['party_name'],
             'constituency_id': constituency_id,
-            'constituency_name': row['constituency']
+            'constituency_name': row['post_label']
         }
 
         # XXX reenable this when 546 candidate duplicate fixed

@@ -18,6 +18,7 @@ import flask.ext.compress
 import flask.ext.assets
 
 import identity
+import elections
 
 app = flask.Flask(__name__)
 flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
@@ -113,7 +114,7 @@ def look_for_postcode():
         return
 
     postcode = flask.request.args.get('postcode').strip()
-    constituency = lookups.lookup_postcode(postcode)
+    constituency = lookups.lookup_postcode(elections.current_election, postcode)
 
     if 'error' in constituency:
         if re.search(r"^[A-Z][A-Z]?[0-9][0-9]?[A-Z]?$", postcode, re.IGNORECASE):
@@ -122,6 +123,7 @@ def look_for_postcode():
             flask.flash(constituency['error'], 'danger')
         return flask.redirect(flask.url_for('index'))
 
+    flask.session['election'] = elections.current_election
     flask.session['postcode'] = constituency['postcode']
     flask.session['constituency'] = constituency
 
@@ -275,7 +277,7 @@ def _can_tweet(candidates_no_cv):
            return True
     return False
 
-@app.route('/candidates/<int:constituency_id>')
+@app.route('/candidates/<constituency_id>')
 def candidates(constituency_id = None):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
@@ -475,7 +477,7 @@ def upload_cv_upload(person_id, signature):
 #####################################################################
 # Ask candidates to upload their CV
 
-@app.route('/email_candidates/<int:constituency_id>', methods=['GET','POST'])
+@app.route('/email_candidates/<constituency_id>', methods=['GET','POST'])
 def email_candidates(constituency_id):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
@@ -575,7 +577,7 @@ Yours sincerely,
         tempt_text=tempt_text
     )
 
-@app.route('/tweet_candidates/<int:constituency_id>')
+@app.route('/tweet_candidates/<constituency_id>')
 def tweet_candidates(constituency_id):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
