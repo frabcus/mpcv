@@ -12,7 +12,6 @@ import collections
 import csv
 import io
 
-import constants
 import main
 
 import boto.s3.connection
@@ -116,7 +115,7 @@ def _fetch_candidates(config):
     bucket = _get_s3_bucket(config)
     key_name = "cache/candidates.csv"
 
-    url = "https://edit.yournextmp.com/media/candidates.csv"
+    url = "https://candidates.democracyclub.org.uk/media/candidates-2015.csv"
     r = requests.get(url)
 
     if r.status_code == 200:
