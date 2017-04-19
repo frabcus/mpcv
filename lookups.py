@@ -98,7 +98,7 @@ def _hashes_of_candidates(config):
     rows = _fetch_candidates(config)
     for row in rows:
         candidate_id = int(row['id'])
-        constituency_id = int(row['post_id'])
+        constituency_id = str(row['post_id'])
 
         if row['email'] == '':
             row['email'] = None
