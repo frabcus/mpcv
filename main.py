@@ -271,6 +271,7 @@ def _can_tweet(candidates_no_cv):
 def candidates(constituency_id = None):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
+        logging.warn("Error looking up candidates: " + str(all_candidates))
         flask.flash("Error looking up candidates in YourNextMP.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
