@@ -121,6 +121,9 @@ python cron.py
 Administration
 ==============
 
+Changing CVs
+------------
+
 To change someone's CV as an administrator, go to this URL:
 
 ```
@@ -141,4 +144,18 @@ We do however keep archival copies (in S3) of the old CVs. We would
 let people use these for research (for example of historical elections), or
 release them where it is in the public interest to do so.
 
+
+Archiving an election
+---------------------
+
+After each election, we archive the site and make it available as .zip file. 
+
+Then when a new election starts, 
+
+There's a script in `bin/archive-entire-election.sh` which uses wget on a local
+copy of the site to make an archive. This includes all the actual .doc and .pdf
+CV files, and thumbnail images.
+
+After it is made, zip it up and put it on S3. Then update the archive page
+to link to it.
 
