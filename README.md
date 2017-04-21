@@ -159,3 +159,7 @@ CV files, and thumbnail images.
 After it is made, zip it up and put it on S3. Then update the archive page
 to link to it.
 
+There are commented commands in the shell script for what to do, but a bit
+hard coded for the 2015 General Election. This can be generalised.
+
+
