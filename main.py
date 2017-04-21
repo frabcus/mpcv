@@ -116,7 +116,7 @@ def look_for_postcode():
         return
 
     postcode = flask.request.args.get('postcode').strip()
-    constituency = lookups.lookup_postcode(elections.current_election, postcode)
+    constituency = lookups.lookup_postcode(postcode)
 
     if 'error' in constituency:
         if re.search(r"^[A-Z][A-Z]?[0-9][0-9]?[A-Z]?$", postcode, re.IGNORECASE):
@@ -283,8 +283,11 @@ def _can_tweet(candidates_no_cv):
 def candidates(constituency_id = None):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
-        logging.warn("Error looking up candidates: " + str(all_candidates))
-        flask.flash("Error looking up candidates in YourNextMP.", 'danger')
+        if "Constituency not found" in all_candidates['error']:
+            flask.flash("No candidates known for your constituency yet.", 'warning')
+        else:
+            logging.warn("Error looking up candidates: " + str(all_candidates))
+            flask.flash("Error looking up candidates in YourNextMP.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 

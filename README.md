@@ -49,7 +49,7 @@ To run in development do:
 ```
 
 ZZ9 9ZZ is a test constituency postcode, which uses fake data without even
-calling MaPit.
+calling the Democracy Club postcode lookup API.
 
 
 Testing

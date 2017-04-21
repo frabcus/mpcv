@@ -14,6 +14,7 @@ import io
 import datetime
 
 import main
+import elections
 
 import boto.s3.connection
 import boto.s3.key
@@ -46,10 +47,10 @@ def _get_s3_bucket(config):
 #   error - with a user friendly message, if the lookup failed
 #   id - the mySociety identifier of the constituency
 #   name - the text name of the constituency
-def lookup_postcode(election_id, postcode):
+def lookup_postcode(postcode):
     canon_postcode = postcode.upper().strip().replace(" ", "")
     if canon_postcode in ('ZZ99ZZ'):
-        return { 'id': 8888888, 'name': "Democracy Club Test Constituency", 'postcode': 'ZZ9 9ZZ' }
+        return { 'id': "8888888", 'name': "Democracy Club Test Constituency", 'postcode': 'ZZ9 9ZZ' }
 
     headers = {"user-agent": "Democracy Club CVs/1.0"}
     try:
@@ -63,7 +64,7 @@ def lookup_postcode(election_id, postcode):
         return { "error": "Postcode not properly recognised" }
 
     for election in data["results"]:
-        if election["group"] == election_id:
+        if election["group"] == elections.current_election:
             if election["division"]["division_type"] != "WMC":
                 return { "error": "Internal error: Unexpectedly not Westminster election" }
             constituency_id = election["division"]["official_identifier"]
@@ -129,7 +130,7 @@ def _fetch_candidates(config):
     bucket = _get_s3_bucket(config)
     key_name = "cache/candidates.csv"
 
-    url = "https://candidates.democracyclub.org.uk/media/candidates-2015.csv"
+    url = "https://candidates.democracyclub.org.uk/media/candidates-" + elections.current_election + ".csv"
     r = requests.get(url)
 
     if r.status_code == 200:
@@ -150,23 +151,23 @@ def _fetch_candidates(config):
 #   error - if there was an error
 # Or an array of dictionaries with fields as in _hashes_of_candidates.
 def lookup_candidates(config, constituency_id):
-    if constituency_id == 8888888:
+    if constituency_id == "8888888":
         return [
             { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus+sicnarf@fastmail.fm', 'twitter': 'frabcus+sicnarf', 'linkedin_url': 'https://www.linkedin.com/in/FrancisIrving', 'party': 'Bunny Rabbits Rule',
-                'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+                'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
             },
             { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus+notlits@fastmail.fm', 'twitter': 'frabcus+notlits', 'linkedin_url': 'https://www.linkedin.com/in/FrancisIrving', 'party': 'Mice Rule More',
-                'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+                'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
             },
             { 'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus+ojom@fastmail.fm', 'twitter': None, 'linkedin_url': None, 'party': 'Monkeys Are Best',
-                'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+                'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
             }
         ]
 
     _, by_constituency_id = _hashes_of_candidates(config)
 
     if constituency_id not in by_constituency_id:
-        return { 'error': "Constituency {} not found".format(constituency_id)}
+        return { 'error': "Constituency not found: {}".format(constituency_id)}
 
     current_candidate_list = by_constituency_id[constituency_id]
 
@@ -183,23 +184,23 @@ def lookup_candidate(config, person_id):
     if person_id == 7777777:
         return {
             'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus+sicnarf@fastmail.fm', 'twitter': 'frabcus+sicnarf', 'linkedin_url': 'https://www.linkedin.com/in/FrancisIrving', 'party': 'Bunny Rabbits Rule',
-            'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+            'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
         }
     if person_id == 7777778:
         return {
             'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus+notlits@fastmail.fm', 'twitter': 'frabcus+notlits', 'linkedin_url': 'https://www.linkedin.com/in/FrancisIrving', 'party': 'Mice Rule More',
-            'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+            'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
         }
     if person_id == 7777779:
         return {
             'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus+ojom@fastmail.fm', 'twitter': None, 'linkedin_url': None, 'party': 'Monkeys Are Best',
-            'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+            'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
         }
 
     by_candidate_id, _ = _hashes_of_candidates(config)
 
     if person_id not in by_candidate_id:
-        return { 'error': "Candidate {} not found".format(person_id) }
+        return { 'error': "Candidate not found: {}".format(person_id) }
 
     candidate = by_candidate_id[person_id]
 
