@@ -15,9 +15,13 @@
 
 {% macro embed_non_cv(image_url, href_url) %}
     <div class="thumb">
+        {% if not g.archive %}
         <a href="{{ href_url }}">
+        {% endif %}
             <img class="thumbimg" src="{{ image_url }}" />
+        {% if not g.archive %}
         </a>
+        {% endif %}
     </div>
 {% endmacro %}
 

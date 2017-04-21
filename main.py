@@ -161,9 +161,16 @@ def about():
         og_image = flask.url_for('static', filename='what-is-cv.png', _external=True)
     )
 
+@app.route('/archive')
+def archive():
+   return flask.render_template('archive.html',
+        og_image = flask.url_for('static', filename='what-is-cv.png', _external=True)
+   )
+
 @app.route('/exception')
 def exception():
     raise Exception("This is a test error")
+
 
 
 #####################################################################
