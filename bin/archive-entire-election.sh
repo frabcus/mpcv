@@ -11,5 +11,5 @@ mv 127.0.0.1:5000 cv.democracyclub.org.uk
 
 # cd ..
 # zip -r democracy-club-cvs-archive-2015.zip archive-2015 
-# s3cmd put democracy-club-cvs-archive-2015.zip s3://mpcv/archive/democracy-club-cvs-archive-2015.zip
+# s3cmd put -P democracy-club-cvs-archive-2015.zip s3://mpcv/archive/democracy-club-cvs-archive-2015.zip
 

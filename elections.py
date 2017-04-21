@@ -3,9 +3,3 @@
 current_election = '2015'
 current_election_name = 'General Election 2015'
 
-# Ones we have an archive of CVs for
-archive_elections = [
-    '2015'
-]
-
-
