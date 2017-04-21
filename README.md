@@ -22,7 +22,7 @@ MPCV_DEBUG_EMAIL=
 
 # any setting from http://pythonhosted.org//Flask-Mail/
 MPCV_MAIL_SERVER=localhost
-MPCV_MAIL_USE_TLS=True/False
+MPCV_MAIL_USE_TLS=True (or empty)
 MPCV_MAIL_USERNAME=
 MPCV_MAIL_PASSWORD=
 
