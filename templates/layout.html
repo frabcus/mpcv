@@ -27,14 +27,16 @@
           </p>
 
           <ul class="nav navbar-nav navbar-right">
-            {% if constituency and g.constituency and g.constituency['id'] == constituency.id %}
-                <li> <a href="/">Change constituency</a> </li>
-            {% elif g.constituency %}
-                <li> <a href="/candidates/{{g.constituency.id}}">My constituency</a> </li>
-            {% elif request.path != "/" %}
-                <li> <a href="/">Choose constituency</a> </li>
+            {% if not g.archive %}
+                {% if constituency and g.constituency and g.constituency['id'] == constituency.id %}
+                    <li> <a href="/">Change constituency</a> </li>
+                {% elif g.constituency %}
+                    <li> <a href="/candidates/{{g.constituency.id}}">My constituency</a> </li>
+                {% elif request.path != "/" %}
+                    <li> <a href="/">Choose constituency</a> </li>
+                {% endif %}
+                <li> <a href="/about">About</a> </li>
             {% endif %}
-            <li> <a href="/about">About</a> </li>
           </ul>
 
         </div>

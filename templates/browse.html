@@ -9,7 +9,11 @@
 
         <div class="row">
             <div class="col-sm-6 col-xs-12">
+              {% if not g.archive %}
                 <h1>Browse CVs</h1>
+              {% else %}
+                <h1>{{ g.current_election_name }} CVs</h1>
+              {% endif %}
             </div>
 
             <div class="col-sm-6 col-xs-12">

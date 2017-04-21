@@ -33,7 +33,11 @@
          {% if candidate.cv %}
              {{ embed_cv(candidate.cv) }}
          {% else %}
-             {{ embed_non_cv("/static/not-submitted-with-button.png", "/upload_cv/" ~ candidate.id) }}
+             {% if not g.archive %}
+                 {{ embed_non_cv("/static/not-submitted-with-button.png", "/upload_cv/" ~ candidate.id) }}
+             {% else %}
+                 {{ embed_non_cv("/static/not-submitted-without-button.png", "/upload_cv/" ~ candidate.id) }}
+             {% endif %}
          {% endif %}
      </div>            
 {% endmacro %}

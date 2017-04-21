@@ -98,6 +98,8 @@ def set_globals(*args, **kwargs):
         flask.g.debug_email = app.config["DEBUG_EMAIL"]
     if 'constituency' in flask.session:
         flask.g.constituency = flask.session['constituency']
+    flask.g.current_election = elections.current_election
+    flask.g.current_election_name = elections.current_election_name
 
 @app.before_request
 def check_ie():
@@ -138,6 +140,14 @@ def track_events_from_cookies():
     if 'emailed_candidates_track' in flask.session:
         flask.g.emailed_candidates_track = flask.session['emailed_candidates_track']
         del flask.session['emailed_candidates_track']
+
+# When archiving an election with bin/archive-entire-election.sh
+@app.before_request
+def detect_archive_mode():
+    if "mpcv_archive" in flask.request.cookies:
+        flask.g.archive = True
+    else:
+        flask.g.archive = False
 
 #####################################################################
 # General routes
@@ -182,6 +192,8 @@ def _cache_candidates_augmented(constituency_id):
 
 @app.route('/')
 def index():
+    if flask.g.archive:
+        return browse("recent", "small")
     recent_cvs = _cache_all_cvs()[0:4]
     return flask.render_template('index.html', recent_cvs=recent_cvs)
 

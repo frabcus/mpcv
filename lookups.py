@@ -11,6 +11,7 @@ import re
 import collections
 import csv
 import io
+import datetime
 
 import main
 
@@ -369,6 +370,8 @@ def _hash_by_prefix(config, prefix):
 
     cvs = bucket.list(prefix)
     cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
+    # Optionally filter to show what the CVs used to look like on a certain day
+    #cvs = filter(lambda k: boto.utils.parse_ts(k.last_modified) <= datetime.datetime(2015, 5, 8), cvs) # XXX temp debug
 
     person_ids = []
     result = collections.OrderedDict()

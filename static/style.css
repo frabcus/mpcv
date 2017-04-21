@@ -324,7 +324,7 @@ body, html {
 }
 
 #show_cv {
-  background:url(https://ssl.gstatic.com/docs/common/v-spinner_gray.gif) #d1d1d1 center center no-repeat;
+  background:url(/static/v-spinner_gray.gif) #d1d1d1 center center no-repeat;
 }
 
 #show_cv {
