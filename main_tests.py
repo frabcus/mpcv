@@ -71,13 +71,13 @@ class MainTestCase(unittest.TestCase):
     def test_bad_postcode(self):
         r = self.app.get('/candidates?postcode=moo', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
-        self.assertIn("Postcode &#39;MOO&#39; is not valid.", r.get_data(True))
+        self.assertIn('Ask your MP candidates for their CV!', r.get_data(True))
+        self.assertIn("Postcode is not valid.", r.get_data(True))
 
     def test_no_postcode(self):
         r = self.app.get('/candidates?postcode=', follow_redirects=True)
         self.assertEqual(r.status_code, 200)
-        self.assertIn('Before you vote, look at their CVs!', r.get_data(True))
+        self.assertIn('Ask your MP candidates for their CV!', r.get_data(True))
         self.assertIn("Postcode is not valid.", r.get_data(True))
 
     def test_upload_cv_index(self):
@@ -91,7 +91,7 @@ class MainTestCase(unittest.TestCase):
         r = self.app.get('/upload_cv/382828281818', follow_redirects=True)
         self.assertEqual(r.status_code, 500)
         self.assertIn('Oh dear', r.get_data(True))
-        self.assertIn('Candidate 382828281818 not found', r.get_data(True))
+        self.assertIn('Candidate not found: 382828281818', r.get_data(True))
 
     def test_upload_cv_send_email(self):
         with main.mail.record_messages() as outbox:

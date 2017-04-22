@@ -49,13 +49,13 @@ def _get_s3_bucket(config):
 #   name - the text name of the constituency
 def lookup_postcode(postcode):
     canon_postcode = postcode.upper().strip().replace(" ", "")
-    if canon_postcode in ('ZZ99ZZ'):
+    if canon_postcode in ['ZZ99ZZ']:
         return { 'id': "8888888", 'name': "Democracy Club Test Constituency", 'postcode': 'ZZ9 9ZZ' }
 
     headers = {"user-agent": "Democracy Club CVs/1.0"}
     try:
         data = requests.get("https://elections.democracyclub.org.uk/api/elections/", params={'postcode':canon_postcode}, headers=headers).json()
-    except ValueError:
+    except json.decoder.JSONDecodeError:
         return { "error": "Postcode is not valid." }
 
     if "error" in data:
