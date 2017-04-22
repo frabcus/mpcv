@@ -96,11 +96,12 @@ Production
 
 In production, Heroku uses the config in `Procfile`.
 
-We use a custom Heroku buildpack to install phantom.js and python stuff. To
-set this up, run:
+We use multiple Heroku buildpacks to install both phantom.js and python stuff.
+To set this up, run:
 
 ```
-heroku buildpack:set https://github.com/ddollar/heroku-buildpack-multi.git
+heroku buildpacks:add heroku/python
+heroku buildpacks:add https://github.com/stomita/heroku-buildpack-phantomjs
 ```
 
 We use the scheduler add-on to build thumbnails. Install and configure that
