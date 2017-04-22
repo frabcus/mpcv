@@ -11,9 +11,10 @@ import re
 import collections
 import csv
 import io
+import datetime
 
-import constants
 import main
+import elections
 
 import boto.s3.connection
 import boto.s3.key
@@ -42,26 +43,39 @@ def _get_s3_bucket(config):
 ###################################################################
 # Democracy APIs
 
-# Takes a postcode returns a dict of:
+# Takes an election and a postcode returns a dict of:
 #   error - with a user friendly message, if the lookup failed
 #   id - the mySociety identifier of the constituency
 #   name - the text name of the constituency
 def lookup_postcode(postcode):
-    headers = {"user-agent": "Democracy Club CVs/1.0"}
+    canon_postcode = postcode.upper().strip().replace(" ", "")
+    if canon_postcode in ['ZZ99ZZ']:
+        return { 'id': "8888888", 'name': "Democracy Club Test Constituency", 'postcode': 'ZZ9 9ZZ' }
 
+    headers = {"user-agent": "Democracy Club CVs/1.0"}
     try:
-        data = requests.get("http://mapit.mysociety.org/postcode/" + postcode, headers=headers).json()
-    except ValueError:
+        data = requests.get("https://elections.democracyclub.org.uk/api/elections/", params={'postcode':canon_postcode}, headers=headers).json()
+    except json.decoder.JSONDecodeError:
         return { "error": "Postcode is not valid." }
+
     if "error" in data:
         return data
-    if data["postcode"] == "ZZ9 9ZZ":
-        return { 'id': 8888888, 'name': "Democracy Club Test Constituency", 'postcode': 'ZZ9 9ZZ' }
-    if "shortcuts" not in data:
+    if "results" not in data:
         return { "error": "Postcode not properly recognised" }
-    c = data["areas"][str(data["shortcuts"]["WMC"])]
-    return { 'id': c['id'], 'name': c['name'], 'postcode': data['postcode'] }
 
+    for election in data["results"]:
+        if election["group"] == elections.current_election:
+            if election["division"]["division_type"] != "WMC":
+                return { "error": "Internal error: Unexpectedly not Westminster election" }
+            constituency_id = election["division"]["official_identifier"]
+            constituency_id = constituency_id.replace("gss:", "WMC:")
+            return {
+                'id': constituency_id,
+                'name': election["division"]["name"],
+                'postcode': canon_postcode
+            }
+
+    return { "error": "Internal error: Election not found" }
 
 # Returns a pair of hashes of data from YourNextMP.
 #   by_candidate_id - maps from person id to dictionary about candidate
@@ -86,7 +100,7 @@ def _hashes_of_candidates(config):
     rows = _fetch_candidates(config)
     for row in rows:
         candidate_id = int(row['id'])
-        constituency_id = int(row['mapit_id'])
+        constituency_id = str(row['post_id'])
 
         if row['email'] == '':
             row['email'] = None
@@ -99,9 +113,9 @@ def _hashes_of_candidates(config):
             'email': row['email'],
             'twitter': row['twitter_username'],
             'linkedin_url': row['linkedin_url'],
-            'party': row['party'],
+            'party': row['party_name'],
             'constituency_id': constituency_id,
-            'constituency_name': row['constituency']
+            'constituency_name': row['post_label']
         }
 
         # XXX reenable this when 546 candidate duplicate fixed
@@ -116,7 +130,7 @@ def _fetch_candidates(config):
     bucket = _get_s3_bucket(config)
     key_name = "cache/candidates.csv"
 
-    url = "https://edit.yournextmp.com/media/candidates.csv"
+    url = "https://candidates.democracyclub.org.uk/media/candidates-" + elections.current_election + ".csv"
     r = requests.get(url)
 
     if r.status_code == 200:
@@ -137,23 +151,23 @@ def _fetch_candidates(config):
 #   error - if there was an error
 # Or an array of dictionaries with fields as in _hashes_of_candidates.
 def lookup_candidates(config, constituency_id):
-    if constituency_id == 8888888:
+    if constituency_id == "8888888":
         return [
             { 'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus+sicnarf@fastmail.fm', 'twitter': 'frabcus+sicnarf', 'linkedin_url': 'https://www.linkedin.com/in/FrancisIrving', 'party': 'Bunny Rabbits Rule',
-                'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+                'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
             },
             { 'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus+notlits@fastmail.fm', 'twitter': 'frabcus+notlits', 'linkedin_url': 'https://www.linkedin.com/in/FrancisIrving', 'party': 'Mice Rule More',
-                'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+                'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
             },
             { 'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus+ojom@fastmail.fm', 'twitter': None, 'linkedin_url': None, 'party': 'Monkeys Are Best',
-                'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+                'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
             }
         ]
 
     _, by_constituency_id = _hashes_of_candidates(config)
 
     if constituency_id not in by_constituency_id:
-        return { 'error': "Constituency {} not found".format(constituency_id)}
+        return { 'error': "Constituency not found: {}".format(constituency_id)}
 
     current_candidate_list = by_constituency_id[constituency_id]
 
@@ -170,23 +184,23 @@ def lookup_candidate(config, person_id):
     if person_id == 7777777:
         return {
             'id': 7777777, 'name' : 'Sicnarf Gnivri', 'email': 'frabcus+sicnarf@fastmail.fm', 'twitter': 'frabcus+sicnarf', 'linkedin_url': 'https://www.linkedin.com/in/FrancisIrving', 'party': 'Bunny Rabbits Rule',
-            'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+            'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
         }
     if person_id == 7777778:
         return {
             'id': 7777778, 'name' : 'Notlits Esuom', 'email': 'frabcus+notlits@fastmail.fm', 'twitter': 'frabcus+notlits', 'linkedin_url': 'https://www.linkedin.com/in/FrancisIrving', 'party': 'Mice Rule More',
-            'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+            'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
         }
     if person_id == 7777779:
         return {
             'id': 7777779, 'name' : 'Ojom Yeknom', 'email': 'frabcus+ojom@fastmail.fm', 'twitter': None, 'linkedin_url': None, 'party': 'Monkeys Are Best',
-            'constituency_id': 8888888, 'constituency_name': "Democracy Club Test Constituency"
+            'constituency_id': "8888888", 'constituency_name': "Democracy Club Test Constituency"
         }
 
     by_candidate_id, _ = _hashes_of_candidates(config)
 
     if person_id not in by_candidate_id:
-        return { 'error': "Candidate {} not found".format(person_id) }
+        return { 'error': "Candidate not found: {}".format(person_id) }
 
     candidate = by_candidate_id[person_id]
 
@@ -357,6 +371,9 @@ def _hash_by_prefix(config, prefix):
 
     cvs = bucket.list(prefix)
     cvs = reversed(sorted(cvs, key=lambda k: k.last_modified))
+
+    # Optionally filter to show what the CVs used to look like on a certain day
+    #cvs = filter(lambda k: boto.utils.parse_ts(k.last_modified) <= datetime.datetime(2015, 5, 8), cvs) # XXX temp debug
 
     person_ids = []
     result = collections.OrderedDict()

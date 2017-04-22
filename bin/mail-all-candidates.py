@@ -29,7 +29,7 @@ with main.app.app_context():
 
             body = '''Hi!
 
-Hunders of thousands of voters are looking at candidate
+Hundreds of thousands of voters are looking at candidate
 CVs on YourNextMP!
 
 To make sure they see your CV, follow this link

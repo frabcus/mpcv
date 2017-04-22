@@ -22,7 +22,7 @@ MPCV_DEBUG_EMAIL=
 
 # any setting from http://pythonhosted.org//Flask-Mail/
 MPCV_MAIL_SERVER=localhost
-MPCV_MAIL_USE_TLS=True/False
+MPCV_MAIL_USE_TLS=True (or empty)
 MPCV_MAIL_USERNAME=
 MPCV_MAIL_PASSWORD=
 
@@ -49,7 +49,7 @@ To run in development do:
 ```
 
 ZZ9 9ZZ is a test constituency postcode, which uses fake data without even
-calling MaPit.
+calling the Democracy Club postcode lookup API.
 
 
 Testing
@@ -96,11 +96,12 @@ Production
 
 In production, Heroku uses the config in `Procfile`.
 
-We use a custom Heroku buildpack to install phantom.js and python stuff. To
-set this up, run:
+We use multiple Heroku buildpacks to install both phantom.js and python stuff.
+To set this up, run:
 
 ```
-heroku buildpack:set https://github.com/ddollar/heroku-buildpack-multi.git
+heroku buildpacks:add heroku/python
+heroku buildpacks:add https://github.com/stomita/heroku-buildpack-phantomjs
 ```
 
 We use the scheduler add-on to build thumbnails. Install and configure that
@@ -121,6 +122,9 @@ python cron.py
 Administration
 ==============
 
+Changing CVs
+------------
+
 To change someone's CV as an administrator, go to this URL:
 
 ```
@@ -140,5 +144,23 @@ dummycvs/removed_after_election_by_candidate.pdf
 We do however keep archival copies (in S3) of the old CVs. We would
 let people use these for research (for example of historical elections), or
 release them where it is in the public interest to do so.
+
+
+Archiving an election
+---------------------
+
+After each election, we archive the site and make it available as .zip file. 
+
+Then when a new election starts, 
+
+There's a script in `bin/archive-entire-election.sh` which uses wget on a local
+copy of the site to make an archive. This includes all the actual .doc and .pdf
+CV files, and thumbnail images.
+
+After it is made, zip it up and put it on S3. Then update the archive page
+to link to it.
+
+There are commented commands in the shell script for what to do, but a bit
+hard coded for the 2015 General Election. This can be generalised.
 
 

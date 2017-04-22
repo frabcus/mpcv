@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.3"
+  - "3.6.1"
 install: pip install -r requirements.txt
 script: ./main_tests.py
 # Encrypted S3 bucket and keys, as tests require them

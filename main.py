@@ -18,6 +18,7 @@ import flask.ext.compress
 import flask.ext.assets
 
 import identity
+import elections
 
 app = flask.Flask(__name__)
 flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
@@ -27,7 +28,6 @@ flask.ext.compress.Compress(app)
 assets = flask.ext.assets.Environment(app)
 
 import lookups
-import constants
 
 # Log to stderr for Heroku
 stream_handler = logging.StreamHandler()
@@ -98,6 +98,8 @@ def set_globals(*args, **kwargs):
         flask.g.debug_email = app.config["DEBUG_EMAIL"]
     if 'constituency' in flask.session:
         flask.g.constituency = flask.session['constituency']
+    flask.g.current_election = elections.current_election
+    flask.g.current_election_name = elections.current_election_name
 
 @app.before_request
 def check_ie():
@@ -123,6 +125,7 @@ def look_for_postcode():
             flask.flash(constituency['error'], 'danger')
         return flask.redirect(flask.url_for('index'))
 
+    flask.session['election'] = elections.current_election
     flask.session['postcode'] = constituency['postcode']
     flask.session['constituency'] = constituency
 
@@ -138,6 +141,14 @@ def track_events_from_cookies():
         flask.g.emailed_candidates_track = flask.session['emailed_candidates_track']
         del flask.session['emailed_candidates_track']
 
+# When archiving an election with bin/archive-entire-election.sh
+@app.before_request
+def detect_archive_mode():
+    if "mpcv_archive" in flask.request.cookies:
+        flask.g.archive = True
+    else:
+        flask.g.archive = False
+
 #####################################################################
 # General routes
 
@@ -150,9 +161,16 @@ def about():
         og_image = flask.url_for('static', filename='what-is-cv.png', _external=True)
     )
 
+@app.route('/archive')
+def archive():
+   return flask.render_template('archive.html',
+        og_image = flask.url_for('static', filename='what-is-cv.png', _external=True)
+   )
+
 @app.route('/exception')
 def exception():
     raise Exception("This is a test error")
+
 
 
 #####################################################################
@@ -181,18 +199,10 @@ def _cache_candidates_augmented(constituency_id):
 
 @app.route('/')
 def index():
+    if flask.g.archive:
+        return browse("recent", "small")
     recent_cvs = _cache_all_cvs()[0:4]
     return flask.render_template('index.html', recent_cvs=recent_cvs)
-
-@app.route('/all_cvs/page/<int:page>')
-def old_all_cvs(page):
-    return flask.redirect(flask.url_for("browse", view="recent", size="large"))
-@app.route('/all_cvs/<view>/<size>')
-def old_all_cvs_2(view, size):
-    return flask.redirect(flask.url_for("browse", view=view, size=size))
-@app.route('/browse/alphabet/<size>')
-def old_all_cvs_3(size):
-    return flask.redirect(flask.url_for("browse", view="constituency", size=size))
 
 @app.route('/browse/<view>/<size>')
 def browse(view, size):
@@ -276,11 +286,15 @@ def _can_tweet(candidates_no_cv):
            return True
     return False
 
-@app.route('/candidates/<int:constituency_id>')
+@app.route('/candidates/<constituency_id>')
 def candidates(constituency_id = None):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
-        flask.flash("Error looking up candidates in YourNextMP.", 'danger')
+        if "Constituency not found" in all_candidates['error']:
+            flask.flash("No candidates known for your constituency yet.", 'warning')
+        else:
+            logging.warn("Error looking up candidates: " + str(all_candidates))
+            flask.flash("Error looking up candidates in YourNextMP.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
@@ -476,11 +490,11 @@ def upload_cv_upload(person_id, signature):
 #####################################################################
 # Ask candidates to upload their CV
 
-@app.route('/email_candidates/<int:constituency_id>', methods=['GET','POST'])
+@app.route('/email_candidates/<constituency_id>', methods=['GET','POST'])
 def email_candidates(constituency_id):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
-        flask.flash("Error looking up candidates in YourNextMP.", 'danger')
+        flask.flash("Error looking up candidates (for email) in YourNextMP.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
@@ -576,11 +590,11 @@ Yours sincerely,
         tempt_text=tempt_text
     )
 
-@app.route('/tweet_candidates/<int:constituency_id>')
+@app.route('/tweet_candidates/<constituency_id>')
 def tweet_candidates(constituency_id):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
-        flask.flash("Error looking up candidates in YourNextMP.", 'danger')
+        flask.flash("Error looking up candidates (for tweeting) in YourNextMP.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 

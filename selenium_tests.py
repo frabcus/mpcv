@@ -14,7 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 class UploadingCVTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.browser = selenium.webdriver.Firefox()
+        self.browser = selenium.webdriver.Chrome()
         self.addCleanup(self.browser.quit)
         self.browser.implicitly_wait(3)
         self.wait = WebDriverWait(self.browser, 10)

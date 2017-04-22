@@ -74,7 +74,11 @@
           </p>
 
           <ul class="nav navbar-nav navbar-right">
-            <li> <a href="/about">About</a> </li>
+            {% if not g.archive %}
+               <li> <a href="/about">About</a> </li>
+            {% else %}
+               <li> <a href="{{ cv.url }}">Download CV</a> </li>
+            {% endif %}
           </ul>
 
         </div>

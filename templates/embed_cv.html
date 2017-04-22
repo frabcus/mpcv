@@ -15,9 +15,13 @@
 
 {% macro embed_non_cv(image_url, href_url) %}
     <div class="thumb">
+        {% if not g.archive %}
         <a href="{{ href_url }}">
+        {% endif %}
             <img class="thumbimg" src="{{ image_url }}" />
+        {% if not g.archive %}
         </a>
+        {% endif %}
     </div>
 {% endmacro %}
 
@@ -33,7 +37,11 @@
          {% if candidate.cv %}
              {{ embed_cv(candidate.cv) }}
          {% else %}
-             {{ embed_non_cv("/static/not-submitted-with-button.png", "/upload_cv/" ~ candidate.id) }}
+             {% if not g.archive %}
+                 {{ embed_non_cv("/static/not-submitted-with-button.png", "/upload_cv/" ~ candidate.id) }}
+             {% else %}
+                 {{ embed_non_cv("/static/not-submitted-without-button.png", "/upload_cv/" ~ candidate.id) }}
+             {% endif %}
          {% endif %}
      </div>            
 {% endmacro %}
