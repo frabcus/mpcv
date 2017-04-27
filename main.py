@@ -96,9 +96,9 @@ def cvs_json():
 def set_globals(*args, **kwargs):
     if "DEBUG_EMAIL" in app.config:
         flask.g.debug_email = app.config["DEBUG_EMAIL"]
-    if 'constituency' in flask.session:
+    if 'constituency' in flask.session and 'election' in flask.session:
         # check current election hasn't changed since cookie was set
-        if flask.g.current_election == elections.current_election:
+        if flask.session['election']  == elections.current_election:
            flask.g.constituency = flask.session['constituency']
         else:
            del flask.session['constituency']
@@ -257,6 +257,9 @@ def clear_all():
     # clear constituency
     if 'constituency' in flask.session:
         del flask.session['constituency']
+    # clear election that was active when constituency set
+    if 'election' in flask.session:
+        del flask.session['election']
     # clear email
     if 'email' in flask.session:
         del flask.session['email']
