@@ -77,7 +77,7 @@ def lookup_postcode(postcode):
 
     return { "error": "Internal error: Election not found" }
 
-# Returns a pair of hashes of data from YourNextMP.
+# Returns a pair of hashes of data from Democracy Club Candidates.
 #   by_candidate_id - maps from person id to dictionary about candidate
 #   by_constituency_id - maps from constituency id to array of dictionaries about candidate
 #
@@ -126,12 +126,14 @@ def _hashes_of_candidates(config):
 
     return by_candidate_id, by_constituency_id
 
+def candidates_csv_url():
+    return "https://candidates.democracyclub.org.uk/media/candidates-" + elections.current_election + ".csv"
+
 def _fetch_candidates(config):
     bucket = _get_s3_bucket(config)
     key_name = "cache/candidates.csv"
 
-    url = "https://candidates.democracyclub.org.uk/media/candidates-" + elections.current_election + ".csv"
-    r = requests.get(url)
+    r = requests.get(candidates_csv_url())
 
     if r.status_code == 200:
         r.encoding = 'utf-8'
@@ -141,7 +143,7 @@ def _fetch_candidates(config):
         key.key = key_name
         key.set_contents_from_string(text)
     else:
-        print("couldn't read from YourNextMP; loading candidates from S3")
+        print("couldn't read from Candidates API; loading candidates from S3")
         key = bucket.get_key(key_name)
         text = key.get_contents_as_string().decode('utf-8')
 

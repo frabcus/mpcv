@@ -30,7 +30,7 @@ with main.app.app_context():
             body = '''Hi!
 
 Hundreds of thousands of voters are looking at candidate
-CVs on YourNextMP!
+CVs on Who Can I Vote For!
 
 To make sure they see your CV, follow this link
 and upload it.

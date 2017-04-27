@@ -294,7 +294,7 @@ def candidates(constituency_id = None):
             flask.flash("No candidates known for your constituency yet.", 'warning')
         else:
             logging.warn("Error looking up candidates: " + str(all_candidates))
-            flask.flash("Error looking up candidates in YourNextMP.", 'danger')
+            flask.flash("Error looking up candidates via Candidates API.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
@@ -494,7 +494,7 @@ def upload_cv_upload(person_id, signature):
 def email_candidates(constituency_id):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
-        flask.flash("Error looking up candidates (for email) in YourNextMP.", 'danger')
+        flask.flash("Error looking up candidates (for email) via Candidates API.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 
@@ -594,7 +594,7 @@ Yours sincerely,
 def tweet_candidates(constituency_id):
     all_candidates = _cache_candidates_augmented(constituency_id)
     if 'error' in all_candidates:
-        flask.flash("Error looking up candidates (for tweeting) in YourNextMP.", 'danger')
+        flask.flash("Error looking up candidates (for tweeting) via Candidates API.", 'danger')
         return error()
     (candidates_no_cv, candidates_no_email, candidates_have_cv) = lookups.split_candidates_by_type(app.config, all_candidates)
 

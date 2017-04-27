@@ -17,7 +17,7 @@ main.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
 
 with main.app.app_context():
 
-    url = "https://yournextmp.com/media/candidates.csv"
+    url = lookups.candidates_csv_url()
     stream = urllib.request.urlopen(url)
     rows = csv.DictReader(codecs.iterdecode(stream, 'utf-8'))
     rows = lookups.augment_if_has_cv(main.app.config, list(rows))
@@ -34,8 +34,8 @@ with main.app.app_context():
         out['name'] = row['name']
         out['email'] = row['email']
         out['id'] = row['id']
-        out['party'] = row['party']
-        out['constituency'] = row['constituency']
+        out['party'] = row['party_name']
+        out['constituency'] = row['post_label']
 
         link = identity.generate_upload_url(main.app.secret_key, row['id'])
         out['upload_url'] = link
