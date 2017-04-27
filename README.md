@@ -4,12 +4,74 @@
 Introduction
 ============
 
-This is the source code to http://cv.democracyclub.org.uk/, which gathers the
-Curriculum Vitae of candidates for Member of Parliament of the UK.
+This is the documentation and code for http://cv.democracyclub.org.uk/, which
+gathers the Curriculum Vitae of candidates for Member of Parliament of the UK.
+
+There are two main sections in this document, one for site administrators
+and one for developers.
+
+
+Administration
+==============
+
+Changing CVs
+------------
+
+To change someone's CV as an administrator, go to this URL:
+
+```
+/upload_cv/<int:person_id>/<admin_key>
+```
+
+Where `<admin_key>` depends on the installation. Ask a developer for the value
+of the config variable `MPCV\_ADMIN\_KEY`, they can find it from Heroku.
+
+Our policy is to let candidates for a live election change their CV, and for
+ex-candidates to ask for a CV to be removed. This is a useful PDF to upload
+in the latter case:
+
+```
+dummycvs/removed_after_election_by_candidate.pdf
+```
+
+A file with that name is special, as it isn't shown on index pages.
+
+We do however keep copies of the old CVs in S3, for future researchers. 
+
+
+Archiving an election
+---------------------
+
+We publish an archive of the state just after each election day via our
+[http://cv.democracyclub.org.uk/archive](archive of old elections). These
+archives are not indexed by search engines.
+
+After each election, an administrator needs to archive the site and make it
+available as new .zip file. 
+
+Run the script `bin/archive-entire-election.sh` which uses wget on a local copy
+of the site to make an archive. This includes all the actual .doc and .pdf CV
+files, and thumbnail images.
+
+After it is made, zip it up and put it on S3. Then update the archive page
+to link to it.
+
+There are commented commands in the shell script for what to do, but it is a
+bit hard coded for the 2015 General Election. This can be generalised.
+
+
+Development
+===========
+
+Democracy Club CV's is a Python application, based on Flask. 
+
+It doesn't have a database. All data that changes is stored in an S3 bucket.
+Other data, such as names of candidates, is loaded at startup from other
+Democracy Club APIs.
 
 
 Environment
-===========
+-----------
 
 You'll need to set these config variables in the environment:
 
@@ -39,8 +101,8 @@ MPCV_ASSETS_DEBUG=true
 ```
 
 
-Development
-===========
+Running in Development
+----------------------
 
 To run in development do:
 
@@ -51,9 +113,6 @@ To run in development do:
 ZZ9 9ZZ is a test constituency postcode, which uses fake data without even
 calling the Democracy Club postcode lookup API.
 
-
-Testing
-=======
 
 Python unit tests
 -----------------
@@ -91,8 +150,8 @@ It makes some assumptions about the ZZ9 9ZZ postcode - in particular it will
 upload a CV to one of the test users in that postcode.
 
 
-Production
-==========
+Running in Production
+---------------------
 
 In production, Heroku uses the config in `Procfile`.
 
@@ -117,50 +176,5 @@ Then add the following to your cron task:
 ```
 python cron.py
 ```
-
-
-Administration
-==============
-
-Changing CVs
-------------
-
-To change someone's CV as an administrator, go to this URL:
-
-```
-/upload_cv/<int:person_id>/<admin_key>
-```
-
-Where `<admin_key>` is the value of the config variable `MPCV\_ADMIN\_KEY`.
-
-Our policy is to let candidates for a live election change their CV, and for
-ex-candidates to ask for a CV to be removed. This is a useful PDF to upload
-in the latter case:
-
-```
-dummycvs/removed_after_election_by_candidate.pdf
-```
-
-We do however keep archival copies (in S3) of the old CVs. We would
-let people use these for research (for example of historical elections), or
-release them where it is in the public interest to do so.
-
-
-Archiving an election
----------------------
-
-After each election, we archive the site and make it available as .zip file. 
-
-Then when a new election starts, 
-
-There's a script in `bin/archive-entire-election.sh` which uses wget on a local
-copy of the site to make an archive. This includes all the actual .doc and .pdf
-CV files, and thumbnail images.
-
-After it is made, zip it up and put it on S3. Then update the archive page
-to link to it.
-
-There are commented commands in the shell script for what to do, but a bit
-hard coded for the 2015 General Election. This can be generalised.
 
 

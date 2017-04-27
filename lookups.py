@@ -316,6 +316,8 @@ def all_cvs_with_thumbnails(config):
         # strip out the test one
         if person_id == 7777777:
             continue
+        if 'removed_after_election_by_candidate' in cv['url']:
+            continue
         if cv['person_id'] in thumb_hash:
             cv['has_thumb'] = True
             cv['thumb'] = thumb_hash[person_id]
