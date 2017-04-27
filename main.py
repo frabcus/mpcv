@@ -97,7 +97,11 @@ def set_globals(*args, **kwargs):
     if "DEBUG_EMAIL" in app.config:
         flask.g.debug_email = app.config["DEBUG_EMAIL"]
     if 'constituency' in flask.session:
-        flask.g.constituency = flask.session['constituency']
+        # check current election hasn't changed since cookie was set
+        if flask.g.current_election == elections.current_election:
+           flask.g.constituency = flask.session['constituency']
+        else:
+           del flask.session['constituency']
     flask.g.current_election = elections.current_election
     flask.g.current_election_name = elections.current_election_name
 
