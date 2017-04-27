@@ -58,8 +58,13 @@ def lookup_postcode(postcode):
     except json.decoder.JSONDecodeError:
         return { "error": "Postcode is not valid." }
 
+    # Error response method varies, so we check three different ways
     if "error" in data:
         return data
+    if "detail" in data:
+        if data["detail"] == "Invalid postcode":
+            return { "error": "Postcode is not valid." }
+        return { "error": data["detail"] }
     if "results" not in data:
         return { "error": "Postcode not properly recognised" }
 
