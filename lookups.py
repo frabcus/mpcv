@@ -504,3 +504,32 @@ def slow_updates_list(config):
 
         yield subscriber
 
+
+###################################################################
+# Last mailed a candidate
+
+def candidate_mail_sent(config, email):
+    email = email.lower().replace("/", "_")
+    bucket = _get_s3_bucket(config)
+
+    key = boto.s3.key.Key(bucket)
+    key.key = "candidate_mail/" + str(email)
+    key.set_contents_from_string("sent")
+
+    url = key.generate_url(expires_in=0, query_auth=False)
+
+def candidate_mail_last_sent(config):
+    bucket = _get_s3_bucket(config)
+
+    prefix = "candidate_mail/"
+    results = bucket.list(prefix)
+    results = sorted(results, key=lambda k: k.last_modified)
+
+    ret = {}
+    for key in results:
+        email = re.match("candidate_mail/(.*)", key.name).group(1)
+        last_modified = boto.utils.parse_ts(key.last_modified)
+        ret[email] = last_modified
+
+    return ret
+

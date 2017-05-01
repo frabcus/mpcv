@@ -3,6 +3,7 @@
 import sys
 import os
 import collections
+import datetime
 
 import flask_mail
 import boto.s3.key
@@ -13,6 +14,10 @@ import identity
 import lookups
 
 main.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
+
+# Get list of when last sent
+last_sent_by_email = lookups.candidate_mail_last_sent(main.app.config)
+
 
 with main.app.app_context():
     for constituency in lookups.all_constituencies(main.app.config):
@@ -25,15 +30,25 @@ with main.app.app_context():
             if not candidate['email']:
                 continue
 
+            # Only mail to ones we haven't mailed recently
+            if candidate['email'] in last_sent_by_email:
+                back_to = datetime.datetime.now() - datetime.timedelta(days=14)
+                last_sent = last_sent_by_email[candidate['email']]
+                if last_sent > back_to:
+                    print("skipping too recent", candidate['email'], last_sent, ">", back_to)
+                    continue
+
             link = identity.generate_upload_url(main.app.secret_key, candidate['id'])
 
             body = '''Hi!
 
-Hundreds of thousands of voters are looking at candidate
-CVs on Who Can I Vote For!
+Great that you're standing for Parliament again!
 
-To make sure they see your CV, follow this link
-and upload it.
+At the last General Election, we found voters love to
+learn more about you by seeing the career history on your
+CV.
+
+To share your CV with voters, follow this link.
 
 {link}
 
@@ -49,7 +64,9 @@ http://cv.democracyclub.org.uk/
 
             print("=========================\n" + body)
 
-            #candidate['email'] = 'frabcus@fastmail.fm'
+            lookups.candidate_mail_sent(main.app.config, candidate['email'])
+
+            candidate['email'] = 'frabcus@fastmail.fm'
 
             msg = flask_mail.Message(body=body,
                     subject="Your voters would like to see your CV!",
@@ -58,6 +75,8 @@ http://cv.democracyclub.org.uk/
                         (candidate['name'], candidate['email'])
                     ]
                   )
-
             main.mail.send(msg)
+
+
+            sys.exit()
 
