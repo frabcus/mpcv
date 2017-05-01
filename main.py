@@ -364,6 +364,9 @@ def candidates(constituency_id = None):
 def show_cv(person_id):
     candidate = lookups.lookup_candidate(app.config, person_id)
     if 'error' in candidate:
+        if "Candidate not found:" in candidate['error']:
+           flask.flash("That candidate isn't standing in a current election, or doesn't exist. Have a look in our archive.", 'warning')
+           return flask.redirect("/archive")
         flask.flash(candidate['error'], 'danger')
         return error()
 
