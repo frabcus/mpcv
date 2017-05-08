@@ -215,22 +215,22 @@ def browse(view, size):
     if view not in ['recent', 'constituency', 'party']:
         return flask.redirect(flask.url_for("browse", view="recent", size=size))
 
+    all_cvs = _cache_all_cvs()
+    all_constituencies = _cache_all_constituencies()
+    cvs_got = len(all_cvs)
+    cvs_out_of = len(all_constituencies) # which is actually a list of all candidates in consituency order
+
     if view == 'recent':
-        all_cvs = _cache_all_cvs()
         return flask.render_template('browse.html',
                 cv_groups = [{ 'heading': None, 'cvs': all_cvs }],
-                size = size,
-                view = view
+                size = size, view = view, cvs_got = cvs_got, cvs_out_of = cvs_out_of, cvs_percent = round((cvs_got / cvs_out_of) * 100, 1)
         )
     elif view == 'constituency':
-        all_constituencies = _cache_all_constituencies()
         return flask.render_template('browse.html',
                 constituencies = all_constituencies,
-                size = size,
-                view = view
+                size = size, view = view, cvs_got = cvs_got, cvs_out_of = cvs_out_of, cvs_percent = round((cvs_got / cvs_out_of) * 100, 1)
         )
     if view == 'party':
-        all_cvs = _cache_all_cvs()
         # sort parties alphabetically
         all_cvs = sorted(all_cvs, key=lambda k: k['candidate']['party'])
         cv_groups = []
@@ -240,8 +240,7 @@ def browse(view, size):
         cv_groups = sorted(cv_groups, key=lambda k: -len(k['cvs']))
         return flask.render_template('browse.html',
                 cv_groups = cv_groups,
-                size = size,
-                view = view
+                size = size, view = view, cvs_got = cvs_got, cvs_out_of = cvs_out_of, cvs_percent = round((cvs_got / cvs_out_of) * 100, 1)
         )
 
 

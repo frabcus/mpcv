@@ -9,11 +9,17 @@
 
         <div class="row">
             <div class="col-sm-6 col-xs-12">
+              <h1>
               {% if not g.archive %}
-                <h1>Browse CVs</h1>
+                Browse CVs
               {% else %}
-                <h1>{{ g.current_election_name }} CVs</h1>
+                {{ g.current_election_name }} CVs
               {% endif %}
+
+              <span class="heading_count" title="{{ cvs_got }} CVs / {{ cvs_out_of }} candidates = {{ cvs_percent }}%" >
+                 {{ cvs_got }}
+              </span>
+              </h1>
             </div>
 
             <div class="col-sm-6 col-xs-12">

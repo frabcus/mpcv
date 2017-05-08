@@ -62,11 +62,11 @@ Volunteer, Democracy Club CVs
 http://cv.democracyclub.org.uk/
 '''.format(link=link, linkedin_url=candidate['linkedin_url'], name=candidate['name'])
 
-            print("=========================\n" + body)
+            print("sending to: " + candidate['email'])
 
-            lookups.candidate_mail_sent(main.app.config, candidate['email'])
-
-            candidate['email'] = 'frabcus@fastmail.fm'
+            # For debugging:
+            #print("\n" + body)
+            #candidate['email'] = 'frabcus@fastmail.fm'
 
             msg = flask_mail.Message(body=body,
                     subject="Your voters would like to see your CV!",
@@ -76,7 +76,5 @@ http://cv.democracyclub.org.uk/
                     ]
                   )
             main.mail.send(msg)
-
-
-            sys.exit()
+            lookups.candidate_mail_sent(main.app.config, candidate['email'])
 
