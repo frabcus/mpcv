@@ -218,7 +218,7 @@ def browse(view, size):
     all_cvs = _cache_all_cvs()
     all_constituencies = _cache_all_constituencies()
     cvs_got = len(all_cvs)
-    cvs_out_of = len(all_constituencies) # which is actually a list of all candidates in consituency order
+    cvs_out_of = sum([ len(c) for c in all_constituencies ])
 
     if view == 'recent':
         return flask.render_template('browse.html',
