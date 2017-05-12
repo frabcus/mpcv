@@ -22,6 +22,10 @@
                         Tweet @{{ candidate.twitter }}
                     </a>
                 </p>
+            {% else %}
+               <h2>{{ candidate.name }} <span class="party">{{ candidate.party }}</span></h2>
+
+               <a href="https://candidates.democracyclub.org.uk/person/{{candidate.id}}" class="btn btn-default btn-lg">Tell us {{ candidate.name }}'s Twitter username</a>
             {% endif %}
         {% endfor %}
 
