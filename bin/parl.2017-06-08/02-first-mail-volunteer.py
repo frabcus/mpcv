@@ -31,8 +31,8 @@ for subscriber in subscribers:
         print("skipping too recent", subscriber['email'], subscriber['last_modified'], ">", back_to)
         continue
 
-    if subscriber['email'] != 'francis@flourish.org':
-        continue
+    #if subscriber['email'] != 'francis@flourish.org':
+    #    continue
 
     body = """At the last General Election you helped us collect CVs from
 17% of candidates for Parliament.
@@ -40,7 +40,9 @@ for subscriber in subscribers:
 We're doing it again!
 """
 
-    assert subscriber['no_cv_count'] > 0
+    if subscriber['no_cv_count'] == 0:
+        print("skipping as all CVs gathered", subscriber['email'])
+        continue
 
     # How many you have
     if subscriber['has_cv_count'] == 0:
