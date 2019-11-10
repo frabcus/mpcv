@@ -23,6 +23,8 @@ def gen_thumbs():
             subprocess.check_call(["phantomjs", "screenshot.js", x["url"], filename])
             # make a JPEG, they're smaller
             img = PIL.Image.open(filename)
+            # remove alpha channel, which JPEG doesn't support
+            img = img.convert("RGB")
             img.save(filename + ".jpg", option='optimize')
             # add the thumbnail to S3
             lookups.add_thumb(main.app.config, filename + ".jpg", x['name'].replace("cvs/", "thumbs/") + ".jpg", extension="jpg")
