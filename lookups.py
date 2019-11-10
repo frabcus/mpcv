@@ -20,8 +20,6 @@ import boto.s3.connection
 import boto.s3.key
 import boto.utils
 
-import flask.ext.cache
-
 
 ###################################################################
 # General helpers

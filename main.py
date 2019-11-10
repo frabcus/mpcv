@@ -13,9 +13,9 @@ import werkzeug
 import flask
 import flask_appconfig.env
 import flask_mail
-import flask.ext.cache
-import flask.ext.compress
-import flask.ext.assets
+import flask_caching
+import flask_compress
+import flask_assets
 
 import identity
 import elections
@@ -23,9 +23,9 @@ import elections
 app = flask.Flask(__name__)
 flask_appconfig.env.from_envvars(app.config, prefix='MPCV_')
 mail = flask_mail.Mail(app)
-cache = flask.ext.cache.Cache(app,config={'CACHE_TYPE': 'simple'})
-flask.ext.compress.Compress(app)
-assets = flask.ext.assets.Environment(app)
+cache = flask_caching.Cache(app,config={'CACHE_TYPE': 'simple'})
+flask_compress.Compress(app)
+assets = flask_assets.Environment(app)
 
 import lookups
 
