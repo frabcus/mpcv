@@ -40,7 +40,7 @@ function waitFor(testFx, onReady, timeOutMillis) {
         }, 250); //< repeat check every 250ms
 };
 
-var url = "http://docs.google.com/viewer?embedded=true&url=" + encodeURIComponent(cvUrl);
+var url = "https://docs.google.com/viewer?embedded=true&url=" + encodeURIComponent(cvUrl);
 
 console.log("Generating screenshot for: " + url);
 page.open(url, function (status) {
