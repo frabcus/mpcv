@@ -1,0 +1,8 @@
+#!/bin/bash
+
+APP=mpcv
+
+export S3_ACCESS_KEY_ID=$(heroku config:get MPCV_S3_ACCESS_KEY_ID --app $APP)
+export S3_SECRET_ACCESS_KEY=$(heroku config:get MPCV_S3_SECRET_ACCESS_KEY --app $APP)
+
+
