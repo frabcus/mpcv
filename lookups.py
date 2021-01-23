@@ -70,7 +70,6 @@ def lookup_postcode(postcode):
             if election["division"]["division_type"] != "WMC":
                 return { "error": "Internal error: Unexpectedly not Westminster election" }
             constituency_id = election["division"]["official_identifier"]
-            constituency_id = constituency_id.replace("gss:", "WMC:")
             return {
                 'id': constituency_id,
                 'name': election["division"]["name"],
