@@ -12,16 +12,16 @@ import flask_mail
 import inflect
 
 sys.path.append(os.getcwd())
-import main
+import app
 import identity
 import lookups
 
-main.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
+app.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
 
 p = inflect.engine()
 
 # Get list of all volunteers from S3
-subscribers = lookups.slow_updates_list(main.app.config)
+subscribers = lookups.slow_updates_list(app.app.config)
 
 # Loop over them
 for subscriber in subscribers:
@@ -128,11 +128,11 @@ P.S. To unsubscribe, reply to this email and just ask.
     #sys.exit(1)
 
     if not dry_run:
-        with main.app.app_context():
-            main.mail.send(msg)
+        with app.app.app_context():
+            app.mail.send(msg)
             print("mail sent!")
             # Touch the timestamp so we don't mail them again until time passes
-            lookups.updates_join(main.app.config, subscriber['email'], subscriber['postcode'])
+            lookups.updates_join(app.app.config, subscriber['email'], subscriber['postcode'])
             print("touched stamp!")
 
     print("========================================")

@@ -14,12 +14,12 @@ os.environ['MPCV_SECRET_KEY'] = 'doesnotmatterastesting'
 os.environ['MPCV_DEBUG_EMAIL'] = 'test@localhost'
 os.environ['MPCV_TESTING'] = 'True'
 
-import main
+import app
 
 class MainTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.app = main.app.test_client()
+        self.app = app.app.test_client()
 
     def tearDown(self):
         pass
@@ -94,7 +94,7 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('Candidate not found: 382828281818', r.get_data(True))
 
     def test_upload_cv_send_email(self):
-        with main.mail.record_messages() as outbox:
+        with app.mail.record_messages() as outbox:
             # Ask for email confirmation
             r = self.app.post('/upload_cv/7777777')
             self.assertEqual(r.status_code, 200)
@@ -178,7 +178,7 @@ class MainTestCase(unittest.TestCase):
         self.assertIn('frabcus+notlits@fastmail.fm, frabcus+ojom@fastmail.fm', r.get_data(True))
         self.assertIn('action="/email_candidates/8888888"', r.get_data(True))
 
-        with main.mail.record_messages() as outbox:
+        with app.mail.record_messages() as outbox:
             self.app.post('/email_candidates/8888888', data={
                 'from_email': 'frabcus+voter@fastmail.fm',
                 'message': 'Please please please send in your CV! Link below ;)',

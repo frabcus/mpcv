@@ -9,18 +9,18 @@ import flask_mail
 import boto.s3.key
 
 sys.path.append(os.getcwd())
-import main
+import app
 import identity
 import lookups
 
-main.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
+app.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
 
 # Get list of when last sent
-last_sent_by_email = lookups.candidate_mail_last_sent(main.app.config)
+last_sent_by_email = lookups.candidate_mail_last_sent(app.app.config)
 
 
-with main.app.app_context():
-    for constituency in lookups.all_constituencies(main.app.config):
+with app.app.app_context():
+    for constituency in lookups.all_constituencies(app.app.config):
         for candidate in constituency:
             if candidate['id'] in [5819]:
                 print("unsubscribed", candidate)
@@ -38,7 +38,7 @@ with main.app.app_context():
                     print("skipping too recent", candidate['email'], last_sent, ">", back_to)
                     continue
 
-            link = identity.generate_upload_url(main.app.secret_key, candidate['id'])
+            link = identity.generate_upload_url(app.app.secret_key, candidate['id'])
 
             body = '''Hi!
 
@@ -75,6 +75,6 @@ http://cv.democracyclub.org.uk/
                         (candidate['name'], candidate['email'])
                     ]
                   )
-            main.mail.send(msg)
-            lookups.candidate_mail_sent(main.app.config, candidate['email'])
+            app.mail.send(msg)
+            lookups.candidate_mail_sent(app.app.config, candidate['email'])
 

@@ -8,16 +8,16 @@ import flask_mail
 import boto.s3.key
 
 sys.path.append(os.getcwd())
-import main
+import app
 import identity
 import lookups
 
-main.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
+app.app.config['SERVER_NAME'] = 'cv.democracyclub.org.uk'
 
-mailed_hash = lookups._hash_by_prefix(main.app.config, "mailed/linkedin/")
+mailed_hash = lookups._hash_by_prefix(app.app.config, "mailed/linkedin/")
 
-with main.app.app_context():
-    for constituency in lookups.all_constituencies(main.app.config):
+with app.app.app_context():
+    for constituency in lookups.all_constituencies(app.app.config):
         for candidate in constituency:
             if candidate['id'] in mailed_hash:
                 print("already mailed", candidate)
@@ -29,7 +29,7 @@ with main.app.app_context():
             if not candidate['email']:
                 continue
 
-            link = identity.generate_upload_url(main.app.secret_key, candidate['id'])
+            link = identity.generate_upload_url(app.app.secret_key, candidate['id'])
 
             body = '''Dear {name},
 
@@ -69,10 +69,10 @@ a Word or PDF document, and go here:
                     ]
                   )
 
-            main.mail.send(msg)
+            app.mail.send(msg)
 
             # record sent
-            bucket = lookups._get_s3_bucket(main.app.config)
+            bucket = lookups._get_s3_bucket(app.app.config)
             key = boto.s3.key.Key(bucket)
             key.key = "mailed/linkedin/" + str(candidate['id']) + ".sent"
             key.set_contents_from_string("sent")
