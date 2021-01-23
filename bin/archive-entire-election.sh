@@ -2,7 +2,7 @@
 
 set -x
 
-ELECTION=parl.2017-06-08
+ELECTION=parl.2019-12-12
 
 mkdir archive-$ELECTION
 cd archive-$ELECTION

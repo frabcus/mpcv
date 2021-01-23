@@ -13,13 +13,12 @@ import csv
 import io
 import datetime
 
-import main
+import app
 import elections
 
 import boto.s3.connection
 import boto.s3.key
 import boto.utils
-
 
 ###################################################################
 # General helpers
@@ -93,7 +92,7 @@ def lookup_postcode(postcode):
 #   party - political party name of the candidate
 #   constituency_id - identifier of constituency
 #   constituency_name - name of constituency
-@main.cache.memoize(60 * 60)
+@app.cache.memoize(60 * 60)
 def _hashes_of_candidates(config):
     print("warming cache _hashes_of_candidates")
 
@@ -370,7 +369,7 @@ def all_cvs_bad_thumbnails(config):
 #   last_modified - when it was uploaded
 #   person_id - id of the person the CV is for
 # Caches for 10 minutes for speed.
-@main.cache.memoize(60 * 10)
+@app.cache.memoize(60 * 10)
 def _hash_by_prefix(config, prefix):
     print("warming cache _hash_by_prefix", prefix)
 
