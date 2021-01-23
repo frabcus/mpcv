@@ -24,8 +24,6 @@ def check_signature(secret_key, person_id, signature):
     signed_again = sign_person_id(secret_key, person_id)
     signature = signature.rstrip("=\n-_")
 
-    print("check_signature", person_id, " person signature:", signed_again, " url signature:", signature)
-
     return signed_again == signature
 
 # Returns a URL that lets someone upload a CV
