@@ -57,7 +57,7 @@ After it is made, zip it up and put it on S3. Then update the archive page
 to link to it.
 
 There are commented commands in the shell script for what to do, but it is a
-bit hard coded for the 2017 General Election. This can be generalised.
+bit hard coded - you have to edit the script to change the election date.
 
 
 Development
@@ -73,7 +73,7 @@ Democracy Club APIs.
 Environment
 -----------
 
-You'll need to set these config variables in the environment:
+You'll need to set these config variables in the environment
 
 ```sh
 # used for signing tokens in emails and sessions
@@ -100,13 +100,26 @@ MPCV_ADMIN_KEY=xxxx
 MPCV_ASSETS_DEBUG=true
 ```
 
+The file `.envrc` is in `.gitignore` if you want to do this with
+`direnv` during development (you'll need to install the `direnv`
+hook in your shell for this to just work).
+
 
 Running in Development
 ----------------------
 
-To run in development do:
+Setup a virtualenv:
 
 ```sh
+virtualenv --python=/usr/bin/python3.6 venv
+. ./venv/bin/activate
+pip install -r requirements.txt
+```
+
+To run the development server:
+
+```sh
+. ./venv/bin/activate
 ./main.py
 ```
 
