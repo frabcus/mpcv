@@ -30,13 +30,12 @@ def read_environment(app):
    print("S3 bucket name:", app.config['S3_BUCKET_NAME'])
 
 app = flask.Flask('mpcv')
+app.debug = True
 read_environment(app)
 mail = flask_mail.Mail(app)
 cache = flask_caching.Cache(app,config={'CACHE_TYPE': 'simple'})
 flask_compress.Compress(app)
 assets = flask_assets.Environment(app)
-
-cache.set('foo', 'bar')
 
 import lookups
 

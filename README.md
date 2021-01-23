@@ -95,9 +95,6 @@ MPCV_S3_SECRET_ACCESS_KEY=
 
 # Admin functions accessible with this
 MPCV_ADMIN_KEY=xxxx
-
-# Disable asset bundling (for debugging)
-MPCV_ASSETS_DEBUG=true
 ```
 
 The file `.envrc` is in `.gitignore` if you want to do this with
