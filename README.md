@@ -5,7 +5,9 @@ Introduction
 ============
 
 This is the documentation and code for http://cv.democracyclub.org.uk/, which
-gathers the Curriculum Vitae of candidates for Member of Parliament of the UK.
+gathered the Curriculum Vitae of candidates for Member of Parliament of the UK.
+
+Archive of CVs from the 2015 and 2019 elections is at https://github.com/DemocracyClub/mpcv-archive.
 
 There are two main sections in this document, one for site administrators
 and one for developers.
